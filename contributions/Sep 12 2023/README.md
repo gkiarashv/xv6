@@ -58,12 +58,14 @@ To use the extensions, in the main folder of the xv6 project, run the `make` com
 
 
 `make clean`:
-
-
-
+![makeclean](https://github.com/gkiarashv/xv6/blob/main/images/makeclean.png)
 
 `make`:
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/makekernel.png)
 
+
+`make qemu`:
+![makeqemu](https://github.com/gkiarashv/xv6/blob/main/images/makeqemu.png)
 
 
 
