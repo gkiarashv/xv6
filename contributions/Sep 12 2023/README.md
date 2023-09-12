@@ -119,6 +119,42 @@ Kernel mode head command:
 
 
 
+# Uniq
+```
+uniq [-i | -c | -d] [file ...]
+```
+The uniq command reads the specified files and compare adjacent lines, and writes a copy of each unique input line to the standard output. It support three options where "-i" ignores the case for comaparison, "-c" displays the number of times a line has been repeated, and "-d" only shows the repeated lines.
+
+
+
+### User mode implementation
+The user mode implementation of the uniq command has been given in the `user/uniq.c` file. This file contains the following functions:
+
+Functionality | Description |
+| --- | --- |
+| uniq_usermode() | A wrapper for the actual uniq function   |
+| uniq_run() | Actual implementation for the uniq function |
+| parse_cmd() | Parses the issued uniq command and returns the list of files and options (as a byte) |
+
+
+The `main` function is as follows:
+
+![uniqusermain](https://github.com/gkiarashv/xv6/blob/main/images/uniqusermain.png)
+
+
+
+
+### Kernel mode implementation
+
+The kernel mode implementation of the uniq function has been given in the `kernel/sysproc.c` and `kernel/uniq.c`. The `kernel/sysproc.c` has the `sys_uniq()`
+system call which is called upon the uniq system call. The passed files and the options are the arguments passed to this system call. The `kernel/uniq.c` contains the `head_run()` function which is the actual implementation of the uniq functionality in the kernel.
+
+To use the uniq system call, edit the main function of the `user/uniq.c` as follows:
+
+![uniqusermain](https://github.com/gkiarashv/xv6/blob/main/images/uniqkernelmain.png)
+
+
+
 
 
 
