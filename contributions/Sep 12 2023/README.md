@@ -74,13 +74,51 @@ Functionality | Description |
 
 The `main` function is as follows:
 
-
 ![headusermain](https://github.com/gkiarashv/xv6/blob/main/images/headusermain.png)
  
 
 
 
 ### Kernel mode implementation
+
+```int head(char ** passedFiles, int numOfLines)```
+
+The kernel mode implementation of the head function has been given in the `kernel/sysproc.c` and `kernel/head.c`. The `kernel/sysproc.c` has the `sys_head()`
+system call which is called upon the head system call. The passed files and the options are the arguments passed to this system call. The `kernel/head.c` contains the `head_run()` function which is the actual implementation of the head functionality in the kernel.
+
+To use the head system call, edit the main function of the `user/head.c` as follows:
+
+
+![headkernelmain](https://github.com/gkiarashv/xv6/blob/main/images/headkernelmain.png)
+ 
+
+### Usage
+
+In the following, there are examples of how to work with the head command in the xv6 environment executed once in user mode and once in kernel mode.
+Considering two example files as follows:
+
+
+File1:
+![file1](https://github.com/gkiarashv/xv6/blob/main/images/file1.png)
+
+
+
+File2:
+![file2](https://github.com/gkiarashv/xv6/blob/main/images/file2.png)
+
+
+User mode head command:
+
+![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex.png)
+![headuserstdin](https://github.com/gkiarashv/xv6/blob/main/images/headuserexstdin.png)
+
+
+Kernel mode head command:
+![headkernelex](https://github.com/gkiarashv/xv6/blob/main/images/headkernelex.png)
+![headkernelstdin](https://github.com/gkiarashv/xv6/blob/main/images/headkernelstdin.png)
+
+
+
 
 
 
