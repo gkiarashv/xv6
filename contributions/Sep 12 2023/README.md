@@ -54,6 +54,22 @@ Functionality | Description |
 
 
 # Extensions
+To use the extensions, in the main folder of the xv6 project, run the `make` commands as follows:
+
+
+`make clean`:
+
+
+
+
+`make`:
+
+
+
+
+
+
+
 ## Head
  ```
   head [-n numOfLines] [file ...]
