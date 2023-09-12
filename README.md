@@ -1,4 +1,4 @@
-# xv6 operating system updates
+# xv6 OS updates
 
 A repository that contributes to the existing [xv6](https://pdos.csail.mit.edu/6.828/2012/xv6.html) operating system. Particularly, we have contributed to the RISC-V based implementation of this ([xv6-riscv](https://github.com/mit-pdos/xv6-riscv)). 
 
