@@ -83,27 +83,16 @@ ZhUyU1997, and Zou Chang Wei.
 If every previous step is successul, the xv6 is running and you can issue `ls`.
 
 
+# Contributions and Usages
+All the previous contributions have been classified by their date of accomplishment and can be found in the [contributions](https://github.com/gkiarashv/xv6/tree/main/contributions/Sep%2012%202023) folder.
 
 
-# Contributions
-All the previous contributions have been classified by their date of accomplishment.
+# Authors
+- [kiarash sedghi](https://gkiarashv.github.io)
 
-
-
-
-# Usage
-
-
-
-# Contributing
-Your contributions are always welcome! Please have a look at the [contribution guidelines](CONTRIBUTING.md) first. :tada:
 
 # License
 The MIT License (MIT) 2017 - [Athitya Kumar](https://github.com/athityakumar/). Please have a look at the [LICENSE.md](LICENSE.md) for more details.
 
 
 
-You will need a RISC-V "newlib" tool chain from
-https://github.com/riscv/riscv-gnu-toolchain, and qemu compiled for
-riscv64-softmmu.  Once they are installed, and in your shell
-search path, you can run "make qemu".
