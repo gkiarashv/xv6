@@ -68,7 +68,7 @@ ZhUyU1997, and Zou Chang Wei.
 
 4. Clonning the xv6 repository
    ```sh
-   git clone https :// github .com/mit -pdos/xv6 -riscv
+   git clone https :// github .com/mit-pdos/xv6-riscv
    cd xv6 -riscv
    ```
 5. Building the kernel
@@ -80,7 +80,7 @@ ZhUyU1997, and Zou Chang Wei.
    ```sh
    make qemu
    ```
-If every previous step is successul, the xv6 is running and you can issue `ls`.
+If every previous step is successful, the xv6 is running and you can issue `ls`.
 
 
 # Contributions and Usages
@@ -89,6 +89,9 @@ All the previous contributions have been classified by their date of accomplishm
 
 # Authors
 - [kiarash sedghi](https://gkiarashv.github.io)
+
+# Resources
+- https://github.com/zamanighazaleh/xv6-kernel-system-call
 
 
 # License
