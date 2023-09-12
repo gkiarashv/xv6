@@ -38,9 +38,9 @@ Contains the following functionalites regarding strings
 
 Functionality | Description |
 | --- | --- |
-| get_strlen() | returns the length of a given string  |
-| compare_str() | compares two string considering their case |
-| compare_str_ic() | compares two string ignoring their case |
+| get_strlen() | Returns the length of a given string  |
+| compare_str() | Compares two string considering their case |
+| compare_str_ic() | Compares two string ignoring their case |
 
 
 #### Kernel/elibs/file.c
@@ -48,44 +48,45 @@ Contains the following functionalites for file manipualtion
 
 Functionality | Description |
 | --- | --- |
-| open_file() | opens a file and returns a file descriptor  |
-| read_line() | reads a line from the given file |
+| open_file() | Opens a file and returns a file descriptor  |
+| read_line() | Reads a line from the given file |
+| close_file() | Closes the given file |
 
 
------
-### Commands
-The added commands are as follows:
-
-#### head
-```
-head [-n numOfLines] [file ...]
-```
-The head command prints the first numOfLines lines of each of the specified files, or of the standard input if no files are specified.  If numOfLines is omitted it defaults to 14.
+# Extensions
+## Head
+ ```
+  head [-n numOfLines] [file ...]
+ ```
+The head command prints the first numOfLines lines of each of the specified files, or the standard input if no files are specified. If numOfLines is omitted it defaults to 14.
+User mode implementation
 
 
-#### uniq
-```
-uniq [-i | -c | -d] [file ...]
-```
-The uniq command reads the specified files and compare adjacent lines, and writes a copy of each unique input line to the standard output.
-It support three options where "-i" ignores the case for comaparison, "-c" displays the number of times a line has been repeated, and "-d" only shows the repeated lines.
+### User mode implementation
+
+The user mode implementation of the head command has been given in the file `user/head.c` . This file contains 3 main functions:
+
+Functionality | Description |
+| --- | --- |
+| head_usermode() | A wrapper for the actual head function   |
+| head_run() | Actual implementation for the head function |
+| parse_cmd() | Parses the issued head command and returns the list of files and options |
+
+The `main` function is as follows:
+
+
+![headusermain](https://github.com/gkiarashv/xv6/blob/main/images/headusermain.png)
+ 
+
+
+
+### Kernel mode implementation
 
 
 
 
-### System calls
-The added system calls are as follows:
-
-#### head
-```
-int head(char ** passedFiles, int numOfLines)
-```
-"passedFiles" is an array of files that have been provided and "numOfLines" is the number of lines to be printed.
 
 
-#### uniq
-```
-int uniq(char ** passedFiles, char options)
-```
-"passedFiles" is an array of files that have been provided and "options" is the options that have been passed in the command line.
+
+
 
