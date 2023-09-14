@@ -1,3 +1,5 @@
+# Examples
+
 
 In the following, there are examples of how to work with the head command in the xv6 environment executed once in user mode and once in kernel mode.
 Considering two example files as follows:
@@ -13,6 +15,11 @@ File2:
 User mode head command:
 
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex1.png)
+![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex2.png)
+![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex3.png)
+![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex4.png)
+![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex5.png)
+![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex6.png)
 
 
 
