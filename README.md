@@ -94,7 +94,11 @@ All the previous contributions have been classified by their date of accomplishm
 - Name: Kiarash Sedghi ([Website](https://gkiarashv.github.io))
 - Email: kiarashs@usf.edu
 
-  
+# Team
+- Kiarash Sedghi
+- Moloud Esmaeili
+- Parsa Khorrmi
+
 # Resources
 - https://github.com/zamanighazaleh/xv6-kernel-system-call
 
