@@ -1,4 +1,3 @@
-
 # Examples
 
 In the following, there are examples of how to work with the uniq command in the xv6 environment executed once in user mode and once in kernel mode.
