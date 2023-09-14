@@ -4,28 +4,26 @@ Level | Description |
 | Kernel | Two new system calls, uniq and head, have been added  |
 | User | Two new commands, uniq and head, have been added |
 
-### Extension libraries (elibs)
+### Extension Libraries (elibs)
 Level | Files |
 | --- | --- |
-| Kernel/elibs/ | string.c, file.c  |
-| User/elibs/ | string.c, file.c |
+| Kernel/elibs/ | file.c  |
+| User/elibs/ |  file.c |
 
-
-### ELIBS detail
-
-
-#### User/elibs/string.c
-Contains the following functionalites regarding strings
-
-Functionality | Description |
+### Global Extension Libraries (gelibs)
+Level | Files |
 | --- | --- |
-| get_strlen() | returns the length of a given string  |
-| compare_str() | compares two string considering their case |
-| compare_str_ic() | compares two string ignoring their case |
+| gelibs/ | string.c file.h string.h etypes.h |
 
+
+
+
+
+
+# ELIBS details
 
 #### User/elibs/file.c
-Contains the following functionalites for file manipualtion
+Contains the following functionalities for file manipulation.
 
 Functionality | Description |
 | --- | --- |
@@ -33,24 +31,37 @@ Functionality | Description |
 | read_line() | reads a line from the given file |
 
 
-#### Kernel/elibs/string.c
-Contains the following functionalites regarding strings
-
-Functionality | Description |
-| --- | --- |
-| get_strlen() | Returns the length of a given string  |
-| compare_str() | Compares two string considering their case |
-| compare_str_ic() | Compares two string ignoring their case |
-
-
 #### Kernel/elibs/file.c
-Contains the following functionalites for file manipualtion
+Contains the following functionalities for file manipulation.
 
 Functionality | Description |
 | --- | --- |
 | open_file() | Opens a file and returns a file descriptor  |
 | read_line() | Reads a line from the given file |
 | close_file() | Closes the given file |
+
+
+
+# GELIBS details
+
+#### gelibs/string.c
+Contains the following functionalities regarding strings.
+
+Functionality | Description |
+| --- | --- |
+| get_strlen() | returns the length of a given string  |
+| compare_str() | compares two strings considering their case |
+| compare_str_ic() | compares two strings ignoring their case |
+
+
+
+
+
+
+
+
+
+
 
 
 # Extensions
