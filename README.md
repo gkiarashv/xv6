@@ -1,6 +1,8 @@
 # xv6 OS updates
 
-A repository that contributes to the existing [xv6](https://pdos.csail.mit.edu/6.828/2012/xv6.html) operating system. Particularly, we have contributed to the RISC-V based implementation of this ([xv6-riscv](https://github.com/mit-pdos/xv6-riscv)). 
+A repository that contributes to the existing [xv6](https://pdos.csail.mit.edu/6.828/2012/xv6.html) operating system. Particularly, we have contributed to the RISC-V based implementation of this ([xv6-riscv](https://github.com/mit-pdos/xv6-riscv)) ran on Ubuntu 22.04 ARM64.
+
+
 
 
 # Table of contents
@@ -68,8 +70,8 @@ ZhUyU1997, and Zou Chang Wei.
 
 4. Clonning the xv6 repository
    ```sh
-   git clone https :// github .com/mit-pdos/xv6-riscv
-   cd xv6 -riscv
+   git clone https://github.com/mit-pdos/xv6-riscv
+   cd xv6-riscv
    ```
 5. Building the kernel
    ```sh
