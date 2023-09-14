@@ -29,9 +29,28 @@ Considering two example files as follows:
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex5.png)
 
 
+![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex6.png)
+
+
 
 # Kernel mode
 
+## head -n 4
+![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headkernelex1.png)
+
+## cat file1 | head -n 3
+![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headkernelex2.png)
+
+## head file1 file2
+![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headkernelex3.png)
+
+## head README file1 file2 -n 8
+![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headkernelex4.png)
+
+## head README file1
+![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headkernelex5.png)
+
+![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headkernelex6.png)
 
 
 
