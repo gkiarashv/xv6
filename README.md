@@ -75,6 +75,7 @@ ZhUyU1997, and Zou Chang Wei.
    ```
 5. Building the kernel
    ```sh
+   make clean
    make
    ```
 
