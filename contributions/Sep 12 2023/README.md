@@ -20,6 +20,10 @@ Path | Files |
 | --- | --- |
 | efunctions/ | head.c, uniq.c |
 
+### Extension Modifications (EMODIFICATIONS)
+Path | Files |
+| --- | --- |
+| kernel/ | pipe.c |
 
 
 
@@ -62,6 +66,11 @@ Functionality | Description |
 | head_run() | Actual implementation of the head functionality  |
 | uniq_run() | Actual implementation of the uniq functionality |
 
+
+# EMODIFICATIONS details
+Functionality | Description |
+| --- | --- |
+| read_pipe() | Reading from pipe in the kernel mode  |
 
 
 
