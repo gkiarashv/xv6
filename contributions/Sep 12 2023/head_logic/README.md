@@ -1,5 +1,5 @@
 
-![file1](https://github.com/gkiarashv/xv6/blob/main/images/headlogic.png)
+![file1](https://github.com/gkiarashv/xv6/blob/main/images/head_logic.png)
 
 
 
