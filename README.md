@@ -99,6 +99,8 @@ All the previous contributions have been classified by their date of accomplishm
 - Moloud Esmaeili
 - Parsa Khorrmi
 
+As a team, we engaged in thorough discussions pertaining to the design and implementation strategies required to implement the system calls and user level commands.
+
 # Resources
 - https://github.com/zamanighazaleh/xv6-kernel-system-call
 
