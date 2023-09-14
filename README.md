@@ -87,12 +87,14 @@ If every previous step is successful, the xv6 is running and you can issue `ls`.
 
 
 # Contributions and Usages
-All the previous contributions have been classified by their date of accomplishment and can be found in the [contributions](https://github.com/gkiarashv/xv6/tree/main/contributions/Sep%2012%202023) folder.
+All the previous contributions have been classified by their date of accomplishment and can be found in the contributions [folder](https://github.com/gkiarashv/xv6/tree/main/contributions/Sep%2012%202023).
 
 
 # Authors
-- [kiarash sedghi](https://gkiarashv.github.io)
+- Name: Kiarash Sedghi ([Website](https://gkiarashv.github.io))
+- Email: kiarashs@usf.edu
 
+  
 # Resources
 - https://github.com/zamanighazaleh/xv6-kernel-system-call
 
