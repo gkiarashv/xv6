@@ -18,8 +18,7 @@ File2:
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex3.png)
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex4.png)
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex5.png)
-![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex6.png)
-![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex7.png)
+
 
 
 
