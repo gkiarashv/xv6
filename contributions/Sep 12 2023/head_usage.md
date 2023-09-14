@@ -12,12 +12,11 @@ File2:
 
 User mode head command:
 
-![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex.png)
-![headuserstdin](https://github.com/gkiarashv/xv6/blob/main/images/headuserexstdin.png)
+![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex1.png)
+
 
 
 Kernel mode head command:
-![headkernelex](https://github.com/gkiarashv/xv6/blob/main/images/headkernelex.png)
-![headkernelstdin](https://github.com/gkiarashv/xv6/blob/main/images/headkernelstdin.png)
+
 
 
