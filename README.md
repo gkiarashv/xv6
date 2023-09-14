@@ -97,7 +97,7 @@ All the previous contributions have been classified by their date of accomplishm
 # Team
 - Kiarash Sedghi
 - Moloud Esmaeili
-- Parsa Khorrmi
+- Parsa Khorrami
 
 As a team, we engaged in thorough discussions pertaining to the design and implementation strategies required to implement the system calls and user level commands.
 
