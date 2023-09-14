@@ -5,25 +5,34 @@ In the following, there are examples of how to work with the head command in the
 Considering two example files as follows:
 
 
-File1:
+## File 1
 ![file1](https://github.com/gkiarashv/xv6/blob/main/images/file1.png)
 
-File2:
+## File2
 ![file2](https://github.com/gkiarashv/xv6/blob/main/images/file2.png)
 
+# User mode
 
-User mode head command:
-
+## head -n 4
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex1.png)
+
+## cat file1 | head -n 3
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex2.png)
+
+## head file1 file2
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex3.png)
+
+## head README file1 file2 -n 8
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex4.png)
+
+## head README file1
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex5.png)
-![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex6.png)
 
 
 
-Kernel mode head command:
+# Kernel mode
+
+
 
 
 
