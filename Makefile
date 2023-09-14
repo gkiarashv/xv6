@@ -1,5 +1,7 @@
 K=kernel
 U=user
+E=efunctions
+G=gelibs
 
 OBJS = \
   $K/entry.o \
@@ -30,8 +32,9 @@ OBJS = \
   $K/plic.o \
   $K/virtio_disk.o\
   $K/elibs/file.o\
-	$K/elibs/string.o\
-
+	$G/string.o\
+	$E/head.o\
+	$E/uniq.o\
 
 
 # riscv64-unknown-elf- or riscv64-linux-gnu-
@@ -69,10 +72,10 @@ CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 &
 
 # Disable PIE when possible (for Ubuntu 16.10 toolchain)
 ifneq ($(shell $(CC) -dumpspecs 2>/dev/null | grep -e '[^f]no-pie'),)
-CFLAGS += -fno-pie -no-pie -Wno-pointer-sign -Wno-incompatible-pointer-types -Wno-return-type -Wno-unused-variable -Wno-maybe-uninitialized
+CFLAGS += -fno-pie -no-pie -Wno-unused-function -Wno-pointer-sign -Wno-incompatible-pointer-types -Wno-return-type -Wno-unused-variable -Wno-maybe-uninitialized
 endif
 ifneq ($(shell $(CC) -dumpspecs 2>/dev/null | grep -e '[^f]nopie'),)
-CFLAGS += -fno-pie -nopie -Wno-pointer-sign -Wno-incompatible-pointer-types -Wno-return-type -Wno-unused-variable -Wno-maybe-uninitialized
+CFLAGS += -fno-pie -nopie -Wno-unused-function -Wno-pointer-sign -Wno-incompatible-pointer-types -Wno-return-type -Wno-unused-variable -Wno-maybe-uninitialized
 endif
 
 LDFLAGS = -z max-page-size=4096
@@ -91,7 +94,8 @@ $U/initcode: $U/initcode.S
 tags: $(OBJS) _init
 	etags *.S *.c
 
-ULIB = $U/ulib.o $U/usys.o $U/printf.o $U/umalloc.o $U/elibs/io.o $U/elibs/file.o $U/elibs/string.o
+ULIB = $U/ulib.o $U/usys.o $U/printf.o $U/umalloc.o $E/head.o $E/uniq.o $G/string.o $U/elibs/file.o
+
 
 _%: %.o $(ULIB)
 	$(LD) $(LDFLAGS) -T $U/user.ld -o $@ $^
@@ -140,8 +144,8 @@ UPROGS=\
 	$U/_uniq\
 
 
-fs.img: mkfs/mkfs README file1 $(UPROGS)
-	mkfs/mkfs fs.img README file1 $(UPROGS)
+fs.img: mkfs/mkfs README file1 file2 $(UPROGS)
+	mkfs/mkfs fs.img README file1 file2  $(UPROGS)
 
 -include kernel/*.d user/*.d 
 

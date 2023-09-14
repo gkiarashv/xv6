@@ -6,49 +6,22 @@
 #include "spinlock.h"
 #include "proc.h"
 
-// #include "fcntl.h"
-// #include "stat.h"
-// // #include "file.h"
-// #include "fs.h"
 
-// struct inode {
-//   uint dev;           // Device number
-//   uint inum;          // Inode number
-//   int ref;            // Reference count
-//   struct sleeplock lock; // protects everything below here
-//   int valid;          // inode has been read from disk?
-
-//   short type;         // copy of disk inode
-//   short major;
-//   short minor;
-//   short nlink;
-//   uint size;
-//   uint addrs[NDIRECT+1];
-// };
+#include "gelibs/file.h"
+#include "efunctions/head.h"
+#include "efunctions/uniq.h"
 
 
 
-// static void head_kernel_run(int fd, int lineCount){
-//   printf("running on file \n");
-// }
 
-
-
-extern int open_file(char * path, int omode);
-
-extern int read_line(int fd, char * buffer);
-
-extern void head_run(int fd, int numOfLines);
-
-int uniq_run(int fd, char ignoreCase, char showCount, char repeatedLines);
 
 /*
 
 Head syscall 
 
+  
   head(char ** files , int numOfLines);
-
-
+  
 */
 uint64 sys_head(void){
 
@@ -62,107 +35,63 @@ uint64 sys_head(void){
   argaddr(0, &passedFiles);
   argint(1, &lineCount);
 
-
+  /* Get number of files passed as argument*/
+  uint64 files = passedFiles;
   uint64 fileAddr;
+  uint32 numOfFiles=0;
+  fetchaddr(files, &fileAddr);
+  while(fileAddr){files+=8;fetchaddr(files, &fileAddr);numOfFiles++;};
 
+
+  /* Fetching the first file */
   fetchaddr(passedFiles, &fileAddr);
 
   /* Reading from STDIN */
-  if(!fileAddr){
+  if(!fileAddr)
     head_run(0, lineCount);
-    printf("Reading from stdin");
-  }
   else{
-    printf("here %x\n",fileAddr);
     
     while(fileAddr){
 
-      char fileName[100];
-      fetchstr(fileAddr, fileName, 100);
+      char fileName[MAX_FILE_NAME_LEN];
 
-      // Open the given file
-      // struct file * f;
-      // printf("%s\n",fileName);
+      fetchstr(fileAddr, fileName, MAX_FILE_NAME_LEN);
+
+      /* Open the given file */
       int fd = open_file(fileName, 0);
       
-      head_run(fd, lineCount);
+      if (fd == OPEN_FILE_ERROR)
+        printf("[ERR] opening the file '%s' failed \n",fileName);
+      else{
+        /* Only print the header if number of files is more than 1 */
+        if (numOfFiles > 1) 
+          printf("==> %s <==\n",fileName);
+        
+        head_run(fd , lineCount);
+      }
 
-      // printf(">> %d\n",fd);
+      // close_file(fd);
 
-      // char line[200]={0};
-
-      // int x = read_line(fd,line);
-      // line[x]=0;
-      // // head_kernel_run(12,12);
-      // printf(">> %s\n",line);
-
-      // x=read_line(fd,line);
-      // line[x]=0;
-      // // head_kernel_run(12,12);
-      // printf(">> %s\n",line);
-
-
-      // printf("%d\n",fd);
-
-      // Fetching the next file name
       passedFiles+=8;
       fetchaddr(passedFiles, &fileAddr);
-
     }
 
   }
-
-// while (*passedFiles){
-
-//       u32 fd = open_file(*passedFiles, RDONLY);
-      
-//       if (fd == OPEN_FILE_ERROR)
-//         printf("Error opening the file \n");
-//       else
-//         head_run(fd , lineCount);
-
-//       passedFiles++;
-//     }
-
-
-  // Checking the 
-
-
-  // uint64 p;
-  // argaddr(0, &p);
-
-  // // char ** argv = (char **)p;
-
-  // char path[100];
-  // int fd, omode;
-  // struct file *f;
-  // struct inode *ip;
-  // int n;
-
-  // // argint(1, &omode);
-  // // argstr(0, path, 100);
-  
-  // uint64 addr;
-  // // argaddr(n, &addr);
-  // fetchaddr(p+8,&addr);
-  // fetchstr(addr, path, 100);
-
-
-  // printf("%s,\n",path);
-
-
-  // hh(path);
-
-
-  // printf("%s",((char **)p)[0] );
   return 0;
 }
 
+
+
+
+
+
+
+
 /*
 
-Head syscall 
+uniq syscall 
 
-  head(char ** files , int numOfLines);
+  head(char ** files , char options);
 
 
 */
@@ -171,6 +100,8 @@ Head syscall
 #define OPT_IGNORE_CASE 1
 #define OPT_SHOW_COUNT 2
 #define OPT_SHOW_REPEATED_LINES 4
+
+
 
 
 uint64 sys_uniq(void){
@@ -185,102 +116,55 @@ uint64 sys_uniq(void){
   argaddr(0, &passedFiles);
   argint(1, &options);
 
-  printf("%d\n",options);
 
+  /* Get number of files passed as argument*/
+  uint64 files = passedFiles;
   uint64 fileAddr;
+  uint32 numOfFiles=0;
+  fetchaddr(files, &fileAddr);
+  while(fileAddr){files+=8;fetchaddr(files, &fileAddr);numOfFiles++;};
 
+
+
+  /* Fetching the first file */
   fetchaddr(passedFiles, &fileAddr);
 
+
+
+
   /* Reading from STDIN */
-  if(!fileAddr){
-    // head_run(0, lineCount);
-    printf("Reading from stdin");
-  }
+  if(!fileAddr)
+    uniq_run(0, options & OPT_IGNORE_CASE, options & OPT_SHOW_COUNT, options & OPT_SHOW_REPEATED_LINES);
   else{
 
-    
     while(fileAddr){
 
-      char fileName[100];
-      fetchstr(fileAddr, fileName, 100);
+      char fileName[MAX_FILE_NAME_LEN];
+      
+      fetchstr(fileAddr, fileName, MAX_FILE_NAME_LEN);
 
       // Open the given file
-      // struct file * f;
-      // printf("%s\n",fileName);
+
       int fd = open_file(fileName, 0);
 
-      uniq_run(fd, options & OPT_IGNORE_CASE, options & OPT_SHOW_COUNT, options & OPT_SHOW_REPEATED_LINES);
-      // printf(">> %s\n",fileName);
-      // head_run(fd, lineCount);
+      if (fd == OPEN_FILE_ERROR)
+        printf("[ERR] Error opening the file '%s' \n", fileName);
+      else{
+        if (numOfFiles > 1) 
+          printf("==> %s <==\n",fileName);
+        
+        uniq_run(fd, options & OPT_IGNORE_CASE, options & OPT_SHOW_COUNT, options & OPT_SHOW_REPEATED_LINES);
+      }
 
-      // printf(">> %d\n",fd);
+      // close_file(fd);
 
-      // char line[200]={0};
-
-      // int x = read_line(fd,line);
-      // line[x]=0;
-      // // head_kernel_run(12,12);
-      // printf(">> %s\n",line);
-
-      // x=read_line(fd,line);
-      // line[x]=0;
-      // // head_kernel_run(12,12);
-      // printf(">> %s\n",line);
-
-
-      // printf("%d\n",fd);
-
-      // Fetching the next file name
-      passedFiles+=8;
+      /* Fetching the next file name */
+      passedFiles+=8; // TODO
       fetchaddr(passedFiles, &fileAddr);
 
     }
 
   }
-
-// while (*passedFiles){
-
-//       u32 fd = open_file(*passedFiles, RDONLY);
-      
-//       if (fd == OPEN_FILE_ERROR)
-//         printf("Error opening the file \n");
-//       else
-//         head_run(fd , lineCount);
-
-//       passedFiles++;
-//     }
-
-
-  // Checking the 
-
-
-  // uint64 p;
-  // argaddr(0, &p);
-
-  // // char ** argv = (char **)p;
-
-  // char path[100];
-  // int fd, omode;
-  // struct file *f;
-  // struct inode *ip;
-  // int n;
-
-  // // argint(1, &omode);
-  // // argstr(0, path, 100);
-  
-  // uint64 addr;
-  // // argaddr(n, &addr);
-  // fetchaddr(p+8,&addr);
-  // fetchstr(addr, path, 100);
-
-
-  // printf("%s,\n",path);
-
-
-  // hh(path);
-
-
-  // printf("%s",((char **)p)[0] );
   return 0;
 }
 

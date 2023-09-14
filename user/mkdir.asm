@@ -45,7 +45,7 @@ main(int argc, char *argv[])
   3c:	a80d                	j	6e <main+0x6e>
     fprintf(2, "Usage: mkdir files...\n");
   3e:	00001597          	auipc	a1,0x1
-  42:	98258593          	addi	a1,a1,-1662 # 9c0 <compare_str_ic+0x5c>
+  42:	bc258593          	addi	a1,a1,-1086 # c00 <close_file+0x1e>
   46:	4509                	li	a0,2
   48:	00000097          	auipc	ra,0x0
   4c:	612080e7          	jalr	1554(ra) # 65a <fprintf>
@@ -56,7 +56,7 @@ main(int argc, char *argv[])
       fprintf(2, "mkdir: %s failed to create\n", argv[i]);
   5a:	6090                	ld	a2,0(s1)
   5c:	00001597          	auipc	a1,0x1
-  60:	97c58593          	addi	a1,a1,-1668 # 9d8 <compare_str_ic+0x74>
+  60:	bbc58593          	addi	a1,a1,-1092 # c18 <close_file+0x36>
   64:	4509                	li	a0,2
   66:	00000097          	auipc	ra,0x0
   6a:	5f4080e7          	jalr	1524(ra) # 65a <fprintf>
@@ -798,8 +798,8 @@ printint(int fd, int xx, int base, int sgn)
   do{
     buf[i++] = digits[x % base];
  3f0:	2601                	sext.w	a2,a2
- 3f2:	00000517          	auipc	a0,0x0
- 3f6:	66650513          	addi	a0,a0,1638 # a58 <digits>
+ 3f2:	00001517          	auipc	a0,0x1
+ 3f6:	8a650513          	addi	a0,a0,-1882 # c98 <digits>
  3fa:	883a                	mv	a6,a4
  3fc:	2705                	addiw	a4,a4,1
  3fe:	02c5f7bb          	remuw	a5,a1,a2
@@ -898,7 +898,7 @@ vprintf(int fd, const char *fmt, va_list ap)
  4ac:	02500a13          	li	s4,37
  4b0:	4c55                	li	s8,21
  4b2:	00000c97          	auipc	s9,0x0
- 4b6:	54ec8c93          	addi	s9,s9,1358 # a00 <compare_str_ic+0x9c>
+ 4b6:	78ec8c93          	addi	s9,s9,1934 # c40 <close_file+0x5e>
         printptr(fd, va_arg(ap, uint64));
       } else if(c == 's'){
         s = va_arg(ap, char*);
@@ -910,7 +910,7 @@ vprintf(int fd, const char *fmt, va_list ap)
  4be:	4d41                	li	s10,16
     putc(fd, digits[x >> (sizeof(uint64) * 8 - 4)]);
  4c0:	00000b97          	auipc	s7,0x0
- 4c4:	598b8b93          	addi	s7,s7,1432 # a58 <digits>
+ 4c4:	7d8b8b93          	addi	s7,s7,2008 # c98 <digits>
  4c8:	a839                	j	4e6 <vprintf+0x6a>
         putc(fd, c);
  4ca:	85ca                	mv	a1,s2
@@ -1040,7 +1040,7 @@ vprintf(int fd, const char *fmt, va_list ap)
  5e4:	bde5                	j	4dc <vprintf+0x60>
           s = "(null)";
  5e6:	00000997          	auipc	s3,0x0
- 5ea:	41298993          	addi	s3,s3,1042 # 9f8 <compare_str_ic+0x94>
+ 5ea:	65298993          	addi	s3,s3,1618 # c38 <close_file+0x56>
         while(*s != 0){
  5ee:	85ee                	mv	a1,s11
  5f0:	bff9                	j	5ce <vprintf+0x152>
@@ -1369,280 +1369,568 @@ malloc(uint nbytes)
  822:	4501                	li	a0,0
  824:	bf45                	j	7d4 <malloc+0x94>
 
-0000000000000826 <str_len>:
- 826:	1141                	addi	sp,sp,-16
- 828:	e422                	sd	s0,8(sp)
- 82a:	0800                	addi	s0,sp,16
- 82c:	00054783          	lbu	a5,0(a0)
- 830:	cf99                	beqz	a5,84e <str_len+0x28>
- 832:	00150713          	addi	a4,a0,1
- 836:	87ba                	mv	a5,a4
- 838:	4685                	li	a3,1
- 83a:	9e99                	subw	a3,a3,a4
- 83c:	00f6853b          	addw	a0,a3,a5
- 840:	0785                	addi	a5,a5,1
- 842:	fff7c703          	lbu	a4,-1(a5)
- 846:	fb7d                	bnez	a4,83c <str_len+0x16>
- 848:	6422                	ld	s0,8(sp)
- 84a:	0141                	addi	sp,sp,16
- 84c:	8082                	ret
- 84e:	4501                	li	a0,0
- 850:	bfe5                	j	848 <str_len+0x22>
+0000000000000826 <head_run>:
+#include "user/user.h"
+#include "gelibs/file.h"
 
-0000000000000852 <print>:
- 852:	1101                	addi	sp,sp,-32
- 854:	ec06                	sd	ra,24(sp)
- 856:	e822                	sd	s0,16(sp)
- 858:	e426                	sd	s1,8(sp)
- 85a:	1000                	addi	s0,sp,32
- 85c:	84aa                	mv	s1,a0
- 85e:	00000097          	auipc	ra,0x0
- 862:	fc8080e7          	jalr	-56(ra) # 826 <str_len>
- 866:	0005061b          	sext.w	a2,a0
- 86a:	85a6                	mv	a1,s1
- 86c:	4505                	li	a0,1
- 86e:	00000097          	auipc	ra,0x0
- 872:	ab0080e7          	jalr	-1360(ra) # 31e <write>
- 876:	60e2                	ld	ra,24(sp)
- 878:	6442                	ld	s0,16(sp)
- 87a:	64a2                	ld	s1,8(sp)
- 87c:	6105                	addi	sp,sp,32
- 87e:	8082                	ret
+extern int read_line(int fd, char * buffer);
 
-0000000000000880 <open_file>:
-[INPUT]: File's name
-		 Manipulation mode
+void head_run(int fd, int numOfLines){
+ 826:	dc010113          	addi	sp,sp,-576
+ 82a:	22113c23          	sd	ra,568(sp)
+ 82e:	22813823          	sd	s0,560(sp)
+ 832:	22913423          	sd	s1,552(sp)
+ 836:	23213023          	sd	s2,544(sp)
+ 83a:	21313c23          	sd	s3,536(sp)
+ 83e:	21413823          	sd	s4,528(sp)
+ 842:	21513423          	sd	s5,520(sp)
+ 846:	0480                	addi	s0,sp,576
+ 848:	89aa                	mv	s3,a0
+	
+	char line[MAX_LINE_LEN];
+	int readStatus;
 
-[OUTPUT]: File descriptor, -1 on error
-*/
-s32 open_file(u8 * filePath, s32 flag){
- 880:	1141                	addi	sp,sp,-16
- 882:	e406                	sd	ra,8(sp)
- 884:	e022                	sd	s0,0(sp)
- 886:	0800                	addi	s0,sp,16
-	s32 fd = open(filePath, flag);
- 888:	00000097          	auipc	ra,0x0
- 88c:	ab6080e7          	jalr	-1354(ra) # 33e <open>
-	return fd;
-}
- 890:	60a2                	ld	ra,8(sp)
- 892:	6402                	ld	s0,0(sp)
- 894:	0141                	addi	sp,sp,16
- 896:	8082                	ret
+	while(numOfLines--){
+ 84a:	892e                	mv	s2,a1
 
-0000000000000898 <read_line>:
-
-
-
-
-s64 read_line(s32 fd, u8 * buffer){
- 898:	7139                	addi	sp,sp,-64
- 89a:	fc06                	sd	ra,56(sp)
- 89c:	f822                	sd	s0,48(sp)
- 89e:	f426                	sd	s1,40(sp)
- 8a0:	f04a                	sd	s2,32(sp)
- 8a2:	ec4e                	sd	s3,24(sp)
- 8a4:	e852                	sd	s4,16(sp)
- 8a6:	0080                	addi	s0,sp,64
- 8a8:	892a                	mv	s2,a0
- 8aa:	89ae                	mv	s3,a1
-
-	u8 readByte;
-	s64 byteCount = 0;
- 8ac:	4481                	li	s1,0
+		readStatus = read_line(fd, line);
+		
+		if (readStatus == READ_ERROR){
+ 84c:	5a7d                	li	s4,-1
+			printf("[ERR] Error reading from the file \n");
+			break;
 		}
 
-		*buffer++ = readByte;
-		byteCount++;
+		printf("%s",line);
+ 84e:	00000a97          	auipc	s5,0x0
+ 852:	48aa8a93          	addi	s5,s5,1162 # cd8 <digits+0x40>
+	while(numOfLines--){
+ 856:	02090e63          	beqz	s2,892 <head_run+0x6c>
+		readStatus = read_line(fd, line);
+ 85a:	dc840593          	addi	a1,s0,-568
+ 85e:	854e                	mv	a0,s3
+ 860:	00000097          	auipc	ra,0x0
+ 864:	324080e7          	jalr	804(ra) # b84 <read_line>
+ 868:	84aa                	mv	s1,a0
+		if (readStatus == READ_ERROR){
+ 86a:	01450c63          	beq	a0,s4,882 <head_run+0x5c>
+		printf("%s",line);
+ 86e:	dc840593          	addi	a1,s0,-568
+ 872:	8556                	mv	a0,s5
+ 874:	00000097          	auipc	ra,0x0
+ 878:	e14080e7          	jalr	-492(ra) # 688 <printf>
 
-		if (readByte == '\n')
- 8ae:	4a29                	li	s4,10
-	while((readStatus = read(fd,&readByte,1))){
- 8b0:	4605                	li	a2,1
- 8b2:	fcf40593          	addi	a1,s0,-49
- 8b6:	854a                	mv	a0,s2
- 8b8:	00000097          	auipc	ra,0x0
- 8bc:	a5e080e7          	jalr	-1442(ra) # 316 <read>
- 8c0:	87aa                	mv	a5,a0
- 8c2:	cd01                	beqz	a0,8da <read_line+0x42>
-		if (readStatus <= 0L){
- 8c4:	02f05463          	blez	a5,8ec <read_line+0x54>
-		*buffer++ = readByte;
- 8c8:	fcf44783          	lbu	a5,-49(s0)
- 8cc:	00998733          	add	a4,s3,s1
- 8d0:	00f70023          	sb	a5,0(a4)
-		byteCount++;
- 8d4:	0485                	addi	s1,s1,1
-		if (readByte == '\n')
- 8d6:	fd479de3          	bne	a5,s4,8b0 <read_line+0x18>
-			return byteCount;
+		if (readStatus == READ_EOF )
+ 87c:	397d                	addiw	s2,s2,-1
+ 87e:	fce1                	bnez	s1,856 <head_run+0x30>
+ 880:	a809                	j	892 <head_run+0x6c>
+			printf("[ERR] Error reading from the file \n");
+ 882:	00000517          	auipc	a0,0x0
+ 886:	42e50513          	addi	a0,a0,1070 # cb0 <digits+0x18>
+ 88a:	00000097          	auipc	ra,0x0
+ 88e:	dfe080e7          	jalr	-514(ra) # 688 <printf>
+			break;
 	}
-
-	return byteCount;
 }
- 8da:	8526                	mv	a0,s1
- 8dc:	70e2                	ld	ra,56(sp)
- 8de:	7442                	ld	s0,48(sp)
- 8e0:	74a2                	ld	s1,40(sp)
- 8e2:	7902                	ld	s2,32(sp)
- 8e4:	69e2                	ld	s3,24(sp)
- 8e6:	6a42                	ld	s4,16(sp)
- 8e8:	6121                	addi	sp,sp,64
- 8ea:	8082                	ret
-			if (byteCount == 0)
- 8ec:	f4fd                	bnez	s1,8da <read_line+0x42>
-	while((readStatus = read(fd,&readByte,1))){
- 8ee:	84aa                	mv	s1,a0
- 8f0:	b7ed                	j	8da <read_line+0x42>
+ 892:	23813083          	ld	ra,568(sp)
+ 896:	23013403          	ld	s0,560(sp)
+ 89a:	22813483          	ld	s1,552(sp)
+ 89e:	22013903          	ld	s2,544(sp)
+ 8a2:	21813983          	ld	s3,536(sp)
+ 8a6:	21013a03          	ld	s4,528(sp)
+ 8aa:	20813a83          	ld	s5,520(sp)
+ 8ae:	24010113          	addi	sp,sp,576
+ 8b2:	8082                	ret
 
-00000000000008f2 <close_file>:
+00000000000008b4 <uniq_run>:
+   repeatedLines: Shows only repeated lines
+
+[OUTPUT]: 
+
+*/
+void uniq_run(int fd, char ignoreCase, char showCount, char repeatedLines){
+ 8b4:	ba010113          	addi	sp,sp,-1120
+ 8b8:	44113c23          	sd	ra,1112(sp)
+ 8bc:	44813823          	sd	s0,1104(sp)
+ 8c0:	44913423          	sd	s1,1096(sp)
+ 8c4:	45213023          	sd	s2,1088(sp)
+ 8c8:	43313c23          	sd	s3,1080(sp)
+ 8cc:	43413823          	sd	s4,1072(sp)
+ 8d0:	43513423          	sd	s5,1064(sp)
+ 8d4:	43613023          	sd	s6,1056(sp)
+ 8d8:	41713c23          	sd	s7,1048(sp)
+ 8dc:	41813823          	sd	s8,1040(sp)
+ 8e0:	41913423          	sd	s9,1032(sp)
+ 8e4:	41a13023          	sd	s10,1024(sp)
+ 8e8:	3fb13c23          	sd	s11,1016(sp)
+ 8ec:	46010413          	addi	s0,sp,1120
+ 8f0:	8aaa                	mv	s5,a0
+ 8f2:	8bae                	mv	s7,a1
+ 8f4:	8db2                	mv	s11,a2
+ 8f6:	8c36                	mv	s8,a3
+  char * line1 = buffer1;
+  char * line2 = buffer2;
+  
+  
+  uint64 readStatus;
+  readStatus = read_line(fd, line1);
+ 8f8:	d9840593          	addi	a1,s0,-616
+ 8fc:	00000097          	auipc	ra,0x0
+ 900:	288080e7          	jalr	648(ra) # b84 <read_line>
+
+  if (readStatus == READ_ERROR)
+ 904:	57fd                	li	a5,-1
+ 906:	04f50163          	beq	a0,a5,948 <uniq_run+0x94>
+ 90a:	4b01                	li	s6,0
+    printf("[ERR] Error reading from the file ");
+  
+  else if (readStatus != READ_EOF){
+ 90c:	ed21                	bnez	a0,964 <uniq_run+0xb0>
 
 
-void close_file(s32 fd){
- 8f2:	1141                	addi	sp,sp,-16
- 8f4:	e406                	sd	ra,8(sp)
- 8f6:	e022                	sd	s0,0(sp)
- 8f8:	0800                	addi	s0,sp,16
-	close(fd);
- 8fa:	00000097          	auipc	ra,0x0
- 8fe:	a2c080e7          	jalr	-1492(ra) # 326 <close>
+
+
+
 }
- 902:	60a2                	ld	ra,8(sp)
- 904:	6402                	ld	s0,0(sp)
- 906:	0141                	addi	sp,sp,16
- 908:	8082                	ret
+ 90e:	45813083          	ld	ra,1112(sp)
+ 912:	45013403          	ld	s0,1104(sp)
+ 916:	44813483          	ld	s1,1096(sp)
+ 91a:	44013903          	ld	s2,1088(sp)
+ 91e:	43813983          	ld	s3,1080(sp)
+ 922:	43013a03          	ld	s4,1072(sp)
+ 926:	42813a83          	ld	s5,1064(sp)
+ 92a:	42013b03          	ld	s6,1056(sp)
+ 92e:	41813b83          	ld	s7,1048(sp)
+ 932:	41013c03          	ld	s8,1040(sp)
+ 936:	40813c83          	ld	s9,1032(sp)
+ 93a:	40013d03          	ld	s10,1024(sp)
+ 93e:	3f813d83          	ld	s11,1016(sp)
+ 942:	46010113          	addi	sp,sp,1120
+ 946:	8082                	ret
+    printf("[ERR] Error reading from the file ");
+ 948:	00000517          	auipc	a0,0x0
+ 94c:	39850513          	addi	a0,a0,920 # ce0 <digits+0x48>
+ 950:	00000097          	auipc	ra,0x0
+ 954:	d38080e7          	jalr	-712(ra) # 688 <printf>
+ 958:	bf5d                	j	90e <uniq_run+0x5a>
+ 95a:	87ca                	mv	a5,s2
+ 95c:	8926                	mv	s2,s1
+        swap_pointers(line1, line2);
+ 95e:	84be                	mv	s1,a5
+        lineCount = 1;
+ 960:	89ea                	mv	s3,s10
+ 962:	a8fd                	j	a60 <uniq_run+0x1ac>
+    int isEof = 0;
+ 964:	4a01                	li	s4,0
+    int lineCount=1;
+ 966:	4985                	li	s3,1
+  char * line2 = buffer2;
+ 968:	ba040493          	addi	s1,s0,-1120
+  char * line1 = buffer1;
+ 96c:	d9840913          	addi	s2,s0,-616
+      if (readStatus == READ_ERROR){
+ 970:	5cfd                	li	s9,-1
+        isEof = 1;
+ 972:	4d05                	li	s10,1
+ 974:	a0f5                	j	a60 <uniq_run+0x1ac>
+        printf("[ERR] Error reading from the file");
+ 976:	00000517          	auipc	a0,0x0
+ 97a:	39250513          	addi	a0,a0,914 # d08 <digits+0x70>
+ 97e:	00000097          	auipc	ra,0x0
+ 982:	d0a080e7          	jalr	-758(ra) # 688 <printf>
+        break;
+ 986:	b761                	j	90e <uniq_run+0x5a>
+        compareStatus = compare_str_ic(line1, line2);
+ 988:	85a6                	mv	a1,s1
+ 98a:	854a                	mv	a0,s2
+ 98c:	00000097          	auipc	ra,0x0
+ 990:	184080e7          	jalr	388(ra) # b10 <compare_str_ic>
+ 994:	a8d5                	j	a88 <uniq_run+0x1d4>
+                  printf("%s",line1);
+ 996:	85ca                	mv	a1,s2
+ 998:	00000517          	auipc	a0,0x0
+ 99c:	34050513          	addi	a0,a0,832 # cd8 <digits+0x40>
+ 9a0:	00000097          	auipc	ra,0x0
+ 9a4:	ce8080e7          	jalr	-792(ra) # 688 <printf>
+        lineCount = 1;
+ 9a8:	89da                	mv	s3,s6
+                  printf("%s",line1);
+ 9aa:	87ca                	mv	a5,s2
+ 9ac:	8926                	mv	s2,s1
+        swap_pointers(line1, line2);
+ 9ae:	84be                	mv	s1,a5
+        isRepeated = 0 ;
+ 9b0:	4b01                	li	s6,0
+ 9b2:	a07d                	j	a60 <uniq_run+0x1ac>
+            if (showCount){
+ 9b4:	040d8b63          	beqz	s11,a0a <uniq_run+0x156>
+              printf("<%d> %s",lineCount,line1);
+ 9b8:	864a                	mv	a2,s2
+ 9ba:	85ce                	mv	a1,s3
+ 9bc:	00000517          	auipc	a0,0x0
+ 9c0:	37450513          	addi	a0,a0,884 # d30 <digits+0x98>
+ 9c4:	00000097          	auipc	ra,0x0
+ 9c8:	cc4080e7          	jalr	-828(ra) # 688 <printf>
+              if (isEof && get_strlen(line2)){
+ 9cc:	000a1863          	bnez	s4,9dc <uniq_run+0x128>
+        isRepeated = 0 ;
+ 9d0:	8b52                	mv	s6,s4
+ 9d2:	87ca                	mv	a5,s2
+ 9d4:	8926                	mv	s2,s1
+        swap_pointers(line1, line2);
+ 9d6:	84be                	mv	s1,a5
+        lineCount = 1;
+ 9d8:	89ea                	mv	s3,s10
+ 9da:	a059                	j	a60 <uniq_run+0x1ac>
+              if (isEof && get_strlen(line2)){
+ 9dc:	8526                	mv	a0,s1
+ 9de:	00000097          	auipc	ra,0x0
+ 9e2:	0d8080e7          	jalr	216(ra) # ab6 <get_strlen>
+ 9e6:	8b2a                	mv	s6,a0
+ 9e8:	e511                	bnez	a0,9f4 <uniq_run+0x140>
+        lineCount = 1;
+ 9ea:	89d2                	mv	s3,s4
+ 9ec:	87ca                	mv	a5,s2
+ 9ee:	8926                	mv	s2,s1
+        swap_pointers(line1, line2);
+ 9f0:	84be                	mv	s1,a5
+ 9f2:	a0bd                	j	a60 <uniq_run+0x1ac>
+                printf("<%d> %s",lineCount,line2); 
+ 9f4:	8626                	mv	a2,s1
+ 9f6:	85ce                	mv	a1,s3
+ 9f8:	00000517          	auipc	a0,0x0
+ 9fc:	33850513          	addi	a0,a0,824 # d30 <digits+0x98>
+ a00:	00000097          	auipc	ra,0x0
+ a04:	c88080e7          	jalr	-888(ra) # 688 <printf>
+                break;
+ a08:	b719                	j	90e <uniq_run+0x5a>
+              printf("%s",line1);
+ a0a:	85ca                	mv	a1,s2
+ a0c:	00000517          	auipc	a0,0x0
+ a10:	2cc50513          	addi	a0,a0,716 # cd8 <digits+0x40>
+ a14:	00000097          	auipc	ra,0x0
+ a18:	c74080e7          	jalr	-908(ra) # 688 <printf>
+              if (isEof && get_strlen(line2)){
+ a1c:	000a1863          	bnez	s4,a2c <uniq_run+0x178>
+        isRepeated = 0 ;
+ a20:	8b52                	mv	s6,s4
+ a22:	87ca                	mv	a5,s2
+ a24:	8926                	mv	s2,s1
+        swap_pointers(line1, line2);
+ a26:	84be                	mv	s1,a5
+        lineCount = 1;
+ a28:	89ea                	mv	s3,s10
+ a2a:	a81d                	j	a60 <uniq_run+0x1ac>
+              if (isEof && get_strlen(line2)){
+ a2c:	8526                	mv	a0,s1
+ a2e:	00000097          	auipc	ra,0x0
+ a32:	088080e7          	jalr	136(ra) # ab6 <get_strlen>
+ a36:	8b2a                	mv	s6,a0
+ a38:	e511                	bnez	a0,a44 <uniq_run+0x190>
+        lineCount = 1;
+ a3a:	89d2                	mv	s3,s4
+ a3c:	87ca                	mv	a5,s2
+ a3e:	8926                	mv	s2,s1
+        swap_pointers(line1, line2);
+ a40:	84be                	mv	s1,a5
+ a42:	a839                	j	a60 <uniq_run+0x1ac>
+                printf("%s",line2);
+ a44:	85a6                	mv	a1,s1
+ a46:	00000517          	auipc	a0,0x0
+ a4a:	29250513          	addi	a0,a0,658 # cd8 <digits+0x40>
+ a4e:	00000097          	auipc	ra,0x0
+ a52:	c3a080e7          	jalr	-966(ra) # 688 <printf>
+                break;
+ a56:	bd65                	j	90e <uniq_run+0x5a>
+          if (repeatedLines && !isRepeated){
+ a58:	000c0363          	beqz	s8,a5e <uniq_run+0x1aa>
+ a5c:	8b6a                	mv	s6,s10
+          lineCount++;
+ a5e:	2985                	addiw	s3,s3,1
+      readStatus = read_line(fd, line2);
+ a60:	85a6                	mv	a1,s1
+ a62:	8556                	mv	a0,s5
+ a64:	00000097          	auipc	ra,0x0
+ a68:	120080e7          	jalr	288(ra) # b84 <read_line>
+      if (readStatus == READ_ERROR){
+ a6c:	f19505e3          	beq	a0,s9,976 <uniq_run+0xc2>
+      if (readStatus == READ_EOF){
+ a70:	e501                	bnez	a0,a78 <uniq_run+0x1c4>
+        if (isEof)
+ a72:	e80a1ee3          	bnez	s4,90e <uniq_run+0x5a>
+        isEof = 1;
+ a76:	8a6a                	mv	s4,s10
+      if (!ignoreCase)
+ a78:	f00b98e3          	bnez	s7,988 <uniq_run+0xd4>
+        compareStatus = compare_str(line1, line2);
+ a7c:	85a6                	mv	a1,s1
+ a7e:	854a                	mv	a0,s2
+ a80:	00000097          	auipc	ra,0x0
+ a84:	062080e7          	jalr	98(ra) # ae2 <compare_str>
+      if (compareStatus != 0){ // Not equal
+ a88:	d961                	beqz	a0,a58 <uniq_run+0x1a4>
+          if (repeatedLines){
+ a8a:	f20c05e3          	beqz	s8,9b4 <uniq_run+0x100>
+            if (isRepeated){
+ a8e:	ec0b06e3          	beqz	s6,95a <uniq_run+0xa6>
+                if (showCount)
+ a92:	f00d82e3          	beqz	s11,996 <uniq_run+0xe2>
+                  printf("<%d> %s",lineCount,line1);
+ a96:	864a                	mv	a2,s2
+ a98:	85ce                	mv	a1,s3
+ a9a:	00000517          	auipc	a0,0x0
+ a9e:	29650513          	addi	a0,a0,662 # d30 <digits+0x98>
+ aa2:	00000097          	auipc	ra,0x0
+ aa6:	be6080e7          	jalr	-1050(ra) # 688 <printf>
+        lineCount = 1;
+ aaa:	89da                	mv	s3,s6
+ aac:	87ca                	mv	a5,s2
+ aae:	8926                	mv	s2,s1
+        swap_pointers(line1, line2);
+ ab0:	84be                	mv	s1,a5
+        isRepeated = 0 ;
+ ab2:	4b01                	li	s6,0
+ ab4:	b775                	j	a60 <uniq_run+0x1ac>
 
-000000000000090a <get_strlen>:
+0000000000000ab6 <get_strlen>:
 
 /* Computes the length of a string
 [Input]: String pointer
 [Output]: String's length
  */
-u32 get_strlen(const u8 * str){
- 90a:	1141                	addi	sp,sp,-16
- 90c:	e422                	sd	s0,8(sp)
- 90e:	0800                	addi	s0,sp,16
-	u32 len = 0;
+int get_strlen(const char * str){
+ ab6:	1141                	addi	sp,sp,-16
+ ab8:	e422                	sd	s0,8(sp)
+ aba:	0800                	addi	s0,sp,16
+	int len = 0;
 	while(*str++){len++;};
- 910:	00054783          	lbu	a5,0(a0)
- 914:	cf99                	beqz	a5,932 <get_strlen+0x28>
- 916:	00150713          	addi	a4,a0,1
- 91a:	87ba                	mv	a5,a4
- 91c:	4685                	li	a3,1
- 91e:	9e99                	subw	a3,a3,a4
- 920:	00f6853b          	addw	a0,a3,a5
- 924:	0785                	addi	a5,a5,1
- 926:	fff7c703          	lbu	a4,-1(a5)
- 92a:	fb7d                	bnez	a4,920 <get_strlen+0x16>
+ abc:	00054783          	lbu	a5,0(a0)
+ ac0:	cf99                	beqz	a5,ade <get_strlen+0x28>
+ ac2:	00150713          	addi	a4,a0,1
+ ac6:	87ba                	mv	a5,a4
+ ac8:	4685                	li	a3,1
+ aca:	9e99                	subw	a3,a3,a4
+ acc:	00f6853b          	addw	a0,a3,a5
+ ad0:	0785                	addi	a5,a5,1
+ ad2:	fff7c703          	lbu	a4,-1(a5)
+ ad6:	fb7d                	bnez	a4,acc <get_strlen+0x16>
 	return len;
 }
- 92c:	6422                	ld	s0,8(sp)
- 92e:	0141                	addi	sp,sp,16
- 930:	8082                	ret
-	u32 len = 0;
- 932:	4501                	li	a0,0
- 934:	bfe5                	j	92c <get_strlen+0x22>
+ ad8:	6422                	ld	s0,8(sp)
+ ada:	0141                	addi	sp,sp,16
+ adc:	8082                	ret
+	int len = 0;
+ ade:	4501                	li	a0,0
+ ae0:	bfe5                	j	ad8 <get_strlen+0x22>
 
-0000000000000936 <compare_str>:
+0000000000000ae2 <compare_str>:
 /* Compars two given strings
 [Input]: String 1 pointer
 		 String 2 pointer
 [Output]: 0 If equal, else 1
 */
-u8 compare_str(const u8 * s1 , const u8 * s2){
- 936:	1141                	addi	sp,sp,-16
- 938:	e422                	sd	s0,8(sp)
- 93a:	0800                	addi	s0,sp,16
+char compare_str(const char * s1 , const char * s2){
+ ae2:	1141                	addi	sp,sp,-16
+ ae4:	e422                	sd	s0,8(sp)
+ ae6:	0800                	addi	s0,sp,16
 
 	while(*s1 && *s2){
- 93c:	00054783          	lbu	a5,0(a0)
- 940:	cb91                	beqz	a5,954 <compare_str+0x1e>
- 942:	0005c703          	lbu	a4,0(a1)
- 946:	c719                	beqz	a4,954 <compare_str+0x1e>
+ ae8:	00054783          	lbu	a5,0(a0)
+ aec:	cb91                	beqz	a5,b00 <compare_str+0x1e>
+ aee:	0005c703          	lbu	a4,0(a1)
+ af2:	c719                	beqz	a4,b00 <compare_str+0x1e>
 		if (*s1++ != *s2++)
- 948:	0505                	addi	a0,a0,1
- 94a:	0585                	addi	a1,a1,1
- 94c:	fee788e3          	beq	a5,a4,93c <compare_str+0x6>
+ af4:	0505                	addi	a0,a0,1
+ af6:	0585                	addi	a1,a1,1
+ af8:	fee788e3          	beq	a5,a4,ae8 <compare_str+0x6>
 			return 1;
- 950:	4505                	li	a0,1
- 952:	a031                	j	95e <compare_str+0x28>
+ afc:	4505                	li	a0,1
+ afe:	a031                	j	b0a <compare_str+0x28>
 	}
 	if (*s1 == *s2)
- 954:	0005c503          	lbu	a0,0(a1)
- 958:	8d1d                	sub	a0,a0,a5
+ b00:	0005c503          	lbu	a0,0(a1)
+ b04:	8d1d                	sub	a0,a0,a5
 			return 1;
- 95a:	00a03533          	snez	a0,a0
+ b06:	00a03533          	snez	a0,a0
 		return 0;
 	return 1;
 }
- 95e:	6422                	ld	s0,8(sp)
- 960:	0141                	addi	sp,sp,16
- 962:	8082                	ret
+ b0a:	6422                	ld	s0,8(sp)
+ b0c:	0141                	addi	sp,sp,16
+ b0e:	8082                	ret
 
-0000000000000964 <compare_str_ic>:
+0000000000000b10 <compare_str_ic>:
 /* Compars two given strings (case-insensitive)
 [Input]: String 1 pointer
 		 String 2 pointer
 [Output]: 0 If equal, else 1
 */
-u8 compare_str_ic(const u8 * s1 , const u8 * s2){
- 964:	1141                	addi	sp,sp,-16
- 966:	e422                	sd	s0,8(sp)
- 968:	0800                	addi	s0,sp,16
+char compare_str_ic(const char * s1 , const char * s2){
+ b10:	1141                	addi	sp,sp,-16
+ b12:	e422                	sd	s0,8(sp)
+ b14:	0800                	addi	s0,sp,16
 	while(*s1 && *s2){
 
-		u8 b1 = *s1++;
-		u8 b2 = *s2++;
+		char b1 = *s1++;
+		char b2 = *s2++;
 
 		if (b1>='A' && b1<='Z'){
- 96a:	4665                	li	a2,25
+ b16:	4665                	li	a2,25
 	while(*s1 && *s2){
- 96c:	a019                	j	972 <compare_str_ic+0xe>
+ b18:	a019                	j	b1e <compare_str_ic+0xe>
 			b1 += 32;
 		}
 		if (b2>='A' && b2<='Z')
 			b2 += 32;
 
 		if (b1!=b2){
- 96e:	04e79763          	bne	a5,a4,9bc <compare_str_ic+0x58>
+ b1a:	04e79763          	bne	a5,a4,b68 <compare_str_ic+0x58>
 	while(*s1 && *s2){
- 972:	00054783          	lbu	a5,0(a0)
- 976:	cb9d                	beqz	a5,9ac <compare_str_ic+0x48>
- 978:	0005c703          	lbu	a4,0(a1)
- 97c:	cb05                	beqz	a4,9ac <compare_str_ic+0x48>
-		u8 b1 = *s1++;
- 97e:	0505                	addi	a0,a0,1
-		u8 b2 = *s2++;
- 980:	0585                	addi	a1,a1,1
+ b1e:	00054783          	lbu	a5,0(a0)
+ b22:	cb9d                	beqz	a5,b58 <compare_str_ic+0x48>
+ b24:	0005c703          	lbu	a4,0(a1)
+ b28:	cb05                	beqz	a4,b58 <compare_str_ic+0x48>
+		char b1 = *s1++;
+ b2a:	0505                	addi	a0,a0,1
+		char b2 = *s2++;
+ b2c:	0585                	addi	a1,a1,1
 		if (b1>='A' && b1<='Z'){
- 982:	fbf7869b          	addiw	a3,a5,-65
- 986:	0ff6f693          	zext.b	a3,a3
- 98a:	00d66663          	bltu	a2,a3,996 <compare_str_ic+0x32>
+ b2e:	fbf7869b          	addiw	a3,a5,-65
+ b32:	0ff6f693          	zext.b	a3,a3
+ b36:	00d66663          	bltu	a2,a3,b42 <compare_str_ic+0x32>
 			b1 += 32;
- 98e:	0207879b          	addiw	a5,a5,32
- 992:	0ff7f793          	zext.b	a5,a5
+ b3a:	0207879b          	addiw	a5,a5,32
+ b3e:	0ff7f793          	zext.b	a5,a5
 		if (b2>='A' && b2<='Z')
- 996:	fbf7069b          	addiw	a3,a4,-65
- 99a:	0ff6f693          	zext.b	a3,a3
- 99e:	fcd668e3          	bltu	a2,a3,96e <compare_str_ic+0xa>
+ b42:	fbf7069b          	addiw	a3,a4,-65
+ b46:	0ff6f693          	zext.b	a3,a3
+ b4a:	fcd668e3          	bltu	a2,a3,b1a <compare_str_ic+0xa>
 			b2 += 32;
- 9a2:	0207071b          	addiw	a4,a4,32
- 9a6:	0ff77713          	zext.b	a4,a4
- 9aa:	b7d1                	j	96e <compare_str_ic+0xa>
+ b4e:	0207071b          	addiw	a4,a4,32
+ b52:	0ff77713          	zext.b	a4,a4
+ b56:	b7d1                	j	b1a <compare_str_ic+0xa>
 			return 1;
 		}
 	}
 	if (*s1 == *s2)
- 9ac:	0005c503          	lbu	a0,0(a1)
- 9b0:	8d1d                	sub	a0,a0,a5
+ b58:	0005c503          	lbu	a0,0(a1)
+ b5c:	8d1d                	sub	a0,a0,a5
 			return 1;
- 9b2:	00a03533          	snez	a0,a0
+ b5e:	00a03533          	snez	a0,a0
 		return 0;
 	return 1;
 }
- 9b6:	6422                	ld	s0,8(sp)
- 9b8:	0141                	addi	sp,sp,16
- 9ba:	8082                	ret
+ b62:	6422                	ld	s0,8(sp)
+ b64:	0141                	addi	sp,sp,16
+ b66:	8082                	ret
 			return 1;
- 9bc:	4505                	li	a0,1
- 9be:	bfe5                	j	9b6 <compare_str_ic+0x52>
+ b68:	4505                	li	a0,1
+ b6a:	bfe5                	j	b62 <compare_str_ic+0x52>
+
+0000000000000b6c <open_file>:
+	filePath: File's path
+	flag: Manipulation flag
+
+[OUTPUT]: File descriptor, -1 on error
+*/
+int open_file(char * filePath, int flag){
+ b6c:	1141                	addi	sp,sp,-16
+ b6e:	e406                	sd	ra,8(sp)
+ b70:	e022                	sd	s0,0(sp)
+ b72:	0800                	addi	s0,sp,16
+	int fd = open(filePath, flag);
+ b74:	fffff097          	auipc	ra,0xfffff
+ b78:	7ca080e7          	jalr	1994(ra) # 33e <open>
+	return fd;
+}
+ b7c:	60a2                	ld	ra,8(sp)
+ b7e:	6402                	ld	s0,0(sp)
+ b80:	0141                	addi	sp,sp,16
+ b82:	8082                	ret
+
+0000000000000b84 <read_line>:
+
+[OUTPUT]: Number of read bytes. Upon reading end-of-file, zero is returned.  
+
+[ERROR]: -1 is returned
+*/
+int read_line(int fd, char * buffer){
+ b84:	7139                	addi	sp,sp,-64
+ b86:	fc06                	sd	ra,56(sp)
+ b88:	f822                	sd	s0,48(sp)
+ b8a:	f426                	sd	s1,40(sp)
+ b8c:	f04a                	sd	s2,32(sp)
+ b8e:	ec4e                	sd	s3,24(sp)
+ b90:	e852                	sd	s4,16(sp)
+ b92:	0080                	addi	s0,sp,64
+ b94:	89aa                	mv	s3,a0
+ b96:	84ae                	mv	s1,a1
+
+	char readByte;
+	int byteCount = 0;
+ b98:	4901                	li	s2,0
+			return byteCount; 
+		}
+		*buffer++ = readByte;
+		byteCount++;
+
+		if (readByte == '\n'){
+ b9a:	4a29                	li	s4,10
+		readStatus = read(fd,&readByte,1);
+ b9c:	4605                	li	a2,1
+ b9e:	fcf40593          	addi	a1,s0,-49
+ ba2:	854e                	mv	a0,s3
+ ba4:	fffff097          	auipc	ra,0xfffff
+ ba8:	772080e7          	jalr	1906(ra) # 316 <read>
+		if (readStatus <= 0){
+ bac:	02a05563          	blez	a0,bd6 <read_line+0x52>
+		*buffer++ = readByte;
+ bb0:	0485                	addi	s1,s1,1
+ bb2:	fcf44783          	lbu	a5,-49(s0)
+ bb6:	fef48fa3          	sb	a5,-1(s1)
+		byteCount++;
+ bba:	2905                	addiw	s2,s2,1
+		if (readByte == '\n'){
+ bbc:	ff4790e3          	bne	a5,s4,b9c <read_line+0x18>
+			*buffer = 0;  // Nullifying the end of the string
+ bc0:	00048023          	sb	zero,0(s1)
+		byteCount++;
+ bc4:	854a                	mv	a0,s2
+			return byteCount;
+		}
+	}
+}
+ bc6:	70e2                	ld	ra,56(sp)
+ bc8:	7442                	ld	s0,48(sp)
+ bca:	74a2                	ld	s1,40(sp)
+ bcc:	7902                	ld	s2,32(sp)
+ bce:	69e2                	ld	s3,24(sp)
+ bd0:	6a42                	ld	s4,16(sp)
+ bd2:	6121                	addi	sp,sp,64
+ bd4:	8082                	ret
+			*buffer = 0;  // Nullifying the end of the string
+ bd6:	00048023          	sb	zero,0(s1)
+			if (byteCount == 0)
+ bda:	fe0906e3          	beqz	s2,bc6 <read_line+0x42>
+ bde:	854a                	mv	a0,s2
+ be0:	b7dd                	j	bc6 <read_line+0x42>
+
+0000000000000be2 <close_file>:
+	fd: File discriptor
+
+[OUTPUT]:
+
+*/
+void close_file(int fd){
+ be2:	1141                	addi	sp,sp,-16
+ be4:	e406                	sd	ra,8(sp)
+ be6:	e022                	sd	s0,0(sp)
+ be8:	0800                	addi	s0,sp,16
+	close(fd);
+ bea:	fffff097          	auipc	ra,0xfffff
+ bee:	73c080e7          	jalr	1852(ra) # 326 <close>
+}
+ bf2:	60a2                	ld	ra,8(sp)
+ bf4:	6402                	ld	s0,0(sp)
+ bf6:	0141                	addi	sp,sp,16
+ bf8:	8082                	ret

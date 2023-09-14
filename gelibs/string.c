@@ -1,6 +1,5 @@
 
 
-
 /* Computes the length of a string
 [Input]: String pointer
 [Output]: String's length

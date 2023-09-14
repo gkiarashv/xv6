@@ -128,3 +128,40 @@ piperead(struct pipe *pi, uint64 addr, int n)
   release(&pi->lock);
   return i;
 }
+
+
+
+
+
+
+
+/*
+
+Reading from the pipe
+
+*/
+int
+read_pipe(struct pipe *pi, uint64 addr, int n)
+{
+  int i;
+  struct proc *pr = myproc();
+  char ch;
+
+  acquire(&pi->lock);
+  while(pi->nread == pi->nwrite && pi->writeopen){  //DOC: pipe-empty
+    if(killed(pr)){
+      release(&pi->lock);
+      return -1;
+    }
+    sleep(&pi->nread, &pi->lock); //DOC: piperead-sleep
+  }
+  for(i = 0; i < n; i++){  //DOC: piperead-copy
+    if(pi->nread == pi->nwrite)
+      break;
+    ch = pi->data[pi->nread++ % PIPESIZE];
+    memmove((char *)addr,(char*)&ch,n);
+  }
+  wakeup(&pi->nwrite);  //DOC: piperead-wakeup
+  release(&pi->lock);
+  return i;
+}

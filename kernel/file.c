@@ -13,6 +13,7 @@
 #include "stat.h"
 #include "proc.h"
 
+
 struct devsw devsw[NDEV];
 struct {
   struct spinlock lock;
@@ -106,6 +107,7 @@ filestat(struct file *f, uint64 addr)
 int
 fileread(struct file *f, uint64 addr, int n)
 {
+
   int r = 0;
 
   if(f->readable == 0)

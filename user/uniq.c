@@ -2,11 +2,10 @@
 #include "kernel/stat.h"
 #include "user/user.h"
 
-#include "user/etypes.h"
-#include "user/elibs/io.h"
-#include "user/elibs/string.h"
-#include "user/elibs/file.h"
-
+#include "gelibs/etypes.h"
+#include "gelibs/string.h"
+#include "gelibs/file.h"
+#include "efunctions/uniq.h"
 
 
 #define OPT_IGNORE_CASE 1
@@ -14,23 +13,37 @@
 #define OPT_SHOW_REPEATED_LINES 4
 
 
-u32 uniq_run(s32 fd, u8 ignoreCase, u8 showCount, u8 repeatedLines);
-static u8 ** parse_cmd(u32 argc, u8 ** cmd, u8 * options);
+#define swap_pointers(x, y) {\
+            void * t= x;\
+            x=y;\
+            y=t;\
+           }
 
 
-s32 main(s32 argc, u8 ** argv){
 
 
-	u8 options;
-	u8 ** passedFiles = parse_cmd(argc, argv, &options);
+static void uniq_start(char **passedFiles, char options);
+static char ** parse_cmd(int argc, char ** cmd, char * options);
 
+
+
+
+
+int main(int argc, char ** argv){
+
+	char options;
+	char ** passedFiles = parse_cmd(argc, argv, &options);
 
 	if (!passedFiles){
-		print("[ERR] Cannot parse the cmd");
+		printf("[ERR] Cannot parse the cmd");
 		return 1;
 	}
 
+	/* Kernel mode */
 	uniq(passedFiles,options);
+	
+	/* User mode */
+	// uniq_start(passedFiles, options);
 
 	return 0;
 
@@ -38,26 +51,150 @@ s32 main(s32 argc, u8 ** argv){
 
 
 
-u32 uniq_usermode(u8 **passedFiles, u8 options){
+
+
+
+
+/* Running the usermode implementation of the head command 
+
+[INPUT]: 
+   passFiles: Passed files to the command
+   options: Passed options to the command
+
+[OUTPUT]: 
+
+[ERROR]:
+	NULL is returned.
+
+*/
+static void uniq_start(char **passedFiles, char options){
 
 	printf("Uniq command is getting executed in user mode\n");
 
+	/* Get number of files passed as argument*/
+	char ** files = passedFiles;
+	int numOfFiles=0;
+	while(*files++){numOfFiles++;};
+
 	/* Reading from STDIN */
-	if(!passedFiles[0])
+	if(!*passedFiles)
 		uniq_run(STDIN, options & OPT_IGNORE_CASE, options & OPT_SHOW_COUNT, options & OPT_SHOW_REPEATED_LINES);
 	else{
 		while (*passedFiles){
-			u32 fd = open_file(*passedFiles, RDONLY);
+			int fd = open_file(*passedFiles, RDONLY);
 				
 			if (fd == OPEN_FILE_ERROR)
-				print("Error opening the file \n");
-			else
+				printf("[ERR] Error opening the file \n");
+			else{
+				if (numOfFiles > 1) 
+					printf("==> %s <==\n",*passedFiles);
+				
 				uniq_run(fd, options & OPT_IGNORE_CASE, options & OPT_SHOW_COUNT, options & OPT_SHOW_REPEATED_LINES);
-
+			}
 			passedFiles++;
 		}
 	}
 }
+
+
+
+
+
+
+// /* Running the actual uniq function on the file 
+
+// [INPUT]: 
+//    fd: File descriptor
+//    ignoreCase: Ignore the case while comapring two lines
+//    showCount: Displays the number of times a line is repeated
+//    repeatedLines: Shows only repeated lines
+
+// [OUTPUT]: 
+
+// */
+// static void uniq_run(int fd, char ignoreCase, char showCount, char repeatedLines){
+
+
+// 	char * line1 = malloc(MAX_LINE_LEN);
+// 	char * line2 = malloc(MAX_LINE_LEN);
+	
+// 	int readStatus;
+// 	readStatus = read_line(fd, line1);
+// 	if (readStatus == READ_EOF || readStatus == READ_ERROR)
+// 		return 0;
+
+// 	int lineCount=1;
+// 	int isRepeated;
+
+// 	while(1){
+
+// 		readStatus = read_line(fd, line2);
+		
+// 		if (readStatus == READ_EOF || readStatus == READ_ERROR){
+
+// 			if (!repeatedLines){
+// 				   if (showCount)
+//           			printf("<%d> %s",lineCount,line1);
+//         			else
+//           			printf("%s",line1);
+// 			}
+
+//         break;
+// 		}
+
+// 		/* Comparing two lines */
+// 		char compareStatus;
+
+// 		if (!ignoreCase)
+// 			compareStatus = compare_str(line1, line2);
+// 		else
+// 			compareStatus = compare_str_ic(line1, line2);
+
+
+// 		/* Compare two lines */
+// 		if (compareStatus != 0){ // Not equal
+			
+// 			if (repeatedLines){
+
+// 				if (isRepeated){
+// 						if (showCount)
+// 							printf("<%d> %s",lineCount,line1);
+// 						else
+// 							printf("%s",line1);
+// 				}
+			
+// 			}else{
+				
+// 				if (showCount)
+// 					printf("<%d> %s",lineCount,line1);
+// 				else
+// 					printf("%s",line1);
+// 			}
+
+// 			isRepeated = 0 ;
+
+// 			/* Reset the line count */
+// 			lineCount = 1;
+
+// 			// Swap the lines
+// 			swap_pointers(line1, line2);
+
+// 		}else	{  // Equal lines
+
+// 			if (repeatedLines && !isRepeated){
+// 				// printf("%s",line1);
+// 				isRepeated=1;
+// 			}
+
+// 			lineCount++;
+
+// 		}		
+// 	}
+
+// 	free(line1);
+// 	free(line2);
+// }
+
 
 
 
@@ -70,23 +207,21 @@ u32 uniq_usermode(u8 **passedFiles, u8 options){
 
 [OUTPUT]: 
 
-
-
 [ERROR]:
 
 */
-static u8 ** parse_cmd(u32 argc, u8 ** cmd, u8 * options){
+static char ** parse_cmd(int argc, char ** cmd, char * options){
 
 
 	/* Total number of files is maximum argc-1 requiring argc size storage for the last NULL*/
-	u8 ** passedFiles = malloc(sizeof(u8 *) * (argc));
+	char ** passedFiles = malloc(sizeof(char *) * (argc));
 
 	if (!passedFiles)
 		return NULL;
 
 
 	*options = 0;
-	u32 fileIdx = 0;
+	int fileIdx = 0;
 
 	cmd++;  // Skipping the program's name
 	
@@ -111,72 +246,5 @@ static u8 ** parse_cmd(u32 argc, u8 ** cmd, u8 * options){
 
 
 
-
-
-
-
-u32 uniq_run(s32 fd, u8 ignoreCase, u8 showCount, u8 repeatedLines){
-
-
-	u8 * line1 = malloc(500);
-	u8 * line2 = malloc(500);
-	
-	s64 readStatus;
-
-	readStatus = read_line(fd, line1);
-	if (readStatus == READ_EOF || readStatus == READ_ERROR)
-		return 0;
-	line1[readStatus]=0;
-
-	u8 first = 1;
-	u32 count=1;
-
-	while(1){
-
-		readStatus = read_line(fd, line2);
-		if (readStatus == READ_EOF || readStatus == READ_ERROR)
-			break;
-		line2[readStatus]=0;
-
-
-		// Comparing two lines
-		u8 compareStatus;
-
-		if (!ignoreCase)
-			compareStatus = compare_str(line1, line2);
-		else
-			compareStatus = compare_str_ic(line1, line2);
-
-
-		/* Compare two lines */
-		if (compareStatus != 0){
-
-			if (first==1){
-
-				if (showCount)
-					printf("%d %s",count,line1);
-				else
-					printf("<> %s",line1);
-				first=0;
-			}
-			if (showCount)
-				printf("<%d> %s",count,line2);
-			else
-				printf("<> %s",line2);
-
-			count = 1;
-
-
-			void * t = line1;
-			line1 = line2;
-			line2 = t;
-		}else{
-			// print("EQ:\n");
-			// print(line1);
-			// print(line2);
-			count++;
-		}
-	}
-}
 
 

@@ -1,51 +1,75 @@
 #include "kernel/types.h"
 #include "kernel/stat.h"
 #include "user/user.h"
-
 #include "user/etypes.h"
 
+
+
 /* Opening a file 
-[INPUT]: File's name
-		 Manipulation mode
+[INPUT]: 
+	filePath: File's path
+	flag: Manipulation flag
 
 [OUTPUT]: File descriptor, -1 on error
 */
-s32 open_file(u8 * filePath, s32 flag){
-	s32 fd = open(filePath, flag);
+int open_file(char * filePath, int flag){
+	int fd = open(filePath, flag);
 	return fd;
 }
 
 
 
-
-s64 read_line(s32 fd, u8 * buffer){
-
-	u8 readByte;
-	s64 byteCount = 0;
-	s64 readStatus;
+/* Reads a line from the given file
+[INPUT]: 
+	fd: File discriptor
+	buffer: Buffer for writing the line into
 
 
-	while((readStatus = read(fd,&readByte,1))){
+[OUTPUT]: Number of read bytes. Upon reading end-of-file, zero is returned.  
+
+[ERROR]: -1 is returned
+*/
+int read_line(int fd, char * buffer){
+
+	char readByte;
+	int byteCount = 0;
+	int readStatus;
+
+	while(1){
+
+		readStatus = read(fd,&readByte,1);
 
 		/* Error or End of File */
-		if (readStatus <= 0L){
-			if (byteCount == 0)
-				return readStatus;
-			return byteCount;
-		}
+		if (readStatus <= 0){
+			*buffer = 0;  // Nullifying the end of the string
 
+			/* If we encounter EOF or error and we have not read anything, return the status code.
+			It represents the EOF and error itself.*/
+			if (byteCount == 0)
+				return readStatus; 
+			
+			return byteCount; 
+		}
 		*buffer++ = readByte;
 		byteCount++;
 
-		if (readByte == '\n')
+		if (readByte == '\n'){
+			*buffer = 0;  // Nullifying the end of the string
 			return byteCount;
+		}
 	}
-
-	return byteCount;
 }
 
 
-void close_file(s32 fd){
+
+/* Closes the file
+[INPUT]: 
+	fd: File discriptor
+
+[OUTPUT]:
+
+*/
+void close_file(int fd){
 	close(fd);
 }
 
