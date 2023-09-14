@@ -112,6 +112,9 @@ To use the head system call, edit the main function of the `user/head.c` as foll
 
 ### Usage
 
+See [usages]
+
+
 In the following, there are examples of how to work with the head command in the xv6 environment executed once in user mode and once in kernel mode.
 Considering two example files as follows:
 
@@ -132,6 +135,7 @@ User mode head command:
 Kernel mode head command:
 ![headkernelex](https://github.com/gkiarashv/xv6/blob/main/images/headkernelex.png)
 ![headkernelstdin](https://github.com/gkiarashv/xv6/blob/main/images/headkernelstdin.png)
+
 
 
 
