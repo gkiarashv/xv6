@@ -13,22 +13,22 @@ Considering two example files as follows:
 
 # User mode
 
-## head -n 4
+## head
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex1.png)
 
-## cat file1 | head -n 3
+## head -n 4
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex2.png)
 
-## head file1 file2
+## cat file1 | head
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex3.png)
 
-## head README file1 file2 -n 8
+## cat file1 | head -n 4
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex4.png)
 
-## head README file1
+## head file1 file2
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex5.png)
 
-
+## head file1 file2 -n 3
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headuserex6.png)
 
 
