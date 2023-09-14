@@ -38,6 +38,12 @@ Considering two example files as follows:
 ## uniq -c -d -i file1 file2
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/uniquserex8.png)
 
+![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/uniquserex9.png)
+
+![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/uniquserex10.png)
+
+![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/uniquserex11.png)
+
 
 
 
@@ -70,6 +76,13 @@ Considering two example files as follows:
 ## uniq -d -c -i file1 file2
 ![headkernelex6](https://github.com/gkiarashv/xv6/blob/main/images/uniqkernelex7.png)
 
+![headkernelex6](https://github.com/gkiarashv/xv6/blob/main/images/uniqkernelex8.png)
+
+![headkernelex6](https://github.com/gkiarashv/xv6/blob/main/images/uniqkernelex9.png)
+
+![headkernelex6](https://github.com/gkiarashv/xv6/blob/main/images/uniqkernelex10.png)
+
+![headkernelex6](https://github.com/gkiarashv/xv6/blob/main/images/uniqkernelex11.png)
 
 
 
