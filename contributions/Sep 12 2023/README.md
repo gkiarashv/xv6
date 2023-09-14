@@ -5,15 +5,20 @@ Level | Description |
 | User | Two new commands, uniq and head, have been added |
 
 ### Extension Libraries (elibs)
-Level | Files |
+Path | Files |
 | --- | --- |
 | Kernel/elibs/ | file.c  |
 | User/elibs/ |  file.c |
 
 ### Global Extension Libraries (gelibs)
-Level | Files |
+Path | Files |
 | --- | --- |
-| gelibs/ | string.c file.h string.h etypes.h |
+| gelibs/ | string.c, file.h, string.h, etypes.h |
+
+### Extension Function (EFUNCTIONS)
+Path | Files |
+| --- | --- |
+| efunctions/ | head.c, uniq.c |
 
 
 
@@ -22,8 +27,7 @@ Level | Files |
 
 # ELIBS details
 
-#### User/elibs/file.c
-Contains the following functionalities for file manipulation.
+#### User/elibs/file.c:
 
 Functionality | Description |
 | --- | --- |
@@ -31,8 +35,7 @@ Functionality | Description |
 | read_line() | reads a line from the given file |
 
 
-#### Kernel/elibs/file.c
-Contains the following functionalities for file manipulation.
+#### Kernel/elibs/file.c:
 
 Functionality | Description |
 | --- | --- |
@@ -44,8 +47,7 @@ Functionality | Description |
 
 # GELIBS details
 
-#### gelibs/string.c
-Contains the following functionalities regarding strings.
+#### gelibs/string.c:
 
 Functionality | Description |
 | --- | --- |
@@ -54,18 +56,17 @@ Functionality | Description |
 | compare_str_ic() | compares two strings ignoring their case |
 
 
-
-
-
-
-
-
+# EFUNCTIONS details
+Functionality | Description |
+| --- | --- |
+| head_run() | Actual implementation of the head functionality  |
+| uniq_run() | Actual implementation of the uniq functionality |
 
 
 
 
 # Extensions
-To use the extensions, in the main folder of the xv6 project, run the `make` commands as follows:
+To compile the extensions and integrate them with the xv6 OS, in the main folder of the xv6 project, run the `make` commands as follows:
 
 
 `make clean`:
@@ -80,25 +81,21 @@ To use the extensions, in the main folder of the xv6 project, run the `make` com
 
 
 
-
-
-
-## Head
+## Extension 1: Head
  ```
   head [-n numOfLines] [file ...]
  ```
-The head command prints the first numOfLines lines of each of the specified files, or the standard input if no files are specified. If numOfLines is omitted it defaults to 14.
-User mode implementation
+The head command prints the first `numOfLines` lines of each of the specified files, or the standard input if no files are specified. If numOfLines is omitted it defaults to 14.
+
 
 
 ### User mode implementation
 
-The user mode implementation of the head command has been given in the file `user/head.c` . This file contains 3 main functions:
+The user mode implementation of the head command has been given in the files `user/head.c` and efunction `efunctions/head.c`. `user/head.c` file contains two functions:
 
 Functionality | Description |
 | --- | --- |
-| head_usermode() | A wrapper for the actual head function   |
-| head_run() | Actual implementation for the head function |
+| head_usermode() | A wrapper for the actual head function |
 | parse_cmd() | Parses the issued head command and returns the list of files and options |
 
 The `main` function is as follows:
@@ -112,20 +109,18 @@ The `main` function is as follows:
 
 ```int head(char ** passedFiles, int numOfLines)```
 
-The kernel mode implementation of the head function has been given in the `kernel/sysproc.c` and `kernel/head.c`. The `kernel/sysproc.c` has the `sys_head()`
-system call which is called upon the head system call. The passed files and the options are the arguments passed to this system call. The `kernel/head.c` contains the `head_run()` function which is the actual implementation of the head functionality in the kernel.
+The kernel mode implementation of the head function has been given in the `kernel/sysproc.c` and `efunctions/head.c`. The `kernel/sysproc.c` has the `sys_head()`
+system call which is called upon the head system call. The passed files and the options are the arguments passed to this system call. The `efunctions/head.c` contains the `head_run()` function which is the actual implementation of the head functionality in the kernel.
 
 To use the head system call, edit the main function of the `user/head.c` as follows:
-
 
 ![headkernelmain](https://github.com/gkiarashv/xv6/blob/main/images/headkernelmain.png)
  
 
 ### Usage
-
 See [usages](https://github.com/gkiarashv/xv6/edit/main/contributions/Sep%2012%202023/head_usage.md).
 
-### Logic
+### Implementation Logic
 See [logic](https://github.com/gkiarashv/xv6/edit/main/contributions/Sep%2012%202023/head_logic.md).
 
 
