@@ -118,10 +118,10 @@ To use the head system call, edit the main function of the `user/head.c` as foll
  
 
 ### Usage
-See [usages](https://github.com/gkiarashv/xv6/edit/main/contributions/Sep%2012%202023/head_usage.md).
+See [usages](https://github.com/gkiarashv/xv6/edit/main/contributions/Sep%2012%202023/head_usage/).
 
 ### Implementation Logic
-See [logic](https://github.com/gkiarashv/xv6/edit/main/contributions/Sep%2012%202023/head_logic.md).
+See [logic](https://github.com/gkiarashv/xv6/edit/main/contributions/Sep%2012%202023/head_logic/).
 
 
 
