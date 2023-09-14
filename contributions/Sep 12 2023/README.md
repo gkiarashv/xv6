@@ -173,6 +173,6 @@ To use the uniq system call, edit the main function of the `user/uniq.c` as foll
 See [usages](https://github.com/gkiarashv/xv6/edit/main/contributions/Sep%2012%202023/uniq_usage/).
 
 ### Logic
-See [logic](https://github.com/gkiarashv/xv6/edit/main/contributions/Sep%2012%202023/head_logic/).
+See [logic](https://github.com/gkiarashv/xv6/edit/main/contributions/Sep%2012%202023/uniq_logic/).
 
 
