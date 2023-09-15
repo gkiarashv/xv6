@@ -34,11 +34,11 @@ Considering two example files as follows:
 ## cat file1 | uniq -i
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/uniquserex7.png)
 
-## cat file1 | uniq -c -i
-![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/uniquserex8.png)
-
 ## cat file1 | uniq -d
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/uniquserex9.png)
+
+## cat file1 | uniq -c -i
+![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/uniquserex8.png)
 
 ## uniq file1 file2
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/uniquserex10.png)
@@ -54,36 +54,40 @@ Considering two example files as follows:
 ## uniq
 ![headkernelex1](https://github.com/gkiarashv/xv6/blob/main/images/uniqkernelex1.png)
 
-## cat file1 | uniq
+## uniq file1 file2
 ![headkernelex1](https://github.com/gkiarashv/xv6/blob/main/images/uniqkernelex10.png)
 
-## cat file1 | uniq -d -c -i
+## uniq file1 file2 -d -c -i
 ![headkernelex1](https://github.com/gkiarashv/xv6/blob/main/images/uniqkernelex11.png)
 
-## uniq file1
+## uniq -c
 ![headkernelex2](https://github.com/gkiarashv/xv6/blob/main/images/uniqkernelex2.png)
 
-## uniq -i file1
+## uniq -i
 ![headkernelex3](https://github.com/gkiarashv/xv6/blob/main/images/uniqkernelex3.png)
 
-## uniq -d file1 
+## uniq -i -c
 ![headkernelex4](https://github.com/gkiarashv/xv6/blob/main/images/uniqkernelex4.png)
 
-## uniq -c file1
+## cat file1 | uniq
 ![headkernelex5](https://github.com/gkiarashv/xv6/blob/main/images/uniqkernelex5.png)
 
-## uniq -d -c -i file1
+## cat file1 | uniq -c
 ![headkernelex6](https://github.com/gkiarashv/xv6/blob/main/images/uniqkernelex6.png)
 
-## uniq -d -c -i file1 file2
+## cat file1 | uniq -i
 ![headkernelex6](https://github.com/gkiarashv/xv6/blob/main/images/uniqkernelex7.png)
 
+## cat file1 | uniq -d
 ![headkernelex6](https://github.com/gkiarashv/xv6/blob/main/images/uniqkernelex8.png)
 
+## cat file1 | uniq -d -c -i
 ![headkernelex6](https://github.com/gkiarashv/xv6/blob/main/images/uniqkernelex9.png)
 
+## uniq file1 file2
 ![headkernelex6](https://github.com/gkiarashv/xv6/blob/main/images/uniqkernelex10.png)
 
+## uniq file1 file2 -d -c- -i
 ![headkernelex6](https://github.com/gkiarashv/xv6/blob/main/images/uniqkernelex11.png)
 
 
