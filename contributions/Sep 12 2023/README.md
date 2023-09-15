@@ -37,6 +37,7 @@ Functionality | Description |
 | --- | --- |
 | open_file() | Opens a file and returns a file descriptor  |
 | read_line() | Reads a line from the given file |
+| close_file() | Closes the given file |
 
 
 #### Kernel/elibs/file.c:
