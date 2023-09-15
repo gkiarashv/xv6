@@ -31,10 +31,10 @@ int main(int argc, char ** argv){
 	}
 
 	/* Kernel mode */
-	head(passedFiles, lineCount);
+	// head(passedFiles, lineCount);
 	
 	/* User mode */
-	// head_usermode(passedFiles, lineCount);
+	head_usermode(passedFiles, lineCount);
 
 	return 0;
 
@@ -90,39 +90,6 @@ void head_usermode(char **passedFiles, int lineCount){
 	return 0;
 
 }
-
-
-
-/* Running the actual head function on the file 
-
-[INPUT]: 
-   fd: File descriptor
-   numOfLines: Number of lines to be printed
-
-[OUTPUT]: 
-
-*/
-// void head_run(int fd, int numOfLines){
-	
-// 	char line[MAX_LINE_LEN];
-// 	s64 readStatus;
-
-// 	while(numOfLines--){
-// 		readStatus = read_line(fd, line);
-
-// 		if (readStatus == READ_ERROR){
-// 			printf("[ERR] Error reading from the file \n");
-// 			break;
-// 		}
-
-// 		if (readStatus == READ_EOF )
-// 			break;
-// 		line[readStatus]=0;
-// 		printf("%s",line);
-// 	}
-// }
-
-
 
 
 /* Parsing the issued head command and extracting the passed arguments 

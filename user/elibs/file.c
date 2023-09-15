@@ -39,19 +39,32 @@ int read_line(int fd, char * buffer){
 
 		readStatus = read(fd,&readByte,1);
 
-		/* Error or End of File */
-		if (readStatus <= 0){
-			*buffer = 0;  // Nullifying the end of the string
-
-			/* If we encounter EOF or error and we have not read anything, return the status code.
-			It represents the EOF and error itself.*/
-			if (byteCount == 0)
-				return readStatus; 
-			
-			return byteCount; 
+		if (readStatus == 0){
+			if (byteCount!=0){
+				*buffer = '\n';
+				*(buffer+1)=0;
+				return byteCount+1;
+			}
+			return 0;
 		}
+
+
+		// /* Error or End of File */
+		// if (readStatus <= 0){
+		// 	// *buffer++ = '\n';  
+		// 	// *buffer = 0; // Nullifying the end of the string
+		// 	/* If we encounter EOF or error and we have not read anything, return the status code.
+		// 	It represents the EOF and error itself.*/
+		// 	if (byteCount == 0)
+		// 		return readStatus; 
+			
+		// 	*buffer = '\n';
+		// 	*(buffer+1)=0;
+		// 	return byteCount; 
+		// }
 		*buffer++ = readByte;
 		byteCount++;
+
 
 		if (readByte == '\n'){
 			*buffer = 0;  // Nullifying the end of the string

@@ -13,16 +13,16 @@ void head_run(int fd, int numOfLines){
 	while(numOfLines--){
 
 		readStatus = read_line(fd, line);
-		
+
 		if (readStatus == READ_ERROR){
 			printf("[ERR] Error reading from the file \n");
 			break;
 		}
+		if (readStatus == READ_EOF)
+			break;	
 
 		printf("%s",line);
 
-		if (readStatus == READ_EOF )
-			break;
 	}
 }
 

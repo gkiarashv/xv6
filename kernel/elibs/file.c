@@ -206,24 +206,29 @@ int read_line(int fd, char * buffer){
 
       while(1){
         readStatus = read_pipe(f->pipe,(uint64)buffer+idx,1);
+
         if (readStatus<= 0){
-          buffer[idx] = 0;  // Nullifying the end of the string
-          return readStatus;
+          if (idx!=0){
+            buffer[idx] = '\n';
+            buffer[idx+1]=0;
+            return idx+1;
+          }
+          return 0;
         }
 
         if (buffer[idx]=='\n'){
           buffer[idx+1]=0;
           newLine = 1;
-          break;
+          return idx+1;
         }
         idx++;
       }
-      if (!newLine)
-        buffer[idx]=0;
-      
 
     }else{
+
+
       while((readStatus=devsw[f->major].read(0, (uint64)buffer+idx, 1)) == 1){ // The first 0 indicates kernel address
+        
         if (buffer[idx]=='\n'){
           buffer[idx+1]=0;
           newLine = 1;
@@ -236,39 +241,36 @@ int read_line(int fd, char * buffer){
 
     }
 
-  } else{
+  }else{
 
-    while(1){
+      while(1){
 
-      readStatus = readi(f->ip, 0, (uint64)&readByte, f->off, 1);
+        readStatus = readi(f->ip, 0, (uint64)&readByte, f->off, 1);
 
-      if (readStatus > 0)
-        f->off += readStatus;
-
-      /* Error or End of File */
-      if (readStatus <= 0){
+        if (readStatus > 0)
+          f->off += readStatus;
         
-        *buffer=0;
+        else {         /* Error or End of File */
+          
+          if (byteCount!=0){
+            *buffer = '\n';
+            *(buffer+1)=0;
+            return byteCount+1;
+          }
+          return 0; 
+        }
 
-        /* If we encounter EOF or error and we have not read anything, return the status code.
-        It represents the EOF and error itself.*/
-        if (byteCount == 0)
-          return readStatus; 
-        
-        return byteCount; 
-      }
+        *buffer++ = readByte;
+        byteCount++;
 
-      *buffer++ = readByte;
-      byteCount++;
+        if (readByte == '\n'){
+            *(buffer)=0; // Nullifying the end of the string
+          return byteCount;
+        }
 
-      if (readByte == '\n'){
-        *buffer = 0;  // Nullifying the end of the string
-        return byteCount;
-      }
+    }
+
   }
-
-
-}
 
 }
 
