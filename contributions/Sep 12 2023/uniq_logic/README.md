@@ -1,4 +1,4 @@
-![file1](https://github.com/gkiarashv/xv6/blob/main/images/unqlogic1.png)
+![file1](https://github.com/gkiarashv/xv6/blob/main/images/unq_logic1.png)
 ![file1](https://github.com/gkiarashv/xv6/blob/main/images/unqlogic2.png)
 ![file1](https://github.com/gkiarashv/xv6/blob/main/images/unqlogic3.png)
 ![file1](https://github.com/gkiarashv/xv6/blob/main/images/unqlogic4.png)
