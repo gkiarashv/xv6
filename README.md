@@ -70,7 +70,7 @@ ZhUyU1997, and Zou Chang Wei.
 
 4. Clonning the xv6 repository
    ```sh
-   git clone https://github.com/mit-pdos/xv6-riscv
+   git clone https://github.com/gkiarashv/xv6.git
    cd xv6-riscv
    ```
 5. Building the kernel
