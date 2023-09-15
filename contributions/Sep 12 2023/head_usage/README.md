@@ -35,21 +35,22 @@ Considering two example files as follows:
 
 # Kernel mode
 
-## head -n 4
+## head
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headkernelex1.png)
 
-## cat file1 | head -n 3
+## head -n 4
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headkernelex2.png)
 
-## head file1 file2
+## cat file1 | head
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headkernelex3.png)
 
-## head README file1 file2 -n 8
+## cat file2 | head -n 3
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headkernelex4.png)
 
-## head README file1
+## head file1 file2
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headkernelex5.png)
 
+## head file1 file2 -n 4
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/headkernelex6.png)
 
 
