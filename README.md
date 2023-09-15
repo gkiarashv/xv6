@@ -68,7 +68,7 @@ ZhUyU1997, and Zou Chang Wei.
    binutils-riscv64-linux-gnu
    ```
 
-4. Clonning the xv6 repository
+4. Clonning the repository
    ```sh
    git clone https://github.com/gkiarashv/xv6.git
    cd xv6-riscv
