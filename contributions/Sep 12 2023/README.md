@@ -83,11 +83,11 @@ To compile the extensions and integrate them with the xv6 OS, in the main folder
 ![makeclean](https://github.com/gkiarashv/xv6/blob/main/images/makeclean.png)
 
 `make`:
-![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/makekernel.png)
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/make_kernel.png)
 
 
 `make qemu`:
-![makeqemu](https://github.com/gkiarashv/xv6/blob/main/images/makeqemu.png)
+![makeqemu](https://github.com/gkiarashv/xv6/blob/main/images/make_emu.png)
 
 
 
