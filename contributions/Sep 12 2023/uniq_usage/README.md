@@ -16,6 +16,19 @@ Considering two example files as follows:
 ## uniq
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/uniquserex1.png)
 
+## uniq file1
+![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/uuser1.png)
+
+## uniq -c file1 
+![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/uuser2.png)
+
+## uniq -d file1
+![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/uuser3.png)
+
+## uniq -i file1
+![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/uuser4.png)
+
+
 ## uniq -c
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/uniquserex2.png)
 
@@ -53,6 +66,18 @@ Considering two example files as follows:
 
 ## uniq
 ![headkernelex1](https://github.com/gkiarashv/xv6/blob/main/images/uniqkernelex1.png)
+
+## uniq file1
+![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/ukernel1.png)
+
+## uniq -c file1 
+![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/ukernel2.png)
+
+## uniq -d file1
+![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/ukernel3.png)
+
+## uniq -i file1
+![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/ukernel4.png)
 
 ## uniq file1 file2
 ![headkernelex1](https://github.com/gkiarashv/xv6/blob/main/images/uniqkernelex10.png)
