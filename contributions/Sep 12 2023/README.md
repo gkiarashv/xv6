@@ -87,7 +87,7 @@ To compile the extensions and integrate them with the xv6 OS, in the main folder
 
 
 `make qemu`:
-![makeqemu](https://github.com/gkiarashv/xv6/blob/main/images/make_emu.png)
+![makeqemu](https://github.com/gkiarashv/xv6/blob/main/images/make_qemu.png)
 
 
 
