@@ -87,7 +87,7 @@ Considering two example files as follows:
 ## uniq file1 file2
 ![headkernelex6](https://github.com/gkiarashv/xv6/blob/main/images/uniqkernelex10.png)
 
-## uniq file1 file2 -d -c- -i
+## uniq file1 file2 -d -c -i
 ![headkernelex6](https://github.com/gkiarashv/xv6/blob/main/images/uniqkernelex11.png)
 
 
