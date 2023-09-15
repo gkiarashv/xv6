@@ -19,27 +19,28 @@ Considering two example files as follows:
 ## uniq -c
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/uniquserex2.png)
 
-## uniq -i -c
+## uniq -i
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/uniquserex3.png)
 
-## cat file1 | uniq
+## uniq -i -c
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/uniquserex4.png)
 
-## cat file1 | uniq -c
+## cat file1 | uniq
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/uniquserex5.png)
 
-## cat file1 | uniq -i
+## cat file1 | uniq -c
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/uniquserex6.png)
 
-## cat file1 | uniq -c -i
+## cat file1 | uniq -i
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/uniquserex7.png)
 
-## cat file1 | uniq -d
+## cat file1 | uniq -c -i
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/uniquserex8.png)
 
-## uniq file1 file2
+## cat file1 | uniq -d
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/uniquserex9.png)
 
+## uniq file1 file2
 ![headuserex](https://github.com/gkiarashv/xv6/blob/main/images/uniquserex10.png)
 
 ## uniq file1 file2 -d -c -i
