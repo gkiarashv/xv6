@@ -17,7 +17,15 @@ The implementation of `get_time_perf()` is as follows:
 FIG
 
 
+After getting the timing information, in the `runcmd()` function, we write the execution criteria including the command name and its time information to the the `.temp` file. Here, we utilized the `O_APPEND` mode to append to this file
+whenever a command is being executed. After all parts of the command is executed, we print the timing summary. This has been done in `main()` of `sh.c` after the command is executed:
 
+FIG
+
+
+First, we check if the `.time` file exists and if yes, we call the `print_time_info()` to print the information stored in it. Then, we will remove the file from the disk.
+
+FIG
 
 
 
