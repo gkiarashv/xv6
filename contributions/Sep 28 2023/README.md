@@ -25,3 +25,19 @@ Path | Files |
 | --- | --- |
 | kernel/ | sysfile.c fcntl.h |
 
+
+# File manipulation API extended
+
+The previous `sys_open()` system call had not provided any mode for appending to a file. In the current version, we have added a new mode `O_APPEND` to `fcntl.h` that provides this ability.
+
+FIGURE
+
+The modification to `sys_open()` was to set the file's offset to the size of the file when the mode is `O_APPEND`. This has been done using the file's inode structure `ip->size`.
+
+FIGURE
+
+
+
+
+
+
