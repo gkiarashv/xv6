@@ -36,6 +36,7 @@ The modification to `sys_open()` was to set the file's offset to the size of the
 
 FIGURE
 
+This phase was necessary for the functionality of other new updates of the xv6 OS.
 
 
 
