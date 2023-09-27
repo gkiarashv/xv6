@@ -96,6 +96,12 @@ FIG
 
 ## ps
 
+### Implementation
+See this for the implementation details.
+
+
+### Usages
+See this for the usage examples.
 
 
 
@@ -112,6 +118,14 @@ time CMD | time CMD | ...
 CMD | time CMD | CMD | time CMD ...
 ```
 
+
+
+## Implementation
+See this for the implementation details.
+
+
+## Usages
+See this for the usage examples.
 
 
 
