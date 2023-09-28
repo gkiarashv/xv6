@@ -29,8 +29,9 @@ Path | Files |
 # GELIBS
 The new extension to the `proc` structure of any process has been the timing criterias including the creation time, ending time, and the total time of the execution. These timining information has been defined in the `gelibs/time.h`:
 
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/timeinfo.png)
 
-FIG
+
 
 The calculation of the time is based on the CPU ticks. Therefore, the macro function `tick_to_time()` converts the ticks to the human readable time based on the minutes, seconds, and milliseconds. The `type` input to this macro function defines a string that describes the type of the time that is being printed.
 
@@ -39,11 +40,15 @@ The calculation of the time is based on the CPU ticks. Therefore, the macro func
 
 The previous `sys_open()` system call had not provided any mode for appending to a file. In the current version, we have added a new mode `O_APPEND` to `fcntl.h` that provides this ability.
 
-FIGURE
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/fcntlmodes.png)
+
+
+
 
 The modification to `sys_open()` was to set the file's offset to the size of the file when the mode is `O_APPEND`. This has been done using the file's inode structure `ip->size`.
 
-FIGURE
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/sysopen.png)
+
 
 This phase was necessary for the functionality of other new updates of the xv6 OS.
 
@@ -64,7 +69,8 @@ Where `time_t` is defined in `gelibs/time.h` as a 64-bit number.
 
 The implementiation of the system call has been done in the `sysproc.c` file and is as follows:
 
-FIG
+
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/gettimeimp.png)
 
 
 
@@ -81,14 +87,17 @@ This system call returns the timing information for the process with process id 
 
 The implementation of `sys_times()` is given in `sysproc.c` as follows:
 
-FIGURE
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/sys_times.png)
+
 
 
 The `get_process_time()` function is exactly the `wait(0)` function with this difference that it only search for a ZOMBIE child that has a pid that
 matches the `tpid`. When this child is found, the timing information is completed by computing the ending and total times. Then, it is returned(copyout) to the 
 e_time_t structure in the user space.
 
-FIG
+
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/getprocesstime.png)
+
 
 
 
