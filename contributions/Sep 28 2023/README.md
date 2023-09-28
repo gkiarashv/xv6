@@ -31,6 +31,19 @@ The new extension to the `proc` structure of any process has been the timing cri
 
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/timeinfo.png)
 
+The fields of the `e_time` struct are set as: `creationTime` is set when the `fork()` system call is executed and a process is allocated via the `allocproc()` function.
+
+
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/estructfp.png)
+
+
+
+The other fields are set when the process execution is ended:
+
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/exectime.png)
+
+
+
 
 
 The calculation of the time is based on the CPU ticks. Therefore, the macro function `tick_to_time()` converts the ticks to the human readable time based on the minutes, seconds, and milliseconds. The `type` input to this macro function defines a string that describes the type of the time that is being printed.
