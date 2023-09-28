@@ -1,5 +1,10 @@
+# Date Examples
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/datecmd.png)
 
-# Examples
+
+
+
+# Time Examples
 In the following, there are examples of how to work with the `time` keyword of the xv6 sehll executed once in user mode and once in kernel mode. Considering two example files as follows:
 
 
@@ -38,6 +43,11 @@ In the following, there are examples of how to work with the `time` keyword of t
 ## time cat file1 | time head -n 7
 
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/timecatheadkernel.png)
+
+
+
+
+
 
 
 
