@@ -2,7 +2,7 @@
 Level | Description |
 | --- | --- |
 | Kernel | File manipulation API has been extended, Three new system calls have been added  |
-| User | Shell has been extended |
+| User | Shell has been extended with one keyword and one command |
 
 ### Extension Libraries (elibs)
 Path | Files |
