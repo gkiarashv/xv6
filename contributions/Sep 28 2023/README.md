@@ -129,6 +129,8 @@ See this for the usage examples.
 
 
 # Shell extension
+
+## time keyword
 To compute the total time that an execution of a command or commands take, a new keyword `time` has been added to the shell of the xv6, defined in `user/sh.c`. Adding this keyword before each command, in pipe or not, will print the timing information.
 ```
 time CMD
@@ -139,6 +141,10 @@ time CMD | time CMD | ...
 ```
 CMD | time CMD | CMD | time CMD ...
 ```
+
+
+## date command
+A new command has been added which prints the xv6 OS uptime as the major reference for the time.
 
 
 
