@@ -31,3 +31,7 @@ Containing `s` in the name.
 Containing `ni` in the name.
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/psnameni.png)
 
+
+## ps -pid 2 -ppid 1
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/pspidppid.png)
+
