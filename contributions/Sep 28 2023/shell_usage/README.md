@@ -24,7 +24,7 @@ In the following, there are examples of how to work with the `time` keyword of t
 
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/timels.png)
 
-## time head -n 3 (Delaying purposfully)
+## time head -n 3 (Delaying purposefully)
 
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/timeheadn3.png)
 
@@ -33,7 +33,7 @@ In the following, there are examples of how to work with the `time` keyword of t
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/timecathead.png)
 
 
-## time uniq -c (Delaying purposfully)
+## time uniq -c (Delaying purposefully)
 
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/timeuniquserc.png)
 
@@ -48,7 +48,7 @@ In the following, there are examples of how to work with the `time` keyword of t
 
 # Kernel mode
 
-## time head -n 3 (Delaying purposfully)
+## time head -n 3 (Delaying purposefully)
 
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/timeheadn3kernel.png)
 
