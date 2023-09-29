@@ -117,6 +117,12 @@ e_time_t structure in the user space.
 
 
 ## ps
+The `ps` system call prints out information about the processes of the system. The `ps` system call is as follows:
+```
+void ps(int pid, int ppid, int status, char * pName)
+```
+The arguments can filter the output of the `ps` as, `pid` limits the output to processes with a specific pid, `ppid` limits to processes with specific parent pid, `status` limits to processes with specific status, and `pName` limits the output to processes with a specific string in their name.
+
 
 ### Implementation
 See this for the implementation details.
