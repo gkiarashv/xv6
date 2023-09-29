@@ -160,11 +160,11 @@ A new command has been added which prints the xv6 OS uptime as the major referen
 
 
 
-## Implementation
+### Implementation
 See [implementation](https://github.com/gkiarashv/xv6/tree/main/contributions/Sep%2028%202023/shell_implemenation) for the implementation details.
 
 
-## Usages
+### Usages
 See [usages](https://github.com/gkiarashv/xv6/tree/main/contributions/Sep%2028%202023/shell_usage) for the usage examples.
 
 
