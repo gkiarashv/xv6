@@ -2,7 +2,7 @@
 Level | Description |
 | --- | --- |
 | Kernel | File manipulation API has been extended, Three new system calls have been added  |
-| User | Shell has been extended with one keyword and one command |
+| User | Shell has been extended with one keyword and two commands |
 
 ### Extension Libraries (elibs)
 Path | Files |
@@ -23,19 +23,18 @@ Path | Files |
 ### Extension Modifications (EMODIFICATIONS)
 Path | Files |
 | --- | --- |
-| kernel/ | sysfile.c fcntl.h |
+| kernel/ | sysfile.c, fcntl.h |
 
 
 # GELIBS
-The new extension to the `proc` structure of any process has been the timing criterias including the creation time, ending time, and the total time of the execution. These timining information has been defined in the `gelibs/time.h`:
+The latest addition to the `proc` structure of every process involves the inclusion of timing criteria such as creation time, completion time, and total execution duration. These timing details are specified in the `gelibs/time.h` file.
 
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/timeinfo.png)
 
-The fields of the `e_time` struct are set as: `creationTime` is set when the `fork()` system call is executed and a process is allocated via the `allocproc()` function.
 
+The `e_time` struct fields are initialized as follows: `creationTime` is assigned at the execution of the `fork()` system call and when a process is allocated through the `allocproc()` function.
 
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/estructfp.png)
-
 
 
 The other fields are set when the process execution is ended:
@@ -46,7 +45,9 @@ The other fields are set when the process execution is ended:
 
 
 
-The calculation of the time is based on the CPU ticks. Therefore, the macro function `tick_to_time()` converts the ticks to the human readable time based on the minutes, seconds, and milliseconds. The `type` input to this macro function defines a string that describes the type of the time that is being printed.
+
+The time calculation relies on CPU ticks, with each tick assumed to be equivalent to 100 milliseconds. Consequently, the macro function `tick_to_time()` is employed to convert these ticks into human-readable time, representing minutes, seconds, and milliseconds. The type parameter in this macro function specifies a string indicating the type of time being displayed.
+
 
 
 # File manipulation API extended
