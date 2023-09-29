@@ -23,9 +23,11 @@ In the following, there are examples of how to work with the `ps` command.
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/psstatrunning.png)
 
 ## ps -name s
+Containing `s` in the name.
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/psnames.png)
 
 
 ## ps -name ni
+Containing `ni` in the name.
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/psnameni.png)
 
