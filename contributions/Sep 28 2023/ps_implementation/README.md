@@ -19,4 +19,4 @@ The `ps` system call has been written in the `kernel/sysproc.c` and `kernel/elib
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/psimp4.png)
 
 
-In this implementation, we iterate over the list of processes and if any option has been provided and we do not match a process that satisfy this condition, we skip it by `continue` in the if conidtion of the loop.
+In this approach, we go through the list of processes. If an option has been specified and we don't find a process that meets this criteria, we skip it using the `continue` statement within the loop's if condition.
