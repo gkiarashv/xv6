@@ -5,6 +5,7 @@
 #include "spinlock.h"
 #include "proc.h"
 #include "defs.h"
+#include "gelibs/time.h"
 
 struct cpu cpus[NCPU];
 
@@ -17,6 +18,8 @@ struct spinlock pid_lock;
 
 extern void forkret(void);
 static void freeproc(struct proc *p);
+
+extern uint64 sys_uptime(void);
 
 extern char trampoline[]; // trampoline.S
 
@@ -109,6 +112,7 @@ allocpid()
 static struct proc*
 allocproc(void)
 {
+
   struct proc *p;
 
   for(p = proc; p < &proc[NPROC]; p++) {
@@ -122,6 +126,10 @@ allocproc(void)
   return 0;
 
 found:
+  /* Set the creation time */
+  p->execTime.creationTime = sys_uptime();
+
+
   p->pid = allocpid();
   p->state = USED;
 
@@ -155,6 +163,7 @@ found:
 static void
 freeproc(struct proc *p)
 {
+
   if(p->trapframe)
     kfree((void*)p->trapframe);
   p->trapframe = 0;
@@ -279,6 +288,7 @@ growproc(int n)
 int
 fork(void)
 {
+
   int i, pid;
   struct proc *np;
   struct proc *p = myproc();
@@ -347,6 +357,10 @@ void
 exit(int status)
 {
   struct proc *p = myproc();
+  
+  /* Setting the time information */
+  p->execTime.endTime = sys_uptime();
+  p->execTime.totalTime = p->execTime.endTime - p->execTime.creationTime;
 
   if(p == initproc)
     panic("init exiting");

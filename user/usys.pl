@@ -37,4 +37,7 @@ entry("sbrk");
 entry("sleep");
 entry("uptime");
 entry("head");
-entry("uniq")
+entry("uniq");
+entry("ps");
+entry("times");
+entry("gettime");

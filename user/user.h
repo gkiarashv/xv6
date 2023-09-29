@@ -1,3 +1,5 @@
+#include "gelibs/time.h"
+
 struct stat;
 
 // system calls
@@ -25,7 +27,9 @@ int uptime(void);
 
 int head(char **files, int lineCount);
 int uniq(char **files, char options);
-
+void ps(int pid, int ppid, int status, char * pName);
+void times(int pid, e_time_t * time);
+void gettime(time_t * time);
 
 // ulib.c
 int stat(const char*, struct stat*);

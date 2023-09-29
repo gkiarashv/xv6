@@ -4,6 +4,12 @@
 #include "user/user.h"
 #include "kernel/fcntl.h"
 
+
+#include "gelibs/time.h"
+
+e_time_t get_time_perf(char **argv);
+
+
 // Parsed command representation
 #define EXEC  1
 #define REDIR 2
@@ -54,6 +60,26 @@ void panic(char*);
 struct cmd *parsecmd(char*);
 void runcmd(struct cmd*) __attribute__((noreturn));
 
+
+void create_cmd(char ** argv, char * cmd){
+
+  int offset = 0;
+
+  while(*argv){
+
+    strcpy(cmd+offset,*argv);
+    offset+= strlen(*argv);
+
+    strcpy(cmd+offset," ");
+    offset+=1;
+    argv++;
+  }
+
+  *(cmd+offset)=0;
+
+}
+
+
 // Execute cmd.  Never returns.
 void
 runcmd(struct cmd *cmd)
@@ -76,8 +102,30 @@ runcmd(struct cmd *cmd)
     ecmd = (struct execcmd*)cmd;
     if(ecmd->argv[0] == 0)
       exit(1);
-    exec(ecmd->argv[0], ecmd->argv);
-    fprintf(2, "exec %s failed\n", ecmd->argv[0]);
+
+    char ** argv = &(ecmd->argv[0]);
+
+    if (strcmp(argv[0],"time")==0){
+      
+      argv++;
+      
+      e_time_t time = get_time_perf(argv);
+
+      int fd = open(".time", O_CREATE | O_WRONLY | O_APPEND);
+      char issuedCmd[100]={0};
+      create_cmd(argv,issuedCmd);
+
+      int cmdLen = strlen(issuedCmd);
+      write(fd, &cmdLen, sizeof(int));
+      write(fd, issuedCmd,cmdLen);
+      write(fd, &time, sizeof(e_time_t));
+      close(fd);
+
+    }else{
+      exec(argv[0], argv);
+      fprintf(2, "exec %s failed\n", argv[0]);
+    }
+
     break;
 
   case REDIR:
@@ -142,35 +190,8 @@ getcmd(char *buf, int nbuf)
   return 0;
 }
 
-int
-main(void)
-{
-  static char buf[100];
-  int fd;
 
-  // Ensure that three file descriptors are open.
-  while((fd = open("console", O_RDWR)) >= 0){
-    if(fd >= 3){
-      close(fd);
-      break;
-    }
-  }
 
-  // Read and run input commands.
-  while(getcmd(buf, sizeof(buf)) >= 0){
-    if(buf[0] == 'c' && buf[1] == 'd' && buf[2] == ' '){
-      // Chdir must be called by the parent, not the child.
-      buf[strlen(buf)-1] = 0;  // chop \n
-      if(chdir(buf+3) < 0)
-        fprintf(2, "cannot cd %s\n", buf+3);
-      continue;
-    }
-    if(fork1() == 0)
-      runcmd(parsecmd(buf));
-    wait(0);
-  }
-  exit(0);
-}
 
 void
 panic(char *s)
@@ -328,6 +349,7 @@ struct cmd *nulterminate(struct cmd*);
 struct cmd*
 parsecmd(char *s)
 {
+
   char *es;
   struct cmd *cmd;
 
@@ -492,3 +514,108 @@ nulterminate(struct cmd *cmd)
   }
   return cmd;
 }
+
+
+char * beginswith(char * src, char *target){
+
+  while(*src && (*src=='\t' || *src==' ')){src++;};
+
+  while(*src && *target && *src==*target){
+    src++;
+    target++;
+  }
+
+  if (!*target){
+    return src;
+  }
+
+  return 0;
+}
+
+
+/*
+  Prints the time information stored in the .time file
+*/
+
+void print_time_infos(void){
+  
+  int fd = open(".time",O_RDONLY);
+
+  printf("\n\nTIME---------------------\n");
+
+  long totalTime = 0;
+
+  while (1){
+    int cmdLen;
+    char cmdName[100];
+
+    if (read(fd, &cmdLen, sizeof(int))<=0)
+      break;
+
+    /* Reading the cmd name */
+    read(fd, cmdName, cmdLen);
+    cmdName[cmdLen]=0;
+    printf("CMD: %s\n", cmdName);
+
+    /* Reading the timing information */
+    e_time_t time;
+    read(fd, &time, sizeof(e_time_t));
+
+    tick_to_time("Creation: ",time.creationTime * 100);
+    tick_to_time("End: ", time.endTime * 100);
+    tick_to_time("Duration: ", time.totalTime * 100);
+
+    totalTime += time.totalTime;
+
+    printf("\n");
+  }
+
+  printf("------------Total------------\n");
+  tick_to_time("Total: ", totalTime * 100);
+}
+
+
+int
+main(void)
+{
+
+
+  static char buf[100];
+  int fd;
+
+  // Ensure that three file descriptors are open.
+  while((fd = open("console", O_RDWR)) >= 0){
+    if(fd >= 3){
+      close(fd);
+      break;
+    }
+  }
+
+  // Read and run input commands.
+  while(getcmd(buf, sizeof(buf)) >= 0){
+    if(buf[0] == 'c' && buf[1] == 'd' && buf[2] == ' '){
+      // Chdir must be called by the parent, not the child.
+      buf[strlen(buf)-1] = 0;  // chop \n
+      if(chdir(buf+3) < 0)
+        fprintf(2, "cannot cd %s\n", buf+3);
+      continue;
+    }
+
+    if(fork1() == 0){
+      runcmd(parsecmd(buf));
+    }
+    wait(0);
+
+     /* Check for the existance of .time file and if it exists, remove it */
+    if (open(".time",O_RDONLY)>0){
+
+      /* Process the content */
+      print_time_infos();
+
+      if(unlink(".time") < 0)
+        printf("[ERR] Deleting .time file failed\n");
+    }
+  }
+  exit(0);
+}
+

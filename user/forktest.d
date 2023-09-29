@@ -1,1 +1,2 @@
-user/forktest.o: user/forktest.c kernel/types.h kernel/stat.h user/user.h
+user/forktest.o: user/forktest.c kernel/types.h kernel/stat.h user/user.h \
+ gelibs/time.h

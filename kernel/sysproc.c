@@ -12,7 +12,84 @@
 #include "efunctions/uniq.h"
 
 
+extern void get_process_status(int tpid, int tppid, int tstatus, uint64 pName);
+extern int get_process_time(int tpid, uint64 uaddr, uint64 addr);
+extern struct proc proc[NPROC];
+uint64 sys_uptime(void);
 
+
+/*
+The gettime system call returns the uptime of the 
+system as the time of the system.
+
+  gettime(time_t * time)
+
+*/
+uint64 sys_gettime(void){
+
+  uint64 address;
+  uint64 time;
+  struct proc * p = myproc();
+  argaddr(0, &address);
+
+  time=sys_uptime();
+  
+  copyout(p->pagetable, address,&time, sizeof(uint64));
+
+  return 0;
+
+}
+
+
+/* 
+
+The times system call, returns the timing criteria for the execution of a program.
+
+ times(int pid, e_time_t * time);
+
+It returns the timing information for the process with process id of pid as the e_time_t structure into
+time variable.
+
+*/
+uint64 sys_times(void){
+
+  uint32 pid;
+  uint64 timeStructAddress;
+  argint(0, &pid);
+  argaddr(1, &timeStructAddress);
+
+  get_process_time(pid,timeStructAddress,0);
+  
+  return 0;
+}
+
+
+
+
+/*
+
+ps syscall 
+
+  
+  ps(int pid, int ppid, int status, char * pName);
+  
+*/
+uint64 sys_ps(void){
+
+  uint32 pid;
+  uint32 ppid;
+  uint32 status;
+  uint64 pName;
+
+  argint(0, &pid);
+  argint(1, &ppid);
+  argint(2, &status);
+  argaddr(3, &pName);
+
+  get_process_status(pid, ppid, status, pName);
+
+  return 0;
+}
 
 
 /*

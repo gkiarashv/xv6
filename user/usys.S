@@ -115,3 +115,18 @@ uniq:
  li a7, SYS_uniq
  ecall
  ret
+.global ps
+ps:
+ li a7, SYS_ps
+ ecall
+ ret
+.global times
+times:
+ li a7, SYS_times
+ ecall
+ ret
+.global gettime
+gettime:
+ li a7, SYS_gettime
+ ecall
+ ret

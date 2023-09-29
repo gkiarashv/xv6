@@ -104,6 +104,9 @@ extern uint64 sys_close(void);
 
 extern uint64 sys_head(void);
 extern uint64 sys_uniq(void);
+extern uint64 sys_ps(void);
+extern uint64 sys_times(void);
+extern uint64 sys_gettime(void);
 
 
 // An array mapping syscall numbers from syscall.h
@@ -132,6 +135,9 @@ static uint64 (*syscalls[])(void) = {
 [SYS_close]   sys_close,
 [SYS_head]    sys_head,
 [SYS_uniq]    sys_uniq,
+[SYS_ps]    sys_ps,
+[SYS_times]    sys_times,
+[SYS_gettime]    sys_gettime
 };
 
 void

@@ -92,6 +92,7 @@ sys_write(void)
   if(argfd(0, 0, &f) < 0)
     return -1;
 
+  // printf("SYSCALL : %d\n",f->off);
   return filewrite(f, p, n);
 }
 
@@ -311,6 +312,7 @@ sys_open(void)
   struct inode *ip;
   int n;
 
+
   argint(1, &omode);
   if((n = argstr(0, path, MAXPATH)) < 0)
     return -1;
@@ -350,12 +352,18 @@ sys_open(void)
     return -1;
   }
 
+
   if(ip->type == T_DEVICE){
     f->type = FD_DEVICE;
     f->major = ip->major;
   } else {
+    
     f->type = FD_INODE;
-    f->off = 0;
+
+    if (omode & O_APPEND)
+      f->off = ip->size;
+    else
+      f->off = 0;
   }
   f->ip = ip;
   f->readable = !(omode & O_WRONLY);
@@ -435,6 +443,7 @@ sys_chdir(void)
 uint64
 sys_exec(void)
 {
+
   char path[MAXPATH], *argv[MAXARG];
   int i;
   uint64 uargv, uarg;
@@ -461,7 +470,6 @@ sys_exec(void)
     if(fetchstr(uarg, argv[i], PGSIZE) < 0)
       goto bad;
   }
-
   int ret = exec(path, argv);
 
   for(i = 0; i < NELEM(argv) && argv[i] != 0; i++)

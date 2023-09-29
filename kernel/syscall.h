@@ -24,4 +24,6 @@
 
 #define SYS_head 22
 #define SYS_uniq 23
-
+#define SYS_ps 24
+#define SYS_times 25
+#define SYS_gettime 26

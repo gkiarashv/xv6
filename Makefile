@@ -35,6 +35,8 @@ OBJS = \
 	$G/string.o\
 	$E/head.o\
 	$E/uniq.o\
+	$K/elibs/ps.o\
+	$K/elibs/times.o\
 
 
 # riscv64-unknown-elf- or riscv64-linux-gnu-
@@ -94,7 +96,8 @@ $U/initcode: $U/initcode.S
 tags: $(OBJS) _init
 	etags *.S *.c
 
-ULIB = $U/ulib.o $U/usys.o $U/printf.o $U/umalloc.o $E/head.o $E/uniq.o $G/string.o $U/elibs/file.o
+ULIB = $U/ulib.o $U/usys.o $U/printf.o $U/umalloc.o $E/head.o $E/uniq.o $G/string.o $U/elibs/file.o   $U/time.o
+
 
 
 _%: %.o $(ULIB)
@@ -142,6 +145,9 @@ UPROGS=\
 	$U/_zombie\
 	$U/_head\
 	$U/_uniq\
+	$U/_ps\
+	$U/_date\
+
 
 
 fs.img: mkfs/mkfs README file1 file2 $(UPROGS)

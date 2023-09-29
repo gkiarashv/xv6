@@ -8,6 +8,7 @@
 #include "elf.h"
 
 static int loadseg(pde_t *, uint64, struct inode *, uint, uint);
+extern uint64 sys_uptime(void);
 
 int flags2perm(int flags)
 {
@@ -29,6 +30,8 @@ exec(char *path, char **argv)
   struct inode *ip;
   struct proghdr ph;
   pagetable_t pagetable = 0, oldpagetable;
+
+
   struct proc *p = myproc();
 
   begin_op();
@@ -137,6 +140,7 @@ exec(char *path, char **argv)
     iunlockput(ip);
     end_op();
   }
+
   return -1;
 }
 
