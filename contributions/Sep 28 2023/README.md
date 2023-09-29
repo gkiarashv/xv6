@@ -151,13 +151,19 @@ void ps(int pid, int ppid, int status, char * pName)
 The parameters serve as filters for the ps output. `pid` restricts the output to processes with a particular process ID, `ppid` limits it to processes with a specific parent process ID, `status` narrows down to processes with specific statuses, and `pName` confines the output to processes with a specific string in their names.
 
 
+The `ps` system call has been written in the `kernel/sysproc.c` and `kernel/elibs/ps.c`:
 
-### Implementation
-See [this](https://github.com/gkiarashv/xv6/tree/main/contributions/Sep%2028%202023/ps_implementation) for the implementation details.
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/sysps.png)
+
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/psimp1.png)
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/psimp2.png)
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/psimp3.png)
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/psimp4.png)
+
+In this approach, we go through the list of processes. If an option has been specified and we don't find a process that meets this criteria, we skip it using the `continue` statement within the loop's if condition.
 
 
-### Usages
-See [this](https://github.com/gkiarashv/xv6/tree/main/contributions/Sep%2028%202023/ps_usage) for the usage examples.
+
 
 
 
