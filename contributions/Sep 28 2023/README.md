@@ -125,11 +125,11 @@ The arguments can filter the output of the `ps` as, `pid` limits the output to p
 
 
 ### Implementation
-See this for the implementation details.
+See [this](https://github.com/gkiarashv/xv6/tree/main/contributions/Sep%2028%202023/ps_implementation) for the implementation details.
 
 
 ### Usages
-See this for the usage examples.
+See [this](https://github.com/gkiarashv/xv6/tree/main/contributions/Sep%2028%202023/ps_usage) for the usage examples.
 
 
 
