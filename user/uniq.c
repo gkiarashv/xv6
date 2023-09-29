@@ -40,10 +40,10 @@ int main(int argc, char ** argv){
 	}
 
 	/* Kernel mode */
-	uniq(passedFiles,options);
+	// uniq(passedFiles,options);
 	
 	/* User mode */
-	// uniq_start(passedFiles, options);
+	uniq_start(passedFiles, options);
 
 	return 0;
 
