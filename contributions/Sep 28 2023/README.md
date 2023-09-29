@@ -1,8 +1,8 @@
 # Summary
 Level | Description |
 | --- | --- |
-| Kernel | File manipulation API has been extended, Three new system calls have been added  |
-| User | Shell has been extended with one keyword and two commands |
+| Kernel | File manipulation API has been extended (File append mode), Three new system calls have been added (times, ps, gettime)  |
+| User | Shell has been extended with one keyword (time) and two commands (ps, date) |
 
 ### Extension Libraries (elibs)
 Path | Files |
@@ -42,29 +42,38 @@ The other fields are set when the process execution is ended:
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/exectime.png)
 
 
-
-
-
-
 The time calculation relies on CPU ticks, with each tick assumed to be equivalent to 100 milliseconds. Consequently, the macro function `tick_to_time()` is employed to convert these ticks into human-readable time, representing minutes, seconds, and milliseconds. The type parameter in this macro function specifies a string indicating the type of time being displayed.
+
+
+
+
+
+
+
+
 
 
 
 # File manipulation API extended
 
-The previous `sys_open()` system call had not provided any mode for appending to a file. In the current version, we have added a new mode `O_APPEND` to `fcntl.h` that provides this ability.
+In the past, the `sys_open()` system call did not offer a mode for appending data to a file. In the updated version, we have introduced a new mode called `O_APPEND` in `fcntl.h`, enabling this functionality.
 
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/fcntlmodes.png)
 
 
-
-
-The modification to `sys_open()` was to set the file's offset to the size of the file when the mode is `O_APPEND`. This has been done using the file's inode structure `ip->size`.
+The adjustment made to `sys_open()` involved setting the file's position to the file size when the `O_APPEND` mode is specified. This operation was achieved by utilizing the file's inode structure `ip->size`.
 
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/sysopen.png)
 
 
 This phase was necessary for the functionality of other new updates of the xv6 OS.
+
+
+
+
+
+
+
 
 
 
