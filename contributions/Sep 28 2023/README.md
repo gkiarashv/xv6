@@ -125,7 +125,9 @@ The `ps` system call prints out information about the processes of the system. T
 ```
 void ps(int pid, int ppid, int status, char * pName)
 ```
-The arguments can filter the output of the `ps` as, `pid` limits the output to processes with a specific pid, `ppid` limits to processes with specific parent pid, `status` limits to processes with specific status, and `pName` limits the output to processes with a specific string in their name.
+
+The parameters serve as filters for the ps output. `pid` restricts the output to processes with a particular process ID, `ppid` limits it to processes with a specific parent process ID, `status` narrows down to processes with specific statuses, and `pName` confines the output to processes with a specific string in their names.
+
 
 
 ### Implementation
@@ -141,7 +143,7 @@ See [this](https://github.com/gkiarashv/xv6/tree/main/contributions/Sep%2028%202
 # Shell extension
 
 ## time keyword
-To compute the total time that an execution of a command or commands take, a new keyword `time` has been added to the shell of the xv6, defined in `user/sh.c`. Adding this keyword before each command, in pipe or not, will print the timing information.
+To calculate the overall duration of executing one or multiple commands, a new keyword, `time`, has been introduced into the xv6 shell. This keyword, defined in `user/sh.c`, can be placed before any command, whether in a pipeline or not, to display the timing information.
 ```
 time CMD
 ```
