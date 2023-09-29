@@ -154,10 +154,16 @@ time CMD | time CMD | ...
 CMD | time CMD | CMD | time CMD ...
 ```
 
-
 ## date command
-A new command has been added which prints the xv6 OS uptime as the major reference for the time.
+A new command has been introduced, enabling the display of the xv6 OS uptime as the primary time reference.
 
+
+## ps command
+The `ps` command is as follows:
+```
+ps [-pid PID | -ppid PPID | -stat STATUS | -name NAME]
+```
+Possible values for `STATUS` are: `sleeping`, `ready`, `running`, `zombie`, and `used`. Note that these options can be used simultaneously.
 
 
 ### Implementation
