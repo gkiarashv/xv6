@@ -88,13 +88,13 @@ The `gettime` system call is called in the user space as follows:
 ```
 gettime(time_t * time)
 ```
-Where `time_t` is defined in `gelibs/time.h` as a 64-bit number.
+Where `time_t` is defined in `gelibs/time.h` as a 64-bit integer number.
 
 The implementiation of the system call has been done in the `sysproc.c` file and is as follows:
 
-
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/gettimeimp.png)
 
+As it is clear, it returns the output of the `sys_uptime()` wich is the total number of ticks since the start of the OS.
 
 
 
@@ -104,19 +104,13 @@ The `times` system call is called in the user space as follows:
 ```
 times(int pid, e_time_t * time);
 ```
-This system call returns the timing information for the process with process id of `pid` as the e_time_t structure into
-`time` variable.
-
+This system call returns the timing information for the process with process id of `pid` and stores it as `e_time_t` structure.
 
 The implementation of `sys_times()` is given in `sysproc.c` as follows:
 
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/sys_times.png)
 
-
-
-The `get_process_time()` function is exactly the `wait(0)` function with this difference that it only search for a ZOMBIE child that has a pid that
-matches the `tpid`. When this child is found, the timing information is completed by computing the ending and total times. Then, it is returned(copyout) to the 
-e_time_t structure in the user space.
+The `get_process_time()` function functions similarly to `wait(0)`, but with a distinction: it specifically looks for a ZOMBIE child process that matches the target pid specified in `tpid`. Once this child process is identified, the function calculates ending and total times using the `sys_uptime()` function and completes the timing information. Subsequently, this information is copied out to the `e_time_t` structure in the user space before being returned.
 
 
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/getprocesstime.png)
