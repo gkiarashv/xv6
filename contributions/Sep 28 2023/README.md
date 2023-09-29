@@ -26,6 +26,28 @@ Path | Files |
 | kernel/ | sysfile.c, fcntl.h |
 
 
+
+# Compilation
+To compile the extensions and integrate them with the xv6 OS, in the main folder of the xv6 project, run the `make` commands as follows:
+
+
+`make clean`:
+![makeclean](https://github.com/gkiarashv/xv6/blob/main/images/makeclean2.png)
+
+`make`:
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/make2.png)
+
+
+`make qemu`:
+![makeqemu](https://github.com/gkiarashv/xv6/blob/main/images/makeqemu2.png)
+
+
+
+
+
+
+
+
 # GELIBS
 The latest addition to the `proc` structure of every process involves the inclusion of timing criteria such as creation time, completion time, and total execution duration. These timing details are specified in the `gelibs/time.h` file.
 
