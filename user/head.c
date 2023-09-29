@@ -32,10 +32,10 @@ int main(int argc, char ** argv){
 	}
 
 	/* Kernel mode */
-	head(passedFiles, lineCount);
+	// head(passedFiles, lineCount);
 	
 	/* User mode */
-	// head_usermode(passedFiles, lineCount);
+	head_usermode(passedFiles, lineCount);
 
 	return 0;
 }
