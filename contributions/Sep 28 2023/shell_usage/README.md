@@ -33,6 +33,18 @@ In the following, there are examples of how to work with the `time` keyword of t
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/timecathead.png)
 
 
+## time uniq -c (Delaying purposfully)
+
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/timeuniquserc.png)
+
+
+## time uniq file1 file2
+
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/timeuniqfile1file2.png)
+
+
+
+
 
 # Kernel mode
 
@@ -43,6 +55,9 @@ In the following, there are examples of how to work with the `time` keyword of t
 ## time cat file1 | time head -n 7
 
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/timecatheadkernel.png)
+
+## time uniq -c file1 file2
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/timeuniqcfile1file2kernel.png)
 
 
 
