@@ -55,32 +55,23 @@ To test FCFS scheduling, first, compile the kernel using `make SCHED=FCFS`.
 To test Priority scheduling, first, compile the kernel using `make SCHED=PS`.
 
 ## schedtest -p 9 -c t1 -p 8 -c t2
-![cmd](https://github.com/gkiarashv/xv6/blob/main/images/pst1.png)
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schede7.png)
 
 ## schedtest -p 3 -c t1 -p 8 -c t2
-![cmd](https://github.com/gkiarashv/xv6/blob/main/images/pst2.png)
-
-
-## schedtest -p 3 -c t1 -p 8 -c t2 (delayed)
-To make timing information more understandable, we have added a delay function to the for loops of `t1` and `t2`:
-![cmd](https://github.com/gkiarashv/xv6/blob/main/images/pst3.png)
-
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schede8.png)
 
 ## schedtest -p 3 -c head file1 -p 2 -c head -k file2 (Kernel head with file2)
-![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedhead3.png)
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schede9.png)
 
 
 ## schedtest -p 2 -c head file1 -p 7 -c head -k file2 (Kernel head with file2)
-![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedhead4.png)
-
-
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schede10.png)
 
 ## schedtest -p 3 -c uniq -i file1 -p 2 -c uniq -k file2 (Kernel uniq with file2)
-![cmd](https://github.com/gkiarashv/xv6/blob/main/images/scheduniq3.png)
-
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schede11.png)
 
 ## schedtest -p 2 -c uniq -i file1 -p 7 -c uniq -k file2 (Kernel uniq with file2)
-![cmd](https://github.com/gkiarashv/xv6/blob/main/images/scheduniq4.png)
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schede12.png)
 
 
 
