@@ -44,6 +44,9 @@ To test Priority scheduling, first, compile the kernel using `make SCHED=PS`.
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/pst2.png)
 
 
+## schedtest -p 3 -c t1 -p 8 -c t2 (delayed)
+To make timing information more understandable, we have added a delay function to the for loops of `t1` and `t2`:
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/pst3.png)
 
 
 
