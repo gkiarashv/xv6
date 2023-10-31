@@ -81,6 +81,25 @@ $ schedtest -c CMD1 -p PRIORITY -c CMD2
 ```
 $ schedtest -p PRIORTY -c CMD1 -p PRIORITY -c CMD2
 ```
+The `schedtest` command first parses the passed command and extracts the passed commands along with their priorities. Then, based on the scheduling algorithm of the
+kernel, these commands are executed. The logic to execute them is as follows:
+
+### Scheduling is FCFS
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedtestfcfs.png)
+In the code above, there is a `delay` function which is defined as follows:
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/delay.png)
+
+
+
+
+
+### Scheduling is Priority scheduling
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedtestfcfs.png)
+
+### Scheduling is Default
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedtestfcfs.png)
+
+
 
 ## Head and Uniq extensions
 Both the `uniq` and `head` commands can now switched between user mode and kernel mode with the command line option `-k`.
@@ -105,6 +124,10 @@ The `runningTime` should only be set once when the process gets the chance to be
 Each process in xv6 will now be having a new field in `struct proc` struct called `priority` which is needed for priority scheduling.
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/proch.png)
 
+The default priority of a process is set to 10 in the `proc.c/allocproc()` function.
+
+
+
 
 
 ## proc.c
@@ -112,13 +135,14 @@ The scheduler of the XV6 kernel now supports three scheduling algorithms: `Defau
 
 ### Priority scheduling
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/pssched.png)
-The logic is to iterate over the processes and choose the one that is first runnable and has the lowest possible priority.
+The logic is to iterate over the processes and choose the one that is first runnable and has the lowest possible priority. If the creation times were equal, the one with the lowest priority will be chosen.
 
 
 ### FCFS
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/fcfssched.png)
 The logic is to iterate over the processes and choose the one that is first runnable and has the lowest creation time. The creation time of a process indicates
-when the process has arrived and can be useful to indicate the execution order.
+when the process has arrived and can be useful to indicate the execution order. If the creation times were equal, the one with the lowest priority will be chosen.
+
 
 
 ### Default
