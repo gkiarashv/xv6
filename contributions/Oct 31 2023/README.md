@@ -101,13 +101,13 @@ The `schedtest` command first parses the passed command and extracts the passed 
 kernel, these commands are executed. The logic to execute them is as follows:
 
 ### Scheduling is FCFS
-![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedtestfcfs2.png)
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedalgofcfs.png)
 
 ### Scheduling is Priority scheduling
-![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedtestps.png)
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedalgofcpd.png)
 
 ### Scheduling is Default
-![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedtestdef.png)
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedalgodef.png)
 
 
 Note that the turnaround time is calculated as `endTime - creationTime` and the waiting time is computed as `runningTime - creationTime`.
