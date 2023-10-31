@@ -43,7 +43,6 @@ To make timing information more understandable, we have added a delay function t
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedhead2.png)
 
 
-
 ## schedtest -c uniq -i file1 -c uniq -k file2 (Kernel uniq with file2)
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/scheduniq1.png)
 
@@ -72,6 +71,22 @@ To test Priority scheduling, first, compile the kernel using `make SCHED=PS`.
 To make timing information more understandable, we have added a delay function to the for loops of `t1` and `t2`:
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/pst3.png)
 
+
+## schedtest -p 3 -c head file1 -p 2 -c head -k file2 (Kernel head with file2)
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedhead3.png)
+
+
+## schedtest -p 2 -c head file1 -p 7 -c head -k file2 (Kernel head with file2)
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedhead4.png)
+
+
+
+## schedtest -p 3 -c uniq -i file1 -p 2 -c uniq -k file2 (Kernel uniq with file2)
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/scheduniq3.png)
+
+
+## schedtest -p 2 -c uniq -i file1 -p 7 -c uniq -k file2 (Kernel uniq with file2)
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/scheduniq4.png)
 
 
 
