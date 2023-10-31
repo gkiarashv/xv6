@@ -23,32 +23,26 @@ Moreover, we have changed the number of CPUs from 3 to 1, to showcase the effect
 To test FCFS scheduling, first, compile the kernel using `make SCHED=FCFS`.
 
 ## schedtest -c t1 -c t2
-![cmd](https://github.com/gkiarashv/xv6/blob/main/images/fcfst1.png)
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schede1.png)
 
 ## schedtest -c t2 -c t1
-![cmd](https://github.com/gkiarashv/xv6/blob/main/images/fcfst2.png)
-
-## schedtest -c t2 -c t1 (delayed)
-To make timing information more understandable, we have added a delay function to the for loops of `t1` and `t2`:
-![cmd](https://github.com/gkiarashv/xv6/blob/main/images/delay2.png)
-
-![cmd](https://github.com/gkiarashv/xv6/blob/main/images/fcfst3.png)
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schede2.png)
 
 
 ## schedtest -c head file1 -c head -k file2 (Kernel head with file2)
-![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedhead1.png)
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schede3.png)
 
 
 ## schedtest -c head -k file2 -c head file1 (Kernel head with file2)
-![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedhead2.png)
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schede4.png)
 
 
 ## schedtest -c uniq -i file1 -c uniq -k file2 (Kernel uniq with file2)
-![cmd](https://github.com/gkiarashv/xv6/blob/main/images/scheduniq1.png)
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schede5.png)
 
 
 ## schedtest -c uniq -k file2 -c uniq file1 (Kernel uniq with file2)
-![cmd](https://github.com/gkiarashv/xv6/blob/main/images/scheduniq2.png)
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schede6.png)
 
 
 
