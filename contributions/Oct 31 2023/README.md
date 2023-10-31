@@ -33,6 +33,17 @@ Path | Files |
 ## setpr
 The `setpr` system calls sets a priority for a process with process ID of `pid`:
 
+```
+setpr(int pid, int priority);
+```
+
+The implementation of `setpr` system call is given in the `sysproc.c` and is as follows:
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/sys_times.png)
+
+The `change_priority()` function has been defined in the `kernel/elibs/sched.c` file and is as follows:
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/sys_times.png)
+
+
 
 
 
