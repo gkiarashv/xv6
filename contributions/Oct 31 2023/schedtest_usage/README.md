@@ -42,7 +42,7 @@ To test FCFS scheduling, first, compile the kernel using `make SCHED=FCFS`.
 
 
 ## schedtest -c uniq -k file2 -c uniq file1 (Kernel uniq with file2)
-![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schede6.png)
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/sche6.png)
 
 
 
