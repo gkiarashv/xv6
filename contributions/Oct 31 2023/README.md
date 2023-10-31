@@ -97,7 +97,7 @@ kernel, these commands are executed. The logic to execute them is as follows:
 Note that the turnaround time is calculated as `endTime - creationTime` and the waiting time is computed as `runningTime - creationTime`.
 
 ### Usage
-For the example usages, please check [here](https://github.com/gkiarashv/xv6/tree/main/contributions/Sep%2028%202023/shell_implemenation).
+For the example usages, please check [here](https://github.com/gkiarashv/xv6/blob/main/contributions/Oct%2031%202023/schedtest_usage/README.md).
 
 
 
