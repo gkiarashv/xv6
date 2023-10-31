@@ -85,19 +85,18 @@ The `schedtest` command first parses the passed command and extracts the passed 
 kernel, these commands are executed. The logic to execute them is as follows:
 
 ### Scheduling is FCFS
-![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedtestfcfs.png)
-In the code above, there is a `delay` function which is defined as follows:
-![cmd](https://github.com/gkiarashv/xv6/blob/main/images/delay.png)
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedtestfcfs2.png)
+
 
 
 
 
 
 ### Scheduling is Priority scheduling
-![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedtestfcfs.png)
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedtestps.png)
 
 ### Scheduling is Default
-![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedtestfcfs.png)
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedtestdef.png)
 
 
 
