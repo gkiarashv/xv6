@@ -32,3 +32,19 @@ To make timing information more understandable, we have added a delay function t
 
 
 
+
+
+# PS test
+To test Priority scheduling, first, compile the kernel using `make SCHED=PS`.
+
+## schedtest -p 9 -c t1 -p 8 -c t2
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/fcfst1.png)
+
+## schedtest -p 3 -c t1 -p 8 -c t2
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/fcfst2.png)
+
+
+
+
+
+
