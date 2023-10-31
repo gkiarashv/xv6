@@ -152,7 +152,7 @@ The default priority of a process is set to 10 in the `proc.c/allocproc()` funct
 The scheduler of the XV6 kernel now supports three scheduling algorithms: `Default`, `FCFS`, and `PS`(Priority scheduling). The implementation of these three scheduling algorithms have been given in the `proc.c/scheduler()`:
 
 ### Priority scheduling
-![cmd](https://github.com/gkiarashv/xv6/blob/main/images/pssched.png)
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/procps.png)
 The logic is to iterate over the processes and choose the one that is first runnable and has the lowest possible priority. If the creation times were equal, the one with the lowest priority will be chosen.
 
 
