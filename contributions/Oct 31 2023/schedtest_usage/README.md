@@ -22,7 +22,7 @@ To test FCFS scheduling, first, compile the kernel using `make SCHED=FCFS`.
 ## schedtest -c t2 -c t1
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/fcfst2.png)
 
-## schedtest -c t2 -c t1
+## schedtest -c t2 -c t1 (delayed)
 To make timing information more understandable, we have added a delay function to the for loops of `t1` and `t2`:
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/delay2.png)
 
