@@ -23,7 +23,7 @@ Path | Files |
 ### Extension Modifications (EMODIFICATIONS)
 Path | Files |
 | --- | --- |
-| kernel/ | sysfile.c, fcntl.h |
+| kernel/ | - |
 | gelibs/ | time.h |
 
 
