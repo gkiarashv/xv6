@@ -1,6 +1,6 @@
 # schedtest command
 
-To test the `schedtest` command, we first test it against two new commands that can give in-depth inside of execution.
+To test the `schedtest` command, we first test it against two new commands that can give an in-depth inside of execution.
 
 ## t1 and t2 commands
 Two new commands of `t1` and `t2` have been written with the same simple codes:
@@ -16,7 +16,7 @@ Two new commands of `t1` and `t2` have been written with the same simple codes:
 
 
 
-Moreover, we have changed the number of CPUs from 3 to 1 to showcase the correctness of the scheduling. Also, the timer interval of the kernel has been changed so the timing become reasonable:
+Moreover, we have changed the number of CPUs from 3 to 1 to showcase the correctness of the scheduling. Also, the timer interval of the kernel has been changed so the timing becomes reasonable:
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/intervaltimer.png)
 
 
