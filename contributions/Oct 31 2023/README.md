@@ -97,7 +97,7 @@ $ schedtest -c CMD1 -p PRIORITY -c CMD2
 ```
 $ schedtest -p PRIORTY -c CMD1 -p PRIORITY -c CMD2
 ```
-The `schedtest` command first parses the passed command and extracts the passed commands along with their priorities. Then, based on the scheduling algorithm of the
+The `schedtest` command first parses the passed command and extracts the passed commands along with their priorities. Note that the parsing method should follow the exact pattern as xv6's shell does not support double quotes to construct a more robust parser for the command line. Then, based on the scheduling algorithm of the
 kernel, these commands are executed. The logic to execute them is as follows:
 
 ### Scheduling is FCFS
