@@ -71,7 +71,7 @@ The implementation of `getpidtime` has been given in the `sysproc.c` and is as f
 
 
 ## getsched
-The `getsched` retrieves the scheduling algorithm of the Kernel:
+The `getsched` retrieves the scheduling algorithm of the kernel:
 ```
 getsched(int * sch);
 ```
@@ -110,7 +110,7 @@ kernel, these commands are executed. The logic to execute them is as follows:
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedalgodef.png)
 
 
-Note that the turnaround time is calculated as `endTime - creationTime` and the waiting time is computed as `runningTime - creationTime`.
+Note that the turnaround time is calculated as `endTime - creationTime`, and the waiting time is computed as `runningTime - creationTime`.
 
 ### Usage
 For the example usages, please check [here](https://github.com/gkiarashv/xv6/blob/main/contributions/Oct%2031%202023/schedtest_usage/README.md).
@@ -139,7 +139,7 @@ The `runningTime` should only be set once when the process gets the chance to be
 
 
 ## proc.h
-Each process in xv6 will now be having a new field in `struct proc` struct called `priority` which is needed for priority scheduling.
+Each process in xv6 will now have a new field in `struct proc` struct called `priority`, which is needed for priority scheduling.
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/proch.png)
 
 The default priority of a process is set to 10 in the `proc.c/allocproc()` function.
@@ -149,17 +149,17 @@ The default priority of a process is set to 10 in the `proc.c/allocproc()` funct
 
 
 ## proc.c
-The scheduler of the XV6 kernel now supports three scheduling algorithms: `Default`, `FCFS`, and `PS`(Priority scheduling). The implementation of these three scheduling algorithms have been given in the `proc.c/scheduler()`:
+The scheduler of the XV6 kernel now supports three scheduling algorithms: `Default`, `FCFS`, and `PS`(Priority scheduling). The implementation of these three scheduling algorithms has been given in the `proc.c/scheduler()`:
 
 ### Priority scheduling
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/procps3.png)
-The logic is to iterate over the processes and choose the one that is first runnable and has the lowest possible priority. If the creation times were equal, the one with the lowest priority will be chosen.
+The logic is to iterate over the processes and choose the one that is first runnable and has the lowest possible priority. If the creation times were equal, the one with the lowest priority would be chosen.
 
 
 ### FCFS
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/fcfssched.png)
 The logic is to iterate over the processes and choose the one that is first runnable and has the lowest creation time. The creation time of a process indicates
-when the process has arrived and can be useful to indicate the execution order. If the creation times were equal, the one with the lowest priority will be chosen.
+when the process has arrived and can be useful to indicate the execution order. If the creation times were equal, the one with the lowest priority would be chosen.
 
 
 
