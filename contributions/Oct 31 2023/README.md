@@ -7,7 +7,7 @@ Level | Description |
 ### Extension Libraries (elibs)
 Path | Files |
 | --- | --- |
-| Kernel/elibs/ | sched.c |
+| Kernel/elibs/ | sched.c sched.h |
 | User/elibs/ |  - |
 
 ### Global Extension Libraries (gelibs)
@@ -83,7 +83,7 @@ The implementation of `getsched` has been given in the `sysproc.c` and is as fol
 # Shell new commands
 
 ## schedtest
-The `schedtest` command tests the scheduling of the XV6 kernel with the following construction:
+The `schedtest` command tests the scheduling of the xv6 kernel with the following construction:
 ```
 schedtest ([-p PRIORITY] (-c COMMAND)+)+
 ```
@@ -148,24 +148,25 @@ The `runningTime` should only be set once when the process gets the chance to be
 Each process in xv6 will now have a new field in `struct proc` struct called `priority`, which is needed for priority scheduling.
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/proch.png)
 
-The default priority of a process is set to 10 in the `proc.c/allocproc()` function.
+The default priority of a process is set to 10 in the `proc.c/allocproc()` function. Possible values for process priority can be found in the `kernel/elibs/sched.h` file.
+
 
 
 
 
 
 ## proc.c
-The scheduler of the XV6 kernel now supports three scheduling algorithms: `Default`, `FCFS`, and `PS`(Priority scheduling). The implementation of these three scheduling algorithms has been given in the `proc.c/scheduler()`:
+The scheduler of the xv6 kernel now supports three scheduling algorithms: `Default`, `FCFS`, and `PS`(Priority scheduling). The implementation of these three scheduling algorithms has been given in the `proc.c/scheduler()`:
 
 ### Priority scheduling
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/procps3.png)
-The logic is to iterate over the processes and choose the one that is first runnable and has the lowest possible priority. If the creation times were equal, the one with the lowest priority would be chosen.
+The logic is to iterate over the processes and choose the one that is first runnable and has the lowest possible priority. If the priorities were equal, the one with the lowest process ID would be chosen.
 
 
 ### FCFS
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/fcfssched.png)
 The logic is to iterate over the processes and choose the one that is first runnable and has the lowest creation time. The creation time of a process indicates
-when the process has arrived and can be useful to indicate the execution order. If the creation times were equal, the one with the lowest priority would be chosen.
+when the process has arrived and can be useful to indicate the execution order. If the creation times were equal, the one with the lowest process ID would be chosen.
 
 
 
