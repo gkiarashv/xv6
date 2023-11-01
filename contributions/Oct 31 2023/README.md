@@ -23,7 +23,7 @@ Path | Files |
 ### Extension Modifications (EMODIFICATIONS)
 Path | Files |
 | --- | --- |
-| kernel/ | proc.c proc.h |
+| kernel/ | proc.c proc.h start.c |
 | gelibs/ | time.h |
 
 
