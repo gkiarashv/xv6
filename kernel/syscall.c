@@ -107,6 +107,9 @@ extern uint64 sys_uniq(void);
 extern uint64 sys_ps(void);
 extern uint64 sys_times(void);
 extern uint64 sys_gettime(void);
+extern uint64 sys_setpr(void);
+extern uint64 sys_getpidtime(void);
+extern uint64 sys_getsched(void);
 
 
 // An array mapping syscall numbers from syscall.h
@@ -137,7 +140,10 @@ static uint64 (*syscalls[])(void) = {
 [SYS_uniq]    sys_uniq,
 [SYS_ps]    sys_ps,
 [SYS_times]    sys_times,
-[SYS_gettime]    sys_gettime
+[SYS_gettime]    sys_gettime,
+[SYS_setpr]    sys_setpr,
+[SYS_getpidtime]    sys_getpidtime,
+[SYS_getsched]    sys_getsched,
 };
 
 void
@@ -151,6 +157,7 @@ syscall(void)
     // Use num to lookup the system call function for num, call it,
     // and store its return value in p->trapframe->a0
     p->trapframe->a0 = syscalls[num]();
+
   } else {
     printf("%d %s: unknown sys call %d\n",
             p->pid, p->name, num);

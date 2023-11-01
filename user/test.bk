@@ -1,0 +1,197 @@
+#include "kernel/types.h"
+#include "kernel/stat.h"
+#include "user/user.h"
+#include "kernel/fs.h"
+#include "kernel/elibs/flags.h"
+#include "gelibs/string.h"
+
+void delay(){
+	time_t f ;
+	gettime(&f);
+	time_t l=f;
+	while(l-f<5){
+		gettime(&l);
+	};
+}
+
+char * headKernel[] = {"uniq","file2","-k",0};
+char * headUser[] = {"uniq","file1",0};
+
+
+void child(char ** argv){
+	exec(argv[0],argv);
+}
+
+
+
+
+int main(int argc, char ** argv){
+
+
+
+	char sched = SCH_FCFS;
+	char * commands[10];
+	char priority[10];
+	int cmdCount = parse_cmd(argv, &sched , commands, priority);
+
+	for(int i=0;i<cmdCount;i++)
+		printf("%d %s\n",priority[i],commands[i]);
+	
+
+
+
+
+	#ifdef KERNEL_SCHE_FCFS
+		if (sched == SCH_PRIO){
+			printf("[ERR] Kernel is running FCFS\n");
+			exit(-1);
+		}
+		for(int i=0;i<cmdCount;i++){
+
+			
+		}
+	
+
+
+	#elif KERNEL_SCHE_PRIO
+		if (sched == SCH_FCFS){
+			printf("[ERR] Kernel is running Priority scheduling\n");
+			exit(-1);
+		}
+		printf("PRIO\n");
+	#endif
+
+	// 	printf("NO");
+	// #endif
+
+	// for(int i=0;i<5;i++){
+	// 	int pid = fork();
+	// 	if (!pid){
+	// 		child(headUser);
+	// 		break;
+	// 	}else{
+	// 		wait(0);
+	// 		delay();
+	// 	}
+	// }
+
+	// for(int i=0;i<3;i++){
+	// 	delay();
+	// 	int pid = fork();
+	// 	if (!pid){
+	// 		tc(i);
+	// 		break;
+	// 	}
+
+	// }
+	// for(int i=0;i<3;i++)
+	// 	wait(0);
+
+
+
+	/* FCFS scheduling */
+
+	// int pid=fork();
+	
+	// if (pid==0){
+	// 	child(headUser);
+	// }else{
+	// 	int fchildPid = pid;
+	// 	delay();
+	// 	pid=fork();
+	// 	if (pid==0)
+	// 		child(headKernel);
+	// 	else{
+	// 		int schildPid = pid;
+	// 		wait(0);
+	// 		wait(0);
+			
+	// 		e_time_t time;
+	// 		getpidtime(fchildPid,&time);
+	// 		printf("fChild: %d \n",time.runningTime);
+
+	// 		getpidtime(schildPid,&time);
+	// 		printf("sChild: %d \n",time.runningTime);
+	// 	}
+	// }
+
+
+	/* Priority scheduling */ 
+	// int pid=fork();
+	// if (pid==0){
+	// 	child(headKernel);
+	// }else{
+	// 	int fchildPid = pid;
+	// 	setpr(fchildPid,4);
+
+	// 	pid=fork();
+	// 	if (pid==0)
+	// 		child(headUser);
+	// 	else{
+	// 		int schildPid = pid;
+	// 		setpr(schildPid,2);
+	// 		wait(0);
+	// 		wait(0);
+	// 		e_time_t time;
+	// 		getpidtime(fchildPid,&time);
+	// 		printf("fChild: %d \n",time.totalTime);
+
+	// 		getpidtime(schildPid,&time);
+	// 		printf("sChild: %d \n",time.totalTime);
+
+	// 	}
+	// }
+
+
+
+
+	return 0;
+}
+
+
+
+
+int parse_cmd(char ** cmd, char * schedAlgo, char ** commands, char * priority){
+
+	cmd++;  // Skipping the program's name
+	
+
+	int priorityIdx = 0;
+	int commandsIdx = 0;
+
+	int cmdCount=0;
+
+	while(*cmd){
+		// printf("asd");
+		if (!compare_str(cmd[0], "-fcfs"))
+			*schedAlgo = SCH_FCFS;
+		else if (!compare_str(cmd[0], "-prio"))
+			*schedAlgo = SCH_PRIO;
+		
+		else if (!compare_str(cmd[0], "-p")){
+			priority[priorityIdx++]=atoi(cmd[1]);
+			commands[commandsIdx++]=cmd[2];
+			cmd+=2;
+			cmdCount++;
+		}
+		else{
+			priority[priorityIdx++]=10;
+			commands[commandsIdx++]=cmd[0];
+			cmdCount++;
+		}
+			
+		cmd++;
+	}
+	return cmdCount;
+}
+
+
+
+
+void create4exec(char * cmd , char ** execcmd){
+
+	// breaking the command
+
+
+}
+

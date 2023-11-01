@@ -17,7 +17,7 @@ e_time_t get_time_perf(char **argv);
 #define LIST  4
 #define BACK  5
 
-#define MAXARGS 10
+#define MAXARGS 100
 
 struct cmd {
   int type;

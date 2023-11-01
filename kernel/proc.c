@@ -6,6 +6,8 @@
 #include "proc.h"
 #include "defs.h"
 #include "gelibs/time.h"
+#include "kernel/elibs/sched.h"
+
 
 struct cpu cpus[NCPU];
 
@@ -126,8 +128,12 @@ allocproc(void)
   return 0;
 
 found:
-  /* Set the creation time */
+  /* Set the creation time and running time */
   p->execTime.creationTime = sys_uptime();
+  p->execTime.runningTime = 0;
+
+  /* Setting the default priority */
+  p->priority = DEFAULT_PRIORITY;
 
 
   p->pid = allocpid();
@@ -171,7 +177,7 @@ freeproc(struct proc *p)
     proc_freepagetable(p->pagetable, p->sz);
   p->pagetable = 0;
   p->sz = 0;
-  p->pid = 0;
+  // p->pid = 0;
   p->parent = 0;
   p->name[0] = 0;
   p->chan = 0;
@@ -241,6 +247,7 @@ uchar initcode[] = {
 void
 userinit(void)
 {
+
   struct proc *p;
 
   p = allocproc();
@@ -392,9 +399,12 @@ exit(int status)
   p->xstate = status;
   p->state = ZOMBIE;
 
+
+  p->execTime.endTime=sys_uptime();
   release(&wait_lock);
 
   // Jump into the scheduler, never to return.
+  // printf("EXIT\n");
   sched();
   panic("zombie exit");
 }
@@ -424,6 +434,8 @@ wait(uint64 addr)
           pid = pp->pid;
           if(addr != 0 && copyout(p->pagetable, addr, (char *)&pp->xstate,
                                   sizeof(pp->xstate)) < 0) {
+
+            pp->execTime.endTime=sys_uptime();
             release(&pp->lock);
             release(&wait_lock);
             return -1;
@@ -455,23 +467,91 @@ wait(uint64 addr)
 //  - swtch to start running that process.
 //  - eventually that process transfers control
 //    via swtch back to the scheduler.
+
 void
 scheduler(void)
 {
   struct proc *p;
   struct cpu *c = mycpu();
-  
+  struct proc * toRun;
+  struct proc * temp;
+
   c->proc = 0;
+  
+
+
   for(;;){
     // Avoid deadlock by ensuring that devices can interrupt.
     intr_on();
 
+    struct proc * toRun;
+
     for(p = proc; p < &proc[NPROC]; p++) {
+      
       acquire(&p->lock);
+
       if(p->state == RUNNABLE) {
+        
+
+        toRun = p;
+        
+        /*            Priority scheduling            */
+        #ifdef PS
+        for(struct proc * pr=proc; pr < &proc[NPROC]; pr++){
+          if(pr==toRun)
+            continue;
+          acquire(&pr->lock);
+          
+          if((pr->state == RUNNABLE) && (pr->priority == toRun->priority)){
+
+              if (pr->pid < toRun->pid){
+                release(&toRun->lock);
+                toRun = pr;
+              }else
+                release(&pr->lock);
+          }
+          else if((pr->state == RUNNABLE) && (pr->priority < toRun->priority)){
+              release(&toRun->lock);
+              toRun = pr;
+          }else
+            release(&pr->lock);
+        }
+        /* ------------------------------------- */
+
+        /*            FCFS scheduling            */
+        #elif FCFS
+
+          for(struct proc * pr=proc; pr < &proc[NPROC]; pr++){
+            if(pr==toRun)
+              continue;
+            
+            acquire(&pr->lock);
+
+            if((pr->state == RUNNABLE) && (pr->execTime.creationTime == toRun->execTime.creationTime)){
+
+              if (pr->pid < toRun->pid){
+                release(&toRun->lock);
+                toRun = pr;
+              }else
+                release(&pr->lock);
+            }
+            else if((pr->state == RUNNABLE) && (pr->execTime.creationTime < toRun->execTime.creationTime)){
+                release(&toRun->lock);
+                toRun = pr;
+            }else
+              release(&pr->lock);
+          }
+        /* -------------------------------- */
+        #endif
+
+        p=toRun;
+
         // Switch to chosen process.  It is the process's job
         // to release its lock and then reacquire it
         // before jumping back to us.
+        if (!p->execTime.runningTime)
+          p->execTime.runningTime = sys_uptime();
+        
         p->state = RUNNING;
         c->proc = p;
         swtch(&c->context, &p->context);
@@ -481,11 +561,17 @@ scheduler(void)
         c->proc = 0;
       }
       release(&p->lock);
+  
     }
+  
+
+
   }
+
 }
 
-// Switch to scheduler.  Must hold only p->lock
+
+// Switch to scheduler. Must hold only p->lock
 // and have changed proc->state. Saves and restores
 // intena because intena is a property of this
 // kernel thread, not this CPU. It should

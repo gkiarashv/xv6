@@ -47,7 +47,7 @@ forktest(void)
 
   print("fork test\n");
   3a:	00000517          	auipc	a0,0x0
-  3e:	43650513          	addi	a0,a0,1078 # 470 <gettime+0xc>
+  3e:	44e50513          	addi	a0,a0,1102 # 488 <getsched+0xc>
   42:	00000097          	auipc	ra,0x0
   46:	fbe080e7          	jalr	-66(ra) # 0 <print>
 
@@ -71,7 +71,7 @@ forktest(void)
   if(n == N){
     print("fork claimed to work N times!\n");
   64:	00000517          	auipc	a0,0x0
-  68:	41c50513          	addi	a0,a0,1052 # 480 <gettime+0x1c>
+  68:	43450513          	addi	a0,a0,1076 # 498 <getsched+0x1c>
   6c:	00000097          	auipc	ra,0x0
   70:	f94080e7          	jalr	-108(ra) # 0 <print>
     exit(1);
@@ -113,7 +113,7 @@ forktest(void)
 
   print("fork test OK\n");
   b4:	00000517          	auipc	a0,0x0
-  b8:	41c50513          	addi	a0,a0,1052 # 4d0 <gettime+0x6c>
+  b8:	43450513          	addi	a0,a0,1076 # 4e8 <getsched+0x6c>
   bc:	00000097          	auipc	ra,0x0
   c0:	f44080e7          	jalr	-188(ra) # 0 <print>
 }
@@ -125,7 +125,7 @@ forktest(void)
   ce:	8082                	ret
       print("wait stopped early\n");
   d0:	00000517          	auipc	a0,0x0
-  d4:	3d050513          	addi	a0,a0,976 # 4a0 <gettime+0x3c>
+  d4:	3e850513          	addi	a0,a0,1000 # 4b8 <getsched+0x3c>
   d8:	00000097          	auipc	ra,0x0
   dc:	f28080e7          	jalr	-216(ra) # 0 <print>
       exit(1);
@@ -134,7 +134,7 @@ forktest(void)
   e6:	2c2080e7          	jalr	706(ra) # 3a4 <exit>
     print("wait got too many\n");
   ea:	00000517          	auipc	a0,0x0
-  ee:	3ce50513          	addi	a0,a0,974 # 4b8 <gettime+0x54>
+  ee:	3e650513          	addi	a0,a0,998 # 4d0 <getsched+0x54>
   f2:	00000097          	auipc	ra,0x0
   f6:	f0e080e7          	jalr	-242(ra) # 0 <print>
     exit(1);
@@ -858,3 +858,33 @@ gettime:
  466:	00000073          	ecall
  ret
  46a:	8082                	ret
+
+000000000000046c <setpr>:
+.global setpr
+setpr:
+ li a7, SYS_setpr
+ 46c:	48ed                	li	a7,27
+ ecall
+ 46e:	00000073          	ecall
+ ret
+ 472:	8082                	ret
+
+0000000000000474 <getpidtime>:
+.global getpidtime
+getpidtime:
+ li a7, SYS_getpidtime
+ 474:	48f1                	li	a7,28
+ ecall
+ 476:	00000073          	ecall
+ ret
+ 47a:	8082                	ret
+
+000000000000047c <getsched>:
+.global getsched
+getsched:
+ li a7, SYS_getsched
+ 47c:	48f5                	li	a7,29
+ ecall
+ 47e:	00000073          	ecall
+ ret
+ 482:	8082                	ret

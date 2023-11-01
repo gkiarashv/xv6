@@ -107,6 +107,8 @@ struct proc {
   struct file *ofile[NOFILE];  // Open files
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
-  e_time_t execTime;        // Execution time points
+  e_time_t execTime;           // Execution time points
+
+  int priority;                // Priority of the process
   
 };

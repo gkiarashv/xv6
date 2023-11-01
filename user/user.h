@@ -30,6 +30,9 @@ int uniq(char **files, char options);
 void ps(int pid, int ppid, int status, char * pName);
 void times(int pid, e_time_t * time);
 void gettime(time_t * time);
+void setpr(int pid, int priority);
+void getpidtime(int pid, e_time_t * time);
+void getsched(int * sch);
 
 // ulib.c
 int stat(const char*, struct stat*);

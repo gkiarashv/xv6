@@ -65,8 +65,8 @@ timerinit()
   // each CPU has a separate source of timer interrupts.
   int id = r_mhartid();
 
-  // ask the CLINT for a timer interrupt.
-  int interval = 1000000; // cycles; about 1/10th second in qemu.
+  // ask the CLINT for a timer interrupt.1000000
+  int interval = 10000; // cycles; about 1/10th second in qemu.
   *(uint64*)CLINT_MTIMECMP(id) = *(uint64*)CLINT_MTIME + interval;
 
   // prepare information in scratch[] for timervec.

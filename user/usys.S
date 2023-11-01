@@ -130,3 +130,18 @@ gettime:
  li a7, SYS_gettime
  ecall
  ret
+.global setpr
+setpr:
+ li a7, SYS_setpr
+ ecall
+ ret
+.global getpidtime
+getpidtime:
+ li a7, SYS_getpidtime
+ ecall
+ ret
+.global getsched
+getsched:
+ li a7, SYS_getsched
+ ecall
+ ret

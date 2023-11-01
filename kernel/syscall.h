@@ -27,3 +27,6 @@
 #define SYS_ps 24
 #define SYS_times 25
 #define SYS_gettime 26
+#define SYS_setpr 27
+#define SYS_getpidtime 28
+#define SYS_getsched 29

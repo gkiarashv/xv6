@@ -87,7 +87,7 @@ If every previous step is successful, the xv6 is running and you can issue `ls`.
 
 
 # Contributions and Usages
-All the previous contributions have been classified by their date of accomplishment and can be found in the contributions [folder](https://github.com/gkiarashv/xv6/tree/main/contributions/Sep%2012%202023).
+All the previous contributions have been classified by their date of accomplishment and can be found in the contributions [folder](https://github.com/gkiarashv/xv6/tree/main/contributions/).
 
 
 # Authors

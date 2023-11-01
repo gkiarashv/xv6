@@ -41,3 +41,6 @@ entry("uniq");
 entry("ps");
 entry("times");
 entry("gettime");
+entry("setpr");
+entry("getpidtime");
+entry("getsched");

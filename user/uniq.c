@@ -23,8 +23,7 @@
 
 
 static void uniq_start(char **passedFiles, char options);
-static char ** parse_cmd(int argc, char ** cmd, char * options);
-
+static char ** parse_cmd(int argc, char ** cmd, char * options, char * runInKernel);
 
 
 
@@ -32,7 +31,8 @@ static char ** parse_cmd(int argc, char ** cmd, char * options);
 int main(int argc, char ** argv){
 
 	char options;
-	char ** passedFiles = parse_cmd(argc, argv, &options);
+	char runInKernel = 0;
+	char ** passedFiles = parse_cmd(argc, argv, &options, &runInKernel);
 
 	if (!passedFiles){
 		printf("[ERR] Cannot parse the cmd");
@@ -40,10 +40,11 @@ int main(int argc, char ** argv){
 	}
 
 	/* Kernel mode */
-	// uniq(passedFiles,options);
-	
-	/* User mode */
-	uniq_start(passedFiles, options);
+	if (runInKernel)
+		uniq(passedFiles,options);
+	else
+		/* User mode */
+		uniq_start(passedFiles, options);
 
 	return 0;
 
@@ -109,7 +110,7 @@ static void uniq_start(char **passedFiles, char options){
 [ERROR]:
 
 */
-static char ** parse_cmd(int argc, char ** cmd, char * options){
+static char ** parse_cmd(int argc, char ** cmd, char * options, char * runInKernel){
 
 
 	/* Total number of files is maximum argc-1 requiring argc size storage for the last NULL*/
@@ -131,6 +132,8 @@ static char ** parse_cmd(int argc, char ** cmd, char * options){
 			*options |= OPT_IGNORE_CASE;
 		else if (!compare_str(cmd[0], "-d"))
 			*options |= OPT_SHOW_REPEATED_LINES;
+		else if (!compare_str(cmd[0], "-k"))
+			*runInKernel=1;
 		else
 			passedFiles[fileIdx++] = cmd[0];
 			

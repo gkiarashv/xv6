@@ -13,8 +13,7 @@
 
 
 extern void head_run(int fd, int numOfLines);
-
-static char ** parse_cmd(int argc, char ** cmd, int *lineCount);
+static char ** parse_cmd(int argc, char ** cmd, int * lineCount , char * runInKernel);
 void head_usermode(char **passedFiles, int lineCount);
 
 
@@ -24,7 +23,8 @@ void head_usermode(char **passedFiles, int lineCount);
 int main(int argc, char ** argv){
 
 	int lineCount;
-	char ** passedFiles = parse_cmd(argc,argv,&lineCount);
+	char runInKernel = 0;
+	char ** passedFiles = parse_cmd(argc,argv,&lineCount, &runInKernel);
 
 	if (!passedFiles){
 		printf("[ERR] Cannot parse the issued command\n");
@@ -32,10 +32,11 @@ int main(int argc, char ** argv){
 	}
 
 	/* Kernel mode */
-	// head(passedFiles, lineCount);
-	
-	/* User mode */
-	head_usermode(passedFiles, lineCount);
+	if (runInKernel)
+		head(passedFiles, lineCount);
+	else
+		/* User mode */
+		head_usermode(passedFiles, lineCount);
 
 	return 0;
 }
@@ -107,7 +108,7 @@ void head_usermode(char **passedFiles, int lineCount){
 	NULL is returned.
 
 */
-static char ** parse_cmd(int argc, char ** cmd, int *lineCount){
+static char ** parse_cmd(int argc, char ** cmd, int * lineCount , char * runInKernel){
 
 	/* Default value for lineCount */
 	*lineCount = NUM_OF_LINES;
@@ -115,10 +116,9 @@ static char ** parse_cmd(int argc, char ** cmd, int *lineCount){
 	/* Total number of files is maximum argc-1 requiring argc size storage for the last NULL*/
 	char ** passedFiles = malloc(sizeof(char *) * (argc));
 
-	if (!passedFiles){
-		// *lineCount = -1;
+	if (!passedFiles)
 		return NULL;
-	}
+	
 
 
 	int fileIdx = 0;
@@ -128,7 +128,8 @@ static char ** parse_cmd(int argc, char ** cmd, int *lineCount){
 		if (!compare_str(cmd[0], "-n")){
 			cmd++;
 			*lineCount = atoi(cmd[0]);
-		}
+		}else if (!compare_str(cmd[0], "-k"))
+			*runInKernel = 1;
 		else
 			passedFiles[fileIdx++] = cmd[0];
 			

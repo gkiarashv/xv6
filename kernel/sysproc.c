@@ -10,12 +10,75 @@
 #include "gelibs/file.h"
 #include "efunctions/head.h"
 #include "efunctions/uniq.h"
-
+#include "kernel/elibs/sched.h"
 
 extern void get_process_status(int tpid, int tppid, int tstatus, uint64 pName);
 extern int get_process_time(int tpid, uint64 uaddr, uint64 addr);
+extern int change_priority(int pid, int priority);
 extern struct proc proc[NPROC];
+extern struct spinlock wait_lock;
 uint64 sys_uptime(void);
+
+
+
+uint64 sys_getsched(void){
+
+  uint64 address;
+  argaddr(0, &address);
+  struct proc * p = myproc();
+
+  #ifdef FCFS
+    int fcfs = SCH_FCFS;
+    copyout(p->pagetable, address, &fcfs, sizeof(int));
+  #elif PS
+    int ps = SCH_PS;
+    copyout(p->pagetable, address, &ps, sizeof(int));
+  #else
+    int def = SCH_DEF;
+    copyout(p->pagetable, address, &def, sizeof(int));
+  #endif
+}
+
+
+uint64 sys_getpidtime(void){
+
+  uint64 address;
+  uint32 pid;
+
+  argint(0, &pid);
+  argaddr(1, &address);
+
+  struct proc * p = myproc();
+
+  acquire(&wait_lock);
+
+  for(struct proc * pp = proc; pp < &proc[NPROC]; pp++){
+      acquire(&pp->lock);
+
+      if(pp->pid==pid)
+          copyout(p->pagetable, address, &pp->execTime, sizeof(e_time_t));
+
+      release(&pp->lock);
+  }
+
+  release(&wait_lock);
+
+  return 0;
+}
+
+
+uint64 sys_setpr(void){
+
+  uint32 priority;
+  uint32 pid;
+
+  argint(1, &priority);
+  argint(0, &pid);
+
+  change_priority(pid,priority);
+}
+
+
 
 
 /*

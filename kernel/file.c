@@ -127,7 +127,6 @@ fileread(struct file *f, uint64 addr, int n)
   } else {
     panic("fileread");
   }
-
   return r;
 }
 
