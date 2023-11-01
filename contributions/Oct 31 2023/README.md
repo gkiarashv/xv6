@@ -102,15 +102,21 @@ kernel, these commands are executed. The logic to execute them is as follows:
 
 ### Scheduling is FCFS
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedalgofcfs.png)
+For each passed command, we fork a process and execute the passed command.
+
 
 ### Scheduling is Priority scheduling
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedalgops.png)
+For each passed command, we fork a process and execute the passed command. In the parent, we change the priority of the created child process.
+
 
 ### Scheduling is Default
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedalgodef.png)
+For each passed command, we fork a process and execute the passed command.
 
 
-Note that the turnaround time is calculated as `endTime - creationTime`, and the waiting time is computed as `runningTime - creationTime`.
+Note that the turnaround time is calculated as `endTime - creationTime`, and the waiting time is computed as `runningTime - creationTime`. The `runningTime` will be 
+discussed later.
 
 ### Usage
 For the example usages, please check [here](https://github.com/gkiarashv/xv6/blob/main/contributions/Oct%2031%202023/schedtest_usage/README.md).
