@@ -15,8 +15,12 @@ Two new commands of `t1` and `t2` have been written with the same simple codes:
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/file2.png)
 
 
+## Number of CPUs
+Moreover, we have changed the number of CPUs from 3 to 1 in the Makefile to showcase the correctness of the scheduling.
 
-Moreover, we have changed the number of CPUs from 3 to 1 to showcase the correctness of the scheduling. Also, the timer interval of the kernel has been changed so the timing becomes reasonable:
+
+## Tick time
+The timer interval of the kernel has been changed so the timing becomes reasonable:
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/intervaltimer.png)
 
 
