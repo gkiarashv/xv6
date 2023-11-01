@@ -104,7 +104,7 @@ kernel, these commands are executed. The logic to execute them is as follows:
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedalgofcfs.png)
 
 ### Scheduling is Priority scheduling
-![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedalgofcpd.png)
+![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedalgops.png)
 
 ### Scheduling is Default
 ![cmd](https://github.com/gkiarashv/xv6/blob/main/images/schedalgodef.png)
