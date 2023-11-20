@@ -69,7 +69,7 @@ The most important file to modify is the `exec.c` in which the page table of the
 In the above, we have set `sz` to `TEXT_OFFSET`. This indicates that the size of the process is `TEXT_OFFSET`. Next, we set the start of the stack and heap based on the flags passed when compiling
 the kernel. Note that stack and heap can come immediately after the text segment or can reside in a different place in the memory.
 
-![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/execva2.png)
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/execva22.png)
 
 
 Finally, the size of the process is updated and the old page table is removed using the new `free_proc_vm()` function. This function will be discussed further while considering the `vm.c` file.
