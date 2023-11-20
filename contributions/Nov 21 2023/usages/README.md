@@ -57,6 +57,11 @@ Now, considering different commands:
 ## stack
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/stackva1.png)
 
+## ps
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/psva11.png)
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/psva12.png)
+
+
 
 # Usage 2:
 In this example, we place the `TEXT` segment to start from address 0x3000. Then we allocate 2 pages for stack (one is stack guard). We put the stack at the end of the virtual address space. Following the code segment, we would have our heap. To compile the kernel with this setting, we should compile it as follows:
@@ -100,6 +105,9 @@ Now, considering different commands:
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/stackva21.png)
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/stackva22.png)
 
+## ps
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/psva21.png)
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/psva22.png)
 
 
 
@@ -146,6 +154,13 @@ Now, considering different commands:
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/stackva32.png)
 
 
+
+## ps
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/psva31.png)
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/psva32.png)
+
+
+
 # Usage 4:
 In this example, we place the `TEXT` segment to start from address 0x3000. Then we allocate 2 pages for stack (one is stack guard). We put the stack immediately aftet the code segment. Then, we will put the heap in a location specified in the `kernel/elibs/memlayout.h`. To compile the kernel with this setting, we should compile it as follows:
 
@@ -183,6 +198,10 @@ Now, considering different commands:
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/stackva42.png)
 
 
+
+## ps
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/psva41.png)
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/psva42.png)
 
 
 
