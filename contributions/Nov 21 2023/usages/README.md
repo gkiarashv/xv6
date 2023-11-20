@@ -207,7 +207,16 @@ Now, considering different commands:
 
 
 
+# Usage 5
+The kernel can be compiled with more options. In the previous updates to xv6, we added the support for scheduling algorithms of FCFS, Priority scheduling, and default xv6. The `SCHED` option can be used along with `STACK_VA` and `HEAP_VA` as well. For instance:
 
+```
+make STACK_VA=STACK_BEGIN_IN_MEMORY HEAP_VA=HEAP_BEGIN_IN_MEMORY SCHED=FCFS
+```
+
+```
+make STACK_VA=STACK_BEGIN_IN_MEMORY SCHED=PS
+```
 
 
 
