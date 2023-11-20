@@ -44,6 +44,10 @@ To compile the extensions and integrate them with the xv6 OS, in the main folder
 
 
 
+# Note
+xv6 RISCV uses 3 levels for the implementation of the page table:
+![makeqemu](https://github.com/gkiarashv/xv6/blob/main/images/xv6pgtlvls.png)
+
 
 
 
