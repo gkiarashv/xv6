@@ -46,6 +46,38 @@ However, despite xv6, Linux uses a different memory map. Hence, running the same
 
 
 
+# Changing the memory layout
+To enable xv6 to have different memory layouts in which (text, stack, and heap) segments reside in different places, we have extended the functionality of xv6. This extension need a close look at various files. In the following, each modified/added file will be explained.
+
+
+## kernel/elibs/memlayout.h
+This file defines the parameters required to show the boundary for each segment type.
+
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/memlayout.png)
+
+
+## proc.h
+The process structure of a process now holds 5 new field members.
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/procva.png)
+
+
+
+## exec.c
+The most important file to modify is the `exec.c` in which the page table of the process is created and is replaced with its old page table (if forked, for instance). First change is:
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/execva.png)
+
+In the above, we have set `sz` to `TEXT_OFFSET`. This indicates that the size of the process is `TEXT_OFFSET`. Next, we set the start of the stack and heap based on the flags passed when compiling
+the kernel. Note that stack and heap can come immediately after the text segment or can reside in a different place in the memory.
+
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/execva.png)
+
+
+
+
+
+
+
+
 
 
 
