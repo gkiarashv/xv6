@@ -6,7 +6,7 @@ which can illustrate where in the memory these segments reside. Moreover, we hav
 # Debugging program
 The `debug_gpt()` function has been placed in 3 different places (commented): `exec.c/exec()` when the process's page table is created,`trap.c/usertrap()` when the stack is extended for the process, and `proc.c/growproc()` when memory is allocated from the heap.
 
-![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/linuxrun.png)
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/debugpgt.png)
 
 
 # Dummy programs
