@@ -1,10 +1,11 @@
 # Usages 
 To illustrate the xv6 memory layout, we consider different cases in which we can place different segments. Through showing these cases, we have considered dummy programs 
-which can illustrate where in the memory these segments reside. Moreover, we have designed a function `debug_pgt()` in the `kernel/vm.c` which print the page table for the memory
-segments up to `640KB`.
+which can illustrate where in the memory these segments reside. Moreover, we have designed a function `debug_pgt()` in the `kernel/vm.c` which print the page table for the memory segments up to `640KB`.
 
 
 # Debugging program
+The `debug_gpt()` function has been placed in 3 different places (commented): `exec.c/exec()` when the process's page table is created,`trap.c/usertrap()` when the stack is extended for the process, and `proc.c/growproc()` when memory is allocated from the heap.
+
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/linuxrun.png)
 
 
