@@ -47,7 +47,8 @@ However, despite xv6, Linux uses a different memory map. Hence, running the same
 
 
 # Changing the memory layout
-To enable xv6 to have different memory layouts in which (text, stack, and heap) segments reside in different places, we have extended the functionality of xv6. This extension need a close look at various files. In the following, each modified/added file will be explained.
+To enable xv6 to have different memory layouts in which (text, stack, and heap) segments reside in different places, we have extended the functionality of xv6. This extension need a close look at various files. In the following, each modified/added file will be explained. For the usages, check the [folder](https://github.com/gkiarashv/xv6/edit/main/contributions/Sep%2012%202023/uniq_usage/).
+folder.
 
 
 ## kernel/elibs/memlayout.h
@@ -108,13 +109,18 @@ Moreover, the `growproc()` needs to be changed as follows:
 
 
 
-
-
 ## trap.c
 Sometimes when a process access an invalid address means by the process that it needs more memory. For instance, if the process accesses sthe stack guard, it means it needs more memory for 
 the stack. To service the process, we need to handle the page fault for invalid address as follows:
 
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/trap.png)
+
+
+
+## syscall.c
+One of the minor changes is the `fetchaddr()` function. Since the memory layout has been changed, the address from which it is fetching should be changed as well:
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/fetchaddr.png)
+
 
 
 
