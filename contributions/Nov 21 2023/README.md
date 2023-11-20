@@ -76,10 +76,21 @@ Finally, the size of the process is updated and the old page table is removed us
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/execva3.png)
 
 
+## vm.c
+The vm.c now has a new function which frees the page table of the process. The reason to have new such function instead of using `proc_freepagetable` is becuase the existing ones 
+can free only contiguous allocated memory in the page table. However, since the allocated pages for different segments can be in multiple places, the need for new function is desired. 
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/freeprocvm.png)
+
+Moreover, to copy page tables between two processes, we have created the `fork_pgt()` function which will be used in the `fork()` system call:
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/forkpgt.png)
 
 
 
 
+## proc.c
+Forking a process causes parent's page table to be copied into the child's page table. Since the allocated memory can be non-contiguous in parent, we need a function that considers this while copying the page tables. For the sake of that, we use the `fork_pgt()` function as follows in the `fork()` function:
+
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/forkva1.png)
 
 
 
