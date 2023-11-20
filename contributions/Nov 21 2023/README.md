@@ -47,7 +47,7 @@ However, despite xv6, Linux uses a different memory map. Hence, running the same
 
 
 # Changing the memory layout
-To enable xv6 to have different memory layouts in which (text, stack, and heap) segments reside in different places, we have extended the functionality of xv6. This extension need a close look at various files. In the following, each modified/added file will be explained. For the usages, check the [folder](https://github.com/gkiarashv/xv6/edit/main/contributions/Sep%2012%202023/uniq_usage/).
+To enable xv6 to have different memory layouts in which (text, stack, and heap) segments reside in different places, we have extended the functionality of xv6. This extension need a close look at various files. In the following, each modified/added file will be explained. For the usages, check the [folder](https://github.com/gkiarashv/xv6/tree/main/contributions/Nov%2021%202023/usages).
 
 
 ## kernel/elibs/memlayout.h
