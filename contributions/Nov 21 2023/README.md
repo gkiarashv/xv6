@@ -92,9 +92,30 @@ Forking a process causes parent's page table to be copied into the child's page 
 
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/forkva1.png)
 
-Moreover, when freeing a process structure, we need to free its page table as well:
+Moreover, when freeing a process structure, we need to free its page table using `free_proc_vm()` as well:
 
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/freeproc.png)
+
+
+Finally, when it comes to allocating the heap space, the `malloc()` is implemented using the `sbrk` system call. The new `sbrk` syscall has a slight modification in which the 
+starting address is not the end of the process's code but is the address pointed by `procva` field of process structure:
+
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/sysbrk.png)
+
+Moreover, the `growproc()` needs to be changed as follows:
+
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/growproc.png)
+
+
+
+
+
+## trap.c
+Sometimes when a process access an invalid address means by the process that it needs more memory. For instance, if the process accesses sthe stack guard, it means it needs more memory for 
+the stack. To service the process, we need to handle the page fault for invalid address as follows:
+
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/trap.png)
+
 
 
 
