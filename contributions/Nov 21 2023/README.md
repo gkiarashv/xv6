@@ -28,6 +28,24 @@ Path | Files |
 
 
 
+# Compilation
+To compile the extensions and integrate them with the xv6 OS, in the main folder of the xv6 project, run the `make` commands as follows:
+
+
+`make clean`:
+![makeclean](https://github.com/gkiarashv/xv6/blob/main/images/makeclean4.png)
+
+`make [SCHED=(FCFS | PS | DEF)] STACK_VA=(STACK_BEGIN_AFTER_CODE | STACK_BEGIN_IN_MEMORY)  HEAP_VA=(HEAP_BEGIN_AFTER_CODE | HEAP_BEGIN_IN_MEMORY) ]`:
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/make4.png)
+
+
+`make qemu`:
+![makeqemu](https://github.com/gkiarashv/xv6/blob/main/images/makeqemu4.png)
+
+
+
+
+
 
 # Dereferencing null pointer
 
