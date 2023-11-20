@@ -146,6 +146,43 @@ Now, considering different commands:
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/stackva32.png)
 
 
+# Usage 4:
+In this example, we place the `TEXT` segment to start from address 0x3000. Then we allocate 2 pages for stack (one is stack guard). We put the stack immediately aftet the code segment. Then, we will put the heap in a location specified in the `kernel/elibs/memlayout.h`. To compile the kernel with this setting, we should compile it as follows:
+
+```
+make HEAP_VA=HEAP_BEGIN_IN_MEMORY
+```
+
+Now, considering different commands:
+
+## ls
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/lsva41.png)
+
+
+## head file1
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/headva41.png)
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/headva42.png)
+
+
+## uniq file1
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/uniqva41.png)
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/uniqva42.png)
+
+
+## dummy
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/dummyva41.png)
+
+
+## alloc
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/allocva41.png)
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/allocva42.png)
+
+
+## stack
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/stackva41.png)
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/stackva42.png)
+
+
 
 
 
