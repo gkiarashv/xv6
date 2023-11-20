@@ -92,6 +92,9 @@ Forking a process causes parent's page table to be copied into the child's page 
 
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/forkva1.png)
 
+Moreover, when freeing a process structure, we need to free its page table as well:
+
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/freeproc.png)
 
 
 
