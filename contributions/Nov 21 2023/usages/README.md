@@ -104,6 +104,52 @@ Now, considering different commands:
 
 
 
+# Usage 3:
+In this example, we place the `TEXT` segment to start from address 0x3000. Then we allocate 2 pages for stack (one is stack guard). We put the stack at the end of the virtual address space. Then, we will put the heap in a location specified in the `kernel/elibs/memlayout.h`. To compile the kernel with this setting, we should compile it as follows:
+
+```
+make STACK_VA=STACK_BEGIN_IN_MEMORY HEAP_VA=HEAP_BEGIN_IN_MEMORY
+```
+
+Now, considering different commands:
+
+## ls
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/lsva31.png)
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/lsva32.png)
+
+
+## head file1
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/headva31.png)
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/headva32.png)
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/headva33.png)
+
+
+## uniq file1
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/uniqva31.png)
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/uniqva32.png)
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/headva33.png)
+
+
+## dummy
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/dummyva31.png)
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/dummyva32.png)
+
+
+## alloc
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/allocva31.png)
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/allocva32.png)
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/allocva33.png)
+
+
+## stack
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/stackva31.png)
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/stackva32.png)
+
+
+
+
+
+
 
 
 
