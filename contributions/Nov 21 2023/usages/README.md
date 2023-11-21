@@ -1,12 +1,14 @@
 # Usages 
-To illustrate the xv6 memory layout, we consider different cases in which we can place different segments. Through showing these cases, we have considered dummy programs 
-which can illustrate where in the memory these segments reside. Moreover, we have designed a function `debug_pgt()` in the `kernel/vm.c` which print the page table for the memory segments up to `640KB`.
+To demonstrate the memory layout in xv6, we explore scenarios where different memory segments can be positioned. This is illustrated using dummy programs that help visualize the placement of these segments within the memory. Additionally, we have developed a function named `debug_pgt()` in `kernel/vm.c`. This function is designed to print the page table for the memory segments up to `640KB`, providing a clear and detailed view of how the segments are arranged and occupy the virtual memory space. 
+
+
+
 
 
 # Debugging program
-The `debug_gpt()` function has been placed in 3 different places (commented): `exec.c/exec()` when the process's page table is created,`trap.c/usertrap()` when the stack is extended for the process, and `proc.c/growproc()` when memory is allocated from the heap.
-
+The `debug_gpt()` function is strategically inserted in three sections of the xv6 code, each commented in the xv6's code. These sections are: `exec.c/exec()` when the process's page table is created, `trap.c/usertrap()` when the stack is extended for the process, and `proc.c/growproc()` when memory is allocated from the heap.
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/debugpgt.png)
+
 
 
 # Dummy programs
@@ -17,13 +19,13 @@ This program simply allocates memory from the heap to show the heap allocation f
 
 
 ## stack.c
-This program is designed to access an address beyond the currently allocate memory for the stack. 
+This program is designed to access an address beyond the currently allocated memory for the stack. 
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/stack.png)
 
 
 ## dummy.c
-This program only is a dummy program which does nothing but printing. However, the intention behind this was to create a large program to illustrate the number
-of pages which will be allocated for the `TEXT` segment in the memory. This program is large, hence we refuse to show an image.
+This program is only a dummy program that only prints a message. However, the intention behind this was to create a large program to illustrate the number
+of pages allocated for the `TEXT` segment in the memory. This program is large, hence we refuse to show an image.
 
 
 
