@@ -83,32 +83,31 @@ The process structure has been updated to include five new field members. These 
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/procva.png)
 
 
-
 ## exec.c (Modified)
 The key file to update is `exec.c`, where the page table for the process is established and replaces its previous page table (as in the case of forking, for example). The initial modification involves setting the `sz` variable's initial value to `TEXT_OFFSET`. This adjustment indicates that the process's initial size commences from `TEXT_OFFSET`. However, the first set of pages will remain unmapped:
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/execva1.png)
 
-
 Following that, we determine the starting points of the stack and heap based on the flags used during the kernel compilation. It's important to note that the stack and heap can either directly follow the text segment or be located in a different area of the memory, depending on these compilation flags.
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/execva22.png)
-
 
 Ultimately, the size of the process is updated, and the old page table is discarded using the newly implemented `free_proc_vm()` function. This function will be examined in more detail when we discuss the modifications made to the `vm.c` file.
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/execva3.png)
 
 
-## vm.c
-The vm.c now has a new function which frees the page table of the process. The reason to have new such function instead of using `proc_freepagetable` is becuase the existing ones 
-can free only contiguous allocated memory in the page table. However, since the allocated pages for different segments can be in multiple places, the need for new function is desired. 
+
+
+## vm.c (Modified)
+In `vm.c`, a new function, `free_proc_vm()`, has been introduced to free the page table of a process. The rationale for creating this new function, rather than using the existing `proc_freepagetable()`, stems from the fact that the current function can only free contiguous memory allocations within the page table. Given that the allocated pages for different segments may be dispersed across multiple locations in memory, there is a clear need for this new function to handle such non-contiguous memory allocations.
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/freeprocvm2.png)
 
-Moreover, to copy page tables between two processes, we have created the `fork_pgt()` function which will be used in the `fork()` system call:
+
+Additionally, for the same reason, we have developed the `fork_pgt()` function. This is in addition to the `uvmcopy()` function which is only used for copying the text segment. `fork_pgt()` is specifically designed to copy page tables between two processes (parent and child) and will be utilized in the `fork()` system call. 
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/forkpgt.png)
 
-Additionally, the `uvmcopy()` function needs to start copying the TEXT segment from the `TEXT_OFFSET`:
+Furthermore, it's necessary to modify the `uvmcopy()` function so that it begins copying the text segment from the `TEXT_OFFSET`.
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/uvmcopy.png)
 
-Also, the `uvmunclear()` in contrast to `uvmclear()` has been added to make a PTE accessible in the page table:
+In addition, a new function called `uvmunclear()`, as a counterpart to `uvmclear()`, has been introduced. The purpose of `uvmunclear()` is to make a Page Table Entry (PTE) accessible in the page table.
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/uvmunclear.png)
 
 
