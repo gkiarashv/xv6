@@ -125,17 +125,12 @@ Moreover, the `growproc()` function, which is responsible for allocating memory 
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/growproc.png)
 
 
-
-
-## trap.c
-Sometimes when a process access an invalid address means by the process that it needs more memory. For instance, if the process accesses sthe stack guard, it means it needs more memory for 
-the stack. To service the process, we need to handle the page fault for invalid address as follows:
-
+## trap.c (Modified)
+Occasionally, a process accessing an invalid address can signify that it requires additional memory. For example, when a process reaches the stack guard, it typically indicates a need for more stack memory. To accommodate this requirement, we must manage the page fault caused by the invalid address in the following manner:
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/trap.png)
 
 
-
-## syscall.c
+## syscall.c (Modified)
 One of the minor changes is the `fetchaddr()` function. Since the memory layout has been changed, the address from which it is fetching should be changed as well:
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/fetchaddr.png)
 
