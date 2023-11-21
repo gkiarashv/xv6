@@ -9,7 +9,7 @@ Compilation flags for the stack and heap placement are: `STACK_BEGIN_AFTER_CODE`
 
 
 # Debugging program
-The `debug_gpt()` function is strategically inserted in three sections of the xv6 code, each commented in the xv6's code. These sections are: `exec.c/exec()` when the process's page table is created, `trap.c/usertrap()` when the stack is extended for the process, and `proc.c/growproc()` when memory is allocated from the heap.
+The `debug_pgt()` function is strategically inserted in three sections of the xv6 code, each commented in the xv6's code. These sections are: `exec.c/exec()` when the process's page table is created, `trap.c/usertrap()` when the stack is extended for the process, and `proc.c/growproc()` when memory is allocated from the heap.
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/debugpgt.png)
 
 
