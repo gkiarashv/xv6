@@ -2,7 +2,7 @@
 Level | Description |
 | --- | --- |
 | Kernel | Adjustable memory layout has been added |
-| User | Testing commands have been added (dummy, stack, and alloc) |
+| User | Testing commands have been added (deref, dummy, stack, and alloc) |
 
 ### Extension Libraries (elibs)
 Path | Files |
