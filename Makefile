@@ -61,6 +61,15 @@ endif
 ifndef SCHED
 	SCHED := DEF
 endif
+ifndef STACK_VA
+	STACK_VA := STACK_BEGIN_AFTER_CODE
+endif
+
+ifndef HEAP_VA
+	HEAP_VA := HEAP_BEGIN_AFTER_CODE
+endif
+	
+
 
 
 QEMU = qemu-system-riscv64
@@ -77,7 +86,7 @@ CFLAGS += -mcmodel=medany
 CFLAGS += -ffreestanding -fno-common -nostdlib -mno-relax
 CFLAGS += -I.
 CFLAGS += $(shell $(CC) -fno-stack-protector -E -x c /dev/null >/dev/null 2>&1 && echo -fno-stack-protector)
-CFLAGS += -D $(SCHED)
+CFLAGS += -D $(SCHED) -D $(STACK_VA) -D $(HEAP_VA)
 
 
 # Disable PIE when possible (for Ubuntu 16.10 toolchain)
@@ -158,6 +167,10 @@ UPROGS=\
 	$U/_schedtest\
 	$U/_t1\
 	$U/_t2\
+	$U/_deref\
+	$U/_dummy\
+	$U/_stack\
+	$U/_alloc\
 
 
 

@@ -55,6 +55,7 @@ morecore(uint nu)
   if(p == (char*)-1)
     return 0;
   hp = (Header*)p;
+  
   hp->s.size = nu;
   free((void*)(hp + 1));
   return freep;

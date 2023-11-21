@@ -7,7 +7,7 @@
 #include "defs.h"
 #include "gelibs/time.h"
 #include "kernel/elibs/sched.h"
-
+#include "kernel/elibs/memlayout.h"
 
 struct cpu cpus[NCPU];
 
@@ -18,8 +18,14 @@ struct proc *initproc;
 int nextpid = 1;
 struct spinlock pid_lock;
 
+extern void
+freewalk(pagetable_t pagetable);
 extern void forkret(void);
 static void freeproc(struct proc *p);
+extern int fork_pgt(pagetable_t old, pagetable_t new, uint64 sz, uint64 va);
+void free_proc_vm(uint64 pid, pagetable_t oldpagetable, uint64 oldsz, uint64 oldStackVa, uint64 oldStackVaCnt, uint64 oldHeapVa, uint64 oldHeapVaCnt);
+void debug_pgt(pagetable_t pagetable, uint64 stackva, uint64 stackvacnt, uint64 heapva, uint64 heapvacnt);
+
 
 extern uint64 sys_uptime(void);
 
@@ -139,6 +145,8 @@ found:
   p->pid = allocpid();
   p->state = USED;
 
+
+
   // Allocate a trapframe page.
   if((p->trapframe = (struct trapframe *)kalloc()) == 0){
     freeproc(p);
@@ -160,6 +168,9 @@ found:
   p->context.ra = (uint64)forkret;
   p->context.sp = p->kstack + PGSIZE;
 
+  p->stackvacnt=0;
+  p->heapvacnt=0;
+
   return p;
 }
 
@@ -173,8 +184,10 @@ freeproc(struct proc *p)
   if(p->trapframe)
     kfree((void*)p->trapframe);
   p->trapframe = 0;
+
   if(p->pagetable)
-    proc_freepagetable(p->pagetable, p->sz);
+    free_proc_vm(p->pid, p->pagetable, p->sz,  p->stackva, p->stackvacnt, p->heapva, p->heapvacnt);
+  
   p->pagetable = 0;
   p->sz = 0;
   // p->pid = 0;
@@ -227,7 +240,9 @@ proc_freepagetable(pagetable_t pagetable, uint64 sz)
 {
   uvmunmap(pagetable, TRAMPOLINE, 1, 0);
   uvmunmap(pagetable, TRAPFRAME, 1, 0);
+
   uvmfree(pagetable, sz);
+
 }
 
 // a user program that calls exec("/init")
@@ -264,7 +279,6 @@ userinit(void)
 
   safestrcpy(p->name, "initcode", sizeof(p->name));
   p->cwd = namei("/");
-
   p->state = RUNNABLE;
 
   release(&p->lock);
@@ -275,20 +289,34 @@ userinit(void)
 int
 growproc(int n)
 {
+
   uint64 sz;
   struct proc *p = myproc();
 
-  sz = p->sz;
+  sz = p->heapva + PGSIZE * p->heapvacnt;
+
+  /* Compute the last page of the heap after this allocation */
+  uint64 upsize = PGROUNDUP(sz+n);
+
+  /* Check for the heap boundary */
+  if (upsize > HEAP_MEMORY_MAX_ADDR)
+    return -1;
+
   if(n > 0){
     if((sz = uvmalloc(p->pagetable, sz, sz + n, PTE_W)) == 0) {
       return -1;
     }
-  } else if(n < 0){
-    sz = uvmdealloc(p->pagetable, sz, sz + n);
-  }
-  p->sz = sz;
+  } else if(n < 0)
+      sz = uvmdealloc(p->pagetable, sz, sz + n);
+
+  p->heapvacnt = (sz-p->heapva)/PGSIZE;
+
+  /* Uncomment for debugging the page table after allocating more memory from heap */
+  // debug_pgt(p->pagetable , p->stackva, p->stackvacnt, p->heapva, p->heapvacnt );  
+
   return 0;
 }
+
 
 // Create a new process, copying the parent.
 // Sets up child kernel stack to return as if from fork() system call.
@@ -300,10 +328,12 @@ fork(void)
   struct proc *np;
   struct proc *p = myproc();
 
+
   // Allocate process.
   if((np = allocproc()) == 0){
     return -1;
   }
+
 
   // Copy user memory from parent to child.
   if(uvmcopy(p->pagetable, np->pagetable, p->sz) < 0){
@@ -311,6 +341,31 @@ fork(void)
     release(&np->lock);
     return -1;
   }
+
+  /* Copying the stack from parent to child */
+  if(fork_pgt(p->pagetable, np->pagetable, p->stackvacnt*PGSIZE , p->stackva) < 0){
+    freeproc(np);
+    release(&np->lock);
+    return -1;
+  }
+
+  /* Copying the heap from parent to child */
+  if(fork_pgt(p->pagetable, np->pagetable, p->heapvacnt*PGSIZE , p->heapva) < 0){
+    freeproc(np);
+    release(&np->lock);
+    return -1;
+  }
+
+  // Copy stack data from parent to child
+  np->stackva = p->stackva;
+  np->stackvacnt = p->stackvacnt;
+
+  // Copy heap data from parent to child
+  np->heapva = p->heapva;
+  np->heapvacnt = p->heapvacnt;
+
+
+
   np->sz = p->sz;
 
   // copy saved user registers.
@@ -326,7 +381,6 @@ fork(void)
   np->cwd = idup(p->cwd);
 
   safestrcpy(np->name, p->name, sizeof(p->name));
-
   pid = np->pid;
 
   release(&np->lock);

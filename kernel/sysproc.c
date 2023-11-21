@@ -358,11 +358,14 @@ sys_sbrk(void)
   int n;
 
   argint(0, &n);
-  addr = myproc()->sz;
+
+  addr = myproc()->heapva;
   if(growproc(n) < 0)
     return -1;
+  
   return addr;
 }
+
 
 uint64
 sys_sleep(void)

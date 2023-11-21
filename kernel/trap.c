@@ -5,6 +5,8 @@
 #include "spinlock.h"
 #include "proc.h"
 #include "defs.h"
+#include "elibs/memlayout.h"
+
 
 struct spinlock tickslock;
 uint ticks;
@@ -15,6 +17,11 @@ extern char trampoline[], uservec[], userret[];
 void kernelvec();
 
 extern int devintr();
+extern void
+uvmunclear(pagetable_t pagetable, uint64 va);
+extern void debug_pgt(pagetable_t pagetable, uint64 stackva, uint64 stackvacnt, uint64 heapva, uint64 heapvacnt);
+
+
 
 void
 trapinit(void)
@@ -68,13 +75,52 @@ usertrap(void)
   } else if((which_dev = devintr()) != 0){
     // ok
   } else {
+    /* Invalid address, allocate memory if possible */
+
+    /* Allocating more space for stack */
+    uint64 currentVA = r_stval();
+
+    /* Check the address boundary for the stack. If the accessed address is in the guard's address, exten the stack. */
+    if (currentVA > p->stackva && currentVA < p->stackva + PGSIZE){
+
+      /* Accssing the stack's guard. Check if there is any more room for stack to allocate from. */
+      if (p->stackva-PGSIZE >= STACK_MIN_BASE){
+
+        uint64 newStackBase = p->stackva-PGSIZE;
+
+        // Allocate memory
+        uint64 sz1;
+        if((sz1 = uvmalloc(p->pagetable, newStackBase, newStackBase + PGSIZE, PTE_W)) == 0)
+          setkilled(p);
+        else{
+
+          // Mark this new page as stack guard
+          uvmclear(p->pagetable, newStackBase);
+
+          // Mark the previous stack guard as valid
+          uvmunclear(p->pagetable , p->stackva);
+
+          p->stackva=newStackBase;
+          p->stackvacnt++;
+
+          /* Uncomment for debugging the page table after extending the process's stack */
+          // debug_pgt(p->pagetable , p->stackva, p->stackvacnt, p->heapva, p->heapvacnt );  
+
+        }
+      }else
+        setkilled(p);
+
+    }else
+      setkilled(p);
+
+   }
+
+  if(killed(p)){
     printf("usertrap(): unexpected scause %p pid=%d\n", r_scause(), p->pid);
     printf("            sepc=%p stval=%p\n", r_sepc(), r_stval());
-    setkilled(p);
-  }
-
-  if(killed(p))
+    printf("Process Killed\n");
     exit(-1);
+  }
 
   // give up the CPU if this is a timer interrupt.
   if(which_dev == 2)

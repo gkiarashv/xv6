@@ -6,6 +6,12 @@
 #include "defs.h"
 #include "fs.h"
 
+#include "elibs/memlayout.h"
+
+
+
+
+
 /*
  * the kernel's page table.
  */
@@ -14,6 +20,9 @@ pagetable_t kernel_pagetable;
 extern char etext[];  // kernel.ld sets this to end of kernel code.
 
 extern char trampoline[]; // trampoline.S
+
+extern void freewalk(pagetable_t pagetable);
+
 
 // Make a direct-map page table for the kernel.
 pagetable_t
@@ -102,6 +111,78 @@ walk(pagetable_t pagetable, uint64 va, int alloc)
   return &pagetable[PX(0, va)];
 }
 
+
+/* Free the process's pagetable */
+void free_proc_vm(uint64 pid, pagetable_t oldpagetable, uint64 oldsz, uint64 oldStackVa, 
+                    uint64 oldStackVaCnt, uint64 oldHeapVa, uint64 oldHeapVaCnt){
+
+  uvmunmap(oldpagetable, TRAMPOLINE, 1, 0);
+  uvmunmap(oldpagetable, TRAPFRAME, 1, 0);
+
+  if (pid == 1){
+      if(oldsz > 0)
+        uvmunmap(oldpagetable, 0, PGROUNDUP(oldsz)/PGSIZE, 1);
+  }else{
+
+    if(oldsz > 0) 
+      uvmunmap(oldpagetable, TEXT_OFFSET, PGROUNDUP(oldsz-TEXT_OFFSET)/PGSIZE, 1);
+    
+    /* Unmap stack */
+    uvmunmap(oldpagetable, oldStackVa, oldStackVaCnt, 1);
+
+    /* Unmap heap */
+    if(oldHeapVaCnt)
+      uvmunmap(oldpagetable, oldHeapVa, oldHeapVaCnt, 1);
+  }
+  freewalk(oldpagetable);
+}
+
+
+/* Printing the page table of the process for the first 640KB */
+void debug_pgt(pagetable_t pagetable, uint64 stackva, uint64 stackvacnt, uint64 heapva, uint64 heapvacnt){
+
+  uint64 va = 0;
+
+  /* Dereferncing the page tables to access the most inner one as the 640KB resides in it.
+     xv6 riscv uses 3 level page table.
+   */
+  pte_t *pte = &pagetable[PX(2, va)];
+  pagetable = (pagetable_t)PTE2PA(*pte);
+  pte = &pagetable[PX(1, va)];
+  pagetable = (pagetable_t)PTE2PA(*pte);
+
+
+  int pageIdx = 0;
+  for(; va < 160 * PGSIZE ; va+=PGSIZE){
+    
+    /* Printing the pages for the heap */
+    if (va == heapva){
+      if(heapvacnt){
+        do{
+          printf("Page %d:  ACC: %d  V/I: %d (heap)\n", pageIdx++ , (pagetable[PX(0, va)] & 0x01<<4)>>4, pagetable[PX(0, va)] & 0x01);
+          va += PGSIZE;
+        }while(heapvacnt--);
+      }
+    
+    }else if (va==stackva){
+      /* Printing the pages for the stack */
+      if(stackvacnt){
+          printf("Page %d:  ACC: %d  V/I: %d (stack guard)\n", pageIdx++, (pagetable[PX(0, va)] & 0x01<<4)>>4, pagetable[PX(0, va)] & 0x01);
+          va+=PGSIZE;
+          stackvacnt--;
+
+          do{
+            printf("Page %d:  ACC: %d  V/I: %d (stack) \n", pageIdx++, (pagetable[PX(0, va)] & 0x01<<4)>>4, pagetable[PX(0, va)] & 0x01);
+            va+=PGSIZE;
+          }while(--stackvacnt);
+      }
+    }else
+       printf("Page %d:  ACC: %d  V/I: %d\n", pageIdx++ , (pagetable[PX(0, va)] & 0x01<<4)>>4, pagetable[PX(0, va)] & 0x01);
+  }
+  printf("-------------- USERTOP --------------\n");   
+}
+
+
 // Look up a virtual address, return the physical address,
 // or 0 if not mapped.
 // Can only be used to look up user pages.
@@ -173,14 +254,16 @@ uvmunmap(pagetable_t pagetable, uint64 va, uint64 npages, int do_free)
   uint64 a;
   pte_t *pte;
 
+
   if((va % PGSIZE) != 0)
     panic("uvmunmap: not aligned");
 
   for(a = va; a < va + npages*PGSIZE; a += PGSIZE){
     if((pte = walk(pagetable, a, 0)) == 0)
       panic("uvmunmap: walk");
-    if((*pte & PTE_V) == 0)
+    if((*pte & PTE_V) == 0){
       panic("uvmunmap: not mapped");
+    }
     if(PTE_FLAGS(*pte) == PTE_V)
       panic("uvmunmap: not a leaf");
     if(do_free){
@@ -216,6 +299,7 @@ uvmfirst(pagetable_t pagetable, uchar *src, uint sz)
     panic("uvmfirst: more than a page");
   mem = kalloc();
   memset(mem, 0, PGSIZE);
+
   mappages(pagetable, 0, PGSIZE, (uint64)mem, PTE_W|PTE_R|PTE_X|PTE_U);
   memmove(mem, src, sz);
 }
@@ -291,9 +375,12 @@ freewalk(pagetable_t pagetable)
 void
 uvmfree(pagetable_t pagetable, uint64 sz)
 {
-  if(sz > 0)
+  if (1==1){
+
+  if(sz > 0) // KIARASH
     uvmunmap(pagetable, 0, PGROUNDUP(sz)/PGSIZE, 1);
   freewalk(pagetable);
+  }
 }
 
 // Given a parent process's page table, copy
@@ -303,14 +390,15 @@ uvmfree(pagetable_t pagetable, uint64 sz)
 // returns 0 on success, -1 on failure.
 // frees any allocated pages on failure.
 int
-uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
+fork_pgt(pagetable_t old, pagetable_t new, uint64 sz, uint64 va)
 {
+
   pte_t *pte;
   uint64 pa, i;
   uint flags;
   char *mem;
 
-  for(i = 0; i < sz; i += PGSIZE){
+  for(i = va; i < va + sz; i += PGSIZE){
     if((pte = walk(old, i, 0)) == 0)
       panic("uvmcopy: pte should exist");
     if((*pte & PTE_V) == 0)
@@ -331,6 +419,62 @@ uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
   uvmunmap(new, 0, i / PGSIZE, 1);
   return -1;
 }
+
+
+
+
+
+
+
+
+
+
+int
+uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
+{
+  pte_t *pte;
+  uint64 pa, i;
+  uint flags;
+  char *mem;
+
+  for(i = TEXT_OFFSET; i < sz; i += PGSIZE){
+    if((pte = walk(old, i, 0)) == 0)
+      panic("uvmcopy: pte should exist");
+    if((*pte & PTE_V) == 0)
+      panic("uvmcopy: page not present");
+    pa = PTE2PA(*pte);
+    flags = PTE_FLAGS(*pte);
+    if((mem = kalloc()) == 0)
+      goto err;
+    memmove(mem, (char*)pa, PGSIZE);
+    if(mappages(new, i, PGSIZE, (uint64)mem, flags) != 0){
+      kfree(mem);
+      goto err;
+    }
+  }
+  return 0;
+
+ err:
+  uvmunmap(new, 0, i / PGSIZE, 1);
+  return -1;
+}
+
+
+/* Make a PTE accessible */
+void
+uvmunclear(pagetable_t pagetable, uint64 va)
+{
+  pte_t *pte;
+  
+  pte = walk(pagetable, va, 0);
+  if(pte == 0)
+    panic("uvmunclear");
+
+
+  *pte |= PTE_U;
+}
+
+
 
 // mark a PTE invalid for user access.
 // used by exec for the user stack guard page.

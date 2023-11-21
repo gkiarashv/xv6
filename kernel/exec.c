@@ -6,9 +6,17 @@
 #include "proc.h"
 #include "defs.h"
 #include "elf.h"
+#include "elibs/memlayout.h"
 
 static int loadseg(pde_t *, uint64, struct inode *, uint, uint);
 extern uint64 sys_uptime(void);
+
+extern void freewalk(pagetable_t pagetable);
+
+void debug_pgt(pagetable_t pagetable, uint64 stackva, uint64 stackvacnt, uint64 heapva, uint64 heapvacnt);
+
+void free_proc_vm(uint64 pid, pagetable_t oldpagetable, uint64 oldsz, uint64 oldStackVa, uint64 oldStackVaCnt, uint64 oldHeapVa, uint64 oldHeapVaCnt);
+
 
 int flags2perm(int flags)
 {
@@ -25,7 +33,7 @@ exec(char *path, char **argv)
 {
   char *s, *last;
   int i, off;
-  uint64 argc, sz = 0, sp, ustack[MAXARG], stackbase;
+  uint64 argc, sz = TEXT_OFFSET, sp, ustack[MAXARG], stackbase;
   struct elfhdr elf;
   struct inode *ip;
   struct proghdr ph;
@@ -49,6 +57,7 @@ exec(char *path, char **argv)
   if(elf.magic != ELF_MAGIC)
     goto bad;
 
+
   if((pagetable = proc_pagetable(p)) == 0)
     goto bad;
 
@@ -71,6 +80,7 @@ exec(char *path, char **argv)
     if(loadseg(pagetable, ph.vaddr, ip, ph.off, ph.filesz) < 0)
       goto bad;
   }
+
   iunlockput(ip);
   end_op();
   ip = 0;
@@ -78,17 +88,56 @@ exec(char *path, char **argv)
   p = myproc();
   uint64 oldsz = p->sz;
 
+
+  /* OLD stack data */
+  uint64 oldStackVa = p->stackva;
+  uint64 oldStackVaCnt = p->stackvacnt;
+    
+  /* OLD heap data */
+  uint64 oldHeapVa = p->heapva;
+  uint64 oldHeapVaCnt = p->heapvacnt;
+  
+  
+
   // Allocate two pages at the next page boundary.
   // Make the first inaccessible as a stack guard.
   // Use the second as the user stack.
   sz = PGROUNDUP(sz);
+  p->codesize = sz;
+
+
+  #ifdef STACK_BEGIN_AFTER_CODE
+    p->stackva = p->codesize;
+  #elif STACK_BEGIN_IN_MEMORY 
+    p->stackva = STACK_MEMORY_ADDR;
+  #endif
+    
+
+  #ifdef HEAP_BEGIN_AFTER_CODE
+
+    #ifdef STACK_BEGIN_AFTER_CODE
+      p->heapva = p->codesize + STACK_DEFAULT_SIZE * PGSIZE;
+    #elif STACK_BEGIN_IN_MEMORY
+      p->heapva = p->codesize;
+    #endif 
+  #elif HEAP_BEGIN_IN_MEMORY
+      p->heapva = HEAP_MEMORY_ADDR;
+  #endif
+
+  
+  /* Setting the initial size for the heap and stack */
+  p->heapvacnt = 0;
+  p->stackvacnt = STACK_DEFAULT_SIZE;
+
+
   uint64 sz1;
-  if((sz1 = uvmalloc(pagetable, sz, sz + 2*PGSIZE, PTE_W)) == 0)
+  if((sz1 = uvmalloc(pagetable, p->stackva, p->stackva + p->stackvacnt*PGSIZE, PTE_W)) == 0)
     goto bad;
-  sz = sz1;
-  uvmclear(pagetable, sz-2*PGSIZE);
-  sp = sz;
-  stackbase = sp - PGSIZE;
+  // sz = sz1;
+  uvmclear(pagetable, p->stackva);
+  sp = p->stackva + p->stackvacnt*PGSIZE;
+  stackbase = p->stackva + PGSIZE;
+ 
 
   // Push argument strings, prepare rest of stack in ustack.
   for(argc = 0; argv[argc]; argc++) {
@@ -122,20 +171,26 @@ exec(char *path, char **argv)
     if(*s == '/')
       last = s+1;
   safestrcpy(p->name, last, sizeof(p->name));
-    
+
+
   // Commit to the user image.
   oldpagetable = p->pagetable;
   p->pagetable = pagetable;
-  p->sz = sz;
+  p->sz = p->codesize ;//- OFFSET;
   p->trapframe->epc = elf.entry;  // initial program counter = main
   p->trapframe->sp = sp; // initial stack pointer
-  proc_freepagetable(oldpagetable, oldsz);
+
+  /* Uncomment for debugging the page table after process creation */
+  // debug_pgt(pagetable , p->stackva, p->stackvacnt, p->heapva, p->heapvacnt );  
+  
+  free_proc_vm(p->pid, oldpagetable, oldsz,  oldStackVa, oldStackVaCnt, oldHeapVa, oldHeapVaCnt);
 
   return argc; // this ends up in a0, the first argument to main(argc, argv)
 
+
  bad:
   if(pagetable)
-    proc_freepagetable(pagetable, sz);
+    free_proc_vm(p->pid, pagetable, sz, p->stackva, p->stackvacnt, p->heapva, p->heapvacnt);
   if(ip){
     iunlockput(ip);
     end_op();

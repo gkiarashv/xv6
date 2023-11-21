@@ -92,7 +92,6 @@ sys_write(void)
   if(argfd(0, 0, &f) < 0)
     return -1;
 
-  // printf("SYSCALL : %d\n",f->off);
   return filewrite(f, p, n);
 }
 
@@ -452,11 +451,13 @@ sys_exec(void)
   if(argstr(0, path, MAXPATH) < 0) {
     return -1;
   }
+
   memset(argv, 0, sizeof(argv));
   for(i=0;; i++){
     if(i >= NELEM(argv)){
       goto bad;
     }
+
     if(fetchaddr(uargv+sizeof(uint64)*i, (uint64*)&uarg) < 0){
       goto bad;
     }
@@ -464,12 +465,14 @@ sys_exec(void)
       argv[i] = 0;
       break;
     }
+
     argv[i] = kalloc();
     if(argv[i] == 0)
       goto bad;
     if(fetchstr(uarg, argv[i], PGSIZE) < 0)
       goto bad;
   }
+
   int ret = exec(path, argv);
 
   for(i = 0; i < NELEM(argv) && argv[i] != 0; i++)

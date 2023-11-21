@@ -7,17 +7,33 @@
 #include "syscall.h"
 #include "defs.h"
 
+#include "elibs/memlayout.h"
+
+
+int is_va_valid(struct proc * p , uint64 va){
+  if (va>0 || (va>p->stackva && va < p->stackva+p->stackvacnt*PGSIZE) ||
+   (va>p->heapva && va < p->heapva+p->heapvacnt*PGSIZE) )
+    return 1;
+  return 0;
+}
+
+
 // Fetch the uint64 at addr from the current process.
 int
 fetchaddr(uint64 addr, uint64 *ip)
 {
+
   struct proc *p = myproc();
-  if(addr >= p->sz || addr+sizeof(uint64) > p->sz) // both tests needed, in case of overflow
+  if (is_va_valid(p, addr)){
+      if(copyin(p->pagetable, (char *)ip, addr, sizeof(*ip)) != 0)
+        return -1;
+  }else
     return -1;
-  if(copyin(p->pagetable, (char *)ip, addr, sizeof(*ip)) != 0)
-    return -1;
+
   return 0;
 }
+
+
 
 // Fetch the nul-terminated string at addr from the current process.
 // Returns length of string, not including nul, or -1 for error.

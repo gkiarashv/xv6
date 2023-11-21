@@ -111,4 +111,15 @@ struct proc {
 
   int priority;                // Priority of the process
   
+
+  uint64 codesize;            // Size of the TEXT segment
+
+  uint64 stackva;             // Virtual address of the stack's beginning
+  uint64 stackvacnt;          // Number of virtual pages allocated for the stack
+
+  uint64 heapva;              // Virtual address of the heap's beginning
+  uint64 heapvacnt;           // Number of virtual pages allocated for the heap
+
+
 };
+

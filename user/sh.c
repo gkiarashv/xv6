@@ -121,7 +121,7 @@ runcmd(struct cmd *cmd)
       write(fd, &time, sizeof(e_time_t));
       close(fd);
 
-    }else{
+    }else{      
       exec(argv[0], argv);
       fprintf(2, "exec %s failed\n", argv[0]);
     }
@@ -220,6 +220,7 @@ execcmd(void)
   struct execcmd *cmd;
 
   cmd = malloc(sizeof(*cmd));
+
   memset(cmd, 0, sizeof(*cmd));
   cmd->type = EXEC;
   return (struct cmd*)cmd;
@@ -349,17 +350,19 @@ struct cmd *nulterminate(struct cmd*);
 struct cmd*
 parsecmd(char *s)
 {
-
   char *es;
   struct cmd *cmd;
 
   es = s + strlen(s);
+
   cmd = parseline(&s, es);
   peek(&s, es, "");
+
   if(s != es){
     fprintf(2, "leftovers: %s\n", s);
     panic("syntax");
   }
+
   nulterminate(cmd);
   return cmd;
 }
@@ -370,14 +373,17 @@ parseline(char **ps, char *es)
   struct cmd *cmd;
 
   cmd = parsepipe(ps, es);
+
   while(peek(ps, es, "&")){
     gettoken(ps, es, 0, 0);
     cmd = backcmd(cmd);
   }
+
   if(peek(ps, es, ";")){
     gettoken(ps, es, 0, 0);
     cmd = listcmd(cmd, parseline(ps, es));
   }
+
   return cmd;
 }
 
@@ -387,6 +393,7 @@ parsepipe(char **ps, char *es)
   struct cmd *cmd;
 
   cmd = parseexec(ps, es);
+
   if(peek(ps, es, "|")){
     gettoken(ps, es, 0, 0);
     cmd = pipecmd(cmd, parsepipe(ps, es));
@@ -451,6 +458,7 @@ parseexec(char **ps, char *es)
 
   argc = 0;
   ret = parseredirs(ret, ps, es);
+
   while(!peek(ps, es, "|)&;")){
     if((tok=gettoken(ps, es, &q, &eq)) == 0)
       break;

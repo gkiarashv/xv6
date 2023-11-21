@@ -21,7 +21,7 @@ typedef uint64 time_t;
 // 1 tick 1 ms
 // 1 min = 60 * 1000
 #define tick_to_time(type, tick) {\
-            printf("%s: %d min %d sec %d ms  %l(ticks)\n",type , (tick)/6000000 , ((tick)%6000000)/100000 , ((tick)%600000000000)/10000,tick);\
+            printf("%s: %d min %d sec %d ms  %l(ticks)\n",type , (tick/100000000000)/60 , (tick/10000000) , ((tick/10000000)%60) ,tick);\
            }
 
 
