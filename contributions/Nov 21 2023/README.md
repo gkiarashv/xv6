@@ -69,11 +69,13 @@ However, despite xv6, Linux uses a different memory map. Hence, running the same
 
 
 # Changing the memory layout
-To enable xv6 to have different memory layouts in which (text, stack, and heap) segments reside in different places, we have extended the functionality of xv6. This extension need a close look at various files. In the following, each modified/added file will be explained. For the usages, check the [folder](https://github.com/gkiarashv/xv6/tree/main/contributions/Nov%2021%202023/usages).
+To facilitate different memory layouts in xv6, where segments like text, stack, and heap are located in various positions, we have expanded xv6's capabilities. This enhancement requires careful examination of several files. Below, we will explain each file that has been modified or added. For the usages, check the [folder](https://github.com/gkiarashv/xv6/tree/main/contributions/Nov%2021%202023/usages).
+
 
 
 ## kernel/elibs/memlayout.h
-This file defines the parameters required to show the boundary for each segment type.
+This file defines the parameters required to show the boundary for each segment type. The parameters define the last accessible address in the virtual address by `USERTOP`,
+start and end of stack and heap along with number of pages that may needed to be allocated at minimum.
 
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/memlayout.png)
 
