@@ -53,6 +53,7 @@ Now, considering different commands:
 
 ## dummy
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/dummyva1.png)
+Check the number of pages allocated for the text segment.
 
 ## alloc
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/allocva1.png)
