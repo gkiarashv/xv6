@@ -100,7 +100,6 @@ Ultimately, the size of the process is updated, and the old page table is discar
 In `vm.c`, a new function, `free_proc_vm()`, has been introduced to free the page table of a process. The rationale for creating this new function, rather than using the existing `proc_freepagetable()`, stems from the fact that the current function can only free contiguous memory allocations within the page table. Given that the allocated pages for different segments may be dispersed across multiple locations in memory, there is a clear need for this new function to handle such non-contiguous memory allocations.
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/freeprocvm2.png)
 
-
 Additionally, for the same reason, we have developed the `fork_pgt()` function. This is in addition to the `uvmcopy()` function which is only used for copying the text segment. `fork_pgt()` is specifically designed to copy page tables between two processes (parent and child) and will be utilized in the `fork()` system call. 
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/forkpgt.png)
 
@@ -112,24 +111,19 @@ In addition, a new function called `uvmunclear()`, as a counterpart to `uvmclear
 
 
 
-## proc.c
-Forking a process causes parent's page table to be copied into the child's page table. Since the allocated memory can be non-contiguous in parent, we need a function that considers this while copying the page tables. For the sake of that, we use the `fork_pgt()` function as follows in the `fork()` function:
-
+## proc.c (Modified)
+When forking a process, the parent's page table is copied into the child's page table. Given that the allocated memory in the parent can be non-contiguous, it's crucial to have a function that considers this while copying the page tables. To address this need, we utilize the `fork_pgt()` function within the `fork()` function. 
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/forkva1.png)
 
-Moreover, when freeing a process structure, we need to free its page table using `free_proc_vm()` as well:
-
+Additionally, when a process structure is being freed (`freeproc()`), it's essential to free its page table using the `free_proc_vm()` function.
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/freeproc.png)
 
-
-Finally, when it comes to allocating the heap space, the `malloc()` is implemented using the `sbrk` system call. The new `sbrk` syscall has a slight modification in which the 
-starting address is not the end of the process's code but is the address pointed by `procva` field of process structure:
-
+In the final aspect, concerning the allocation of heap space, the `malloc()` function is implemented using the `sys_sbrk()` system call. However, there's a slight modification in `sys_sbrk()`: instead of starting the allocation from the end of the process's code segment, it begins at the address indicated by the `heapva` field in the process structure.
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/sysbrk.png)
 
-Moreover, the `growproc()` needs to be changed as follows:
-
+Moreover, the `growproc()` function, which is responsible for allocating memory from the virtual address space, needs to be changed as follows to make sure the allocation is made from the space pointed by `heapva`:
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/growproc.png)
+
 
 
 
