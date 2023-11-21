@@ -53,7 +53,7 @@ xv6 RISCV uses 3 levels for the implementation of the page table:
 # Dereferencing null pointer
 
 To illustrate the effects of dereferencing a null pointer, we create the following code (`deref.c`):
-![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/linudxcode.png)
+![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/derefnew.png)
 
 
 If we check the `deref.o` using `riscv64-linux-gnu-objdump -D -j .text deref.o`, we will see:
