@@ -31,7 +31,7 @@ of pages allocated for the `TEXT` segment in the memory. This program is large, 
 
 
 # Usage 1:
-In this example, we place the `TEXT` segment to start from address 0x3000. Then immediately after the code, we allocate 2 pages for stack (one is stack guard). Following the stack, we would have our heap. To compile the kernel with this setting, we can either compile it as default settings:
+In this example, we place the text segment to start from the address `TEXT_OFFSET=0x3000`. Then immediately after the code, we allocate 2 pages for stack (one is stack guard). Following the stack, we would have our heap. To compile the kernel with this setting, we can either compile it as default settings:
 ```
 make
 ```
@@ -68,7 +68,7 @@ Check the number of pages allocated for the text segment.
 
 
 # Usage 2:
-In this example, we place the `TEXT` segment to start from address 0x3000. Then we allocate 2 pages for stack (one is stack guard). We put the stack at the end of the virtual address space. Following the code segment, we would have our heap. To compile the kernel with this setting, we should compile it as follows:
+In this example, we place the text segment to start from the address `TEXT_OFFSET=0x3000`. Then we allocate 2 pages for stack (one is stack guard). We put the stack at the end of the virtual address space. Following the code segment, we would have our heap. To compile the kernel with this setting, we should compile it as follows:
 
 ```
 make STACK_VA=STACK_BEGIN_IN_MEMORY HEAP_VA=HEAP_BEGIN_AFTER_CODE
@@ -78,8 +78,6 @@ or leave the heap's setting untouched:
 make STACK_VA=STACK_BEGIN_IN_MEMORY
 ```
 The address of the stack can be configured in the `kernel/elibs/memlayout.h` file.
-
-Now, considering different commands:
 
 ## ls
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/lsva3.png)
