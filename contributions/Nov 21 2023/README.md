@@ -59,7 +59,8 @@ To illustrate the effects of dereferencing a null pointer, we create the followi
 If we check the `deref.o` using `riscv64-linux-gnu-objdump -D -j .text deref.o`, we will see:
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/derefobjdump.png)
 
-If we run the `deref` in xv6, we would get exactly the same bytes we got from objdump. The `main` is the entry point and is mapped to address 0:
+If we run the `deref` in xv6, we would get exactly the same bytes we got from objdump. The `main` is the entry point and is mapped to address 0. Note to consider that
+the starting address of the text segment is 0:
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/deref10.png)
 
 However, despite xv6, Linux uses a different memory map. Hence, running the same code will result in a segmentation fault:
