@@ -1,6 +1,9 @@
 # Usages 
 To demonstrate the memory layout in xv6, we explore scenarios where different memory segments can be positioned. This is illustrated using dummy programs that help visualize the placement of these segments within the memory. Additionally, we have developed a function named `debug_pgt()` in `kernel/vm.c`. This function is designed to print the page table for the memory segments up to `640KB`, providing a clear and detailed view of how the segments are arranged and occupy the virtual memory space. 
 
+Careful attention is needed when adjusting the boundaries of the different segments. The main configuration files are `kernel/elibs/memlayout.h` and `user/user.ld` (for the entry address of compiled programs).
+
+Compilation flags for the stack and heap placement are: `STACK_BEGIN_AFTER_CODE` and `HEAP_BEGIN_AFTER_CODE` which put stack and heap immediately after the code, and `STACK_BEGIN_IN_MEMORY` and `HEAP_BEGIN_IN_MEMORY` which put stack and heap in memory locations specified in the `kernel/elibs/memlayout.h`.
 
 
 
@@ -115,7 +118,7 @@ The address of the stack can be configured in the `kernel/elibs/memlayout.h` fil
 
 
 # Usage 3:
-In this example, we place the `TEXT` segment to start from address 0x3000. Then we allocate 2 pages for stack (one is stack guard). We put the stack at the end of the virtual address space. Then, we will put the heap in a location specified in the `kernel/elibs/memlayout.h`. To compile the kernel with this setting, we should compile it as follows:
+In this example, we place the text segment to start from the address `TEXT_OFFSET=0x3000`. Then we allocate 2 pages for stack (one is stack guard). We put the stack at the end of the virtual address space. Then, we will put the heap in a location specified in the `kernel/elibs/memlayout.h`. To compile the kernel with this setting, we should compile it as follows:
 
 ```
 make STACK_VA=STACK_BEGIN_IN_MEMORY HEAP_VA=HEAP_BEGIN_IN_MEMORY
@@ -139,11 +142,9 @@ Now, considering different commands:
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/uniqva32.png)
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/headva33.png)
 
-
 ## dummy
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/dummyva31.png)
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/dummyva32.png)
-
 
 ## alloc
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/allocva31.png)
@@ -155,8 +156,6 @@ Now, considering different commands:
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/stackva31.png)
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/stackva32.png)
 
-
-
 ## ps
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/psva31.png)
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/psva32.png)
@@ -164,7 +163,7 @@ Now, considering different commands:
 
 
 # Usage 4:
-In this example, we place the `TEXT` segment to start from address 0x3000. Then we allocate 2 pages for stack (one is stack guard). We put the stack immediately aftet the code segment. Then, we will put the heap in a location specified in the `kernel/elibs/memlayout.h`. To compile the kernel with this setting, we should compile it as follows:
+In this example, we place the text segment to start from the address `TEXT_OFFSET=0x3000`. Then we allocate 2 pages for stack (one is stack guard). We put the stack immediately after the code segment. Then, we will put the heap in a location specified in the `kernel/elibs/memlayout.h`. To compile the kernel with this setting, we should compile it as follows:
 
 ```
 make HEAP_VA=HEAP_BEGIN_IN_MEMORY
@@ -218,6 +217,9 @@ make STACK_VA=STACK_BEGIN_IN_MEMORY HEAP_VA=HEAP_BEGIN_IN_MEMORY SCHED=FCFS
 ```
 make STACK_VA=STACK_BEGIN_IN_MEMORY SCHED=PS
 ```
+
+The slight change in the program's execution time compared to previous runs in the latest update is understandable, given the introduction of new functions for tasks like copying page tables and allocating additional memory for the stack. However, it's important to note that, in general, memory layout management and CPU scheduling are distinct aspects and do not directly influence each other. Additionally, the xv6 loads the whole program into memory in the `exec.c/exec()`, and hence no page swapping is happened that can be affected by the scheduling algorithm.
+
 
 
 
