@@ -73,30 +73,27 @@ To facilitate different memory layouts in xv6, where segments like text, stack, 
 
 
 
-## kernel/elibs/memlayout.h
-This file defines the parameters required to show the boundary for each segment type. The parameters define the last accessible address in the virtual address by `USERTOP`,
-start and end of stack and heap along with number of pages that may needed to be allocated at minimum.
-
+## kernel/elibs/memlayout.h (Added)
+This file specifies the necessary parameters to delineate the boundaries for each segment type. For instance, it sets the parameters for the last accessible address in the virtual address space, indicated by `USERTOP`. Additionally, it outlines the starting and ending points of the code segment as `TEXT_OFFSET` along with stack and heap, as well as the minimum number of pages that might need to be allocated.
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/memlayout.png)
 
 
-## proc.h
-The process structure of a process now holds 5 new field members.
+## proc.h (Modified)
+The process structure has been updated to include five new field members. These additional fields store information regarding the size of the code segment, the starting addresses of the heap and stack, and the number of pages allocated for both the heap and stack segments.
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/procva.png)
 
 
 
-## exec.c
-The most important file to modify is the `exec.c` in which the page table of the process is created and is replaced with its old page table (if forked, for instance). First change is:
+## exec.c (Modified)
+The key file to update is `exec.c`, where the page table for the process is established and replaces its previous page table (as in the case of forking, for example). The initial modification involves setting the `sz` variable's initial value to `TEXT_OFFSET`. This adjustment indicates that the process's initial size commences from `TEXT_OFFSET`. However, the first set of pages will remain unmapped:
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/execva1.png)
 
-In the above, we have set `sz` to `TEXT_OFFSET`. This indicates that the size of the process is `TEXT_OFFSET`. Next, we set the start of the stack and heap based on the flags passed when compiling
-the kernel. Note that stack and heap can come immediately after the text segment or can reside in a different place in the memory.
 
+Following that, we determine the starting points of the stack and heap based on the flags used during the kernel compilation. It's important to note that the stack and heap can either directly follow the text segment or be located in a different area of the memory, depending on these compilation flags.
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/execva22.png)
 
 
-Finally, the size of the process is updated and the old page table is removed using the new `free_proc_vm()` function. This function will be discussed further while considering the `vm.c` file.
+Ultimately, the size of the process is updated, and the old page table is discarded using the newly implemented `free_proc_vm()` function. This function will be examined in more detail when we discuss the modifications made to the `vm.c` file.
 ![makekernel](https://github.com/gkiarashv/xv6/blob/main/images/execva3.png)
 
 
